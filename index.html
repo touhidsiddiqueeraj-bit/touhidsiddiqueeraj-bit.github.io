@@ -3,19 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hussain Touhid Siddiqee — Portfolio</title>
-<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI, web apps, battery ML research, embedded hardware.">
+<title>Hussain Touhid Siddiqee — hardware-lab portfolio</title>
+<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI studio, battery ML research, ESP32 data loggers, browser-based engineering tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d0f12;
-    --bg2: #13161b;
-    --ink: #e8e6e1;
-    --muted: #8b909a;
-    --line: #23272e;
+    --bg: #0a0b0d;
+    --panel: #121417;
+    --panel2: #171a1f;
+    --ink: #e9e7e2;
+    --muted: #868b94;
+    --line: #22262d;
     --amber: #f0a63a;
+    --amber-dim: rgba(240, 166, 58, 0.1);
     --green: #7fb069;
+    --red: #d1614d;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -23,220 +26,381 @@
     background: var(--bg);
     color: var(--ink);
     font-family: "Space Grotesk", sans-serif;
-    line-height: 1.6;
+    line-height: 1.55;
+    overflow-x: hidden;
   }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: "IBM Plex Mono", monospace; }
   a { color: var(--amber); text-decoration: none; }
   a:hover { text-decoration: underline; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 
-  header { padding: 96px 0 56px; border-bottom: 1px solid var(--line); }
-  .kicker {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
-    color: var(--green);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+  /* LED */
+  .led { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+  .led.green { background: var(--green); box-shadow: 0 0 8px rgba(127,176,105,.7); }
+  .led.amber { background: var(--amber); box-shadow: 0 0 8px rgba(240,166,58,.7); }
+
+  /* top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 11, 13, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
   }
-  h1 { font-size: clamp(40px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .brand { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink); }
+  .brand b { color: var(--amber); font-weight: 500; }
+  .topnav { display: flex; gap: 22px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--muted); }
+  .topnav a { color: var(--muted); }
+  .topnav a:hover { color: var(--amber); text-decoration: none; }
+  .sys { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+  .cursor { display: inline-block; width: 7px; height: 13px; background: var(--amber); animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* hero */
+  header { padding: 84px 0 64px; position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: start; }
+  .kicker { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 18px; }
+  .kicker::before { content: "$ "; color: var(--muted); }
+  h1 { font-size: clamp(44px, 7.5vw, 86px); font-weight: 700; letter-spacing: -0.03em; line-height: 0.98; }
   h1 .dim { color: var(--muted); }
-  .sub { margin-top: 18px; color: var(--muted); font-size: 18px; max-width: 640px; }
-  .links { margin-top: 28px; font-family: "IBM Plex Mono", monospace; font-size: 14px; display: flex; gap: 24px; flex-wrap: wrap; }
+  .hero-meta { margin-top: 26px; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted); line-height: 2; }
+  .hero-meta span { color: var(--ink); }
+  .hero-meta .sep { color: var(--line); }
+  .hero-sub { margin-top: 22px; color: var(--muted); font-size: 16.5px; max-width: 56ch; }
+  .hero-sub b { color: var(--ink); font-weight: 500; }
 
-  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
-  h2 { font-size: 20px; font-weight: 500; font-family: "IBM Plex Mono", monospace; color: var(--muted); margin-bottom: 32px; }
-  h2 .n { color: var(--amber); }
+  .avatar-wrap { position: relative; }
+  .avatar-ring {
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px;
+    background: var(--panel);
+  }
+  .avatar-ring img { width: 100%; border-radius: 6px; display: block; }
+  .avatar-tag {
+    position: absolute; bottom: -12px; left: 12px;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 6px;
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 5px 10px; color: var(--muted);
+  }
+  .avatar-tag b { color: var(--green); font-weight: 500; }
 
+  /* marquee */
+  .marquee {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: var(--panel);
+    overflow: hidden; white-space: nowrap;
+  }
+  .marquee-inner { display: inline-block; padding: 12px 0; animation: marquee 28s linear infinite; }
+  .marquee-inner span {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted);
+    letter-spacing: 0.14em; text-transform: uppercase; margin: 0 26px;
+  }
+  .marquee-inner span b { color: var(--amber); font-weight: 500; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* sections */
+  section { padding: 72px 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 40px; }
+  .sec-head .n { font-family: "IBM Plex Mono", monospace; color: var(--amber); font-size: 14px; }
+  .sec-head h2 { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 500; color: var(--ink); letter-spacing: 0.1em; text-transform: uppercase; }
+  .sec-head .rule { flex: 1; border-top: 1px solid var(--line); }
+
+  /* featured */
+  #featured { padding-top: 40px; }
+  .feat-card {
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    background: var(--panel); min-height: 380px;
+  }
+  .feat-body { padding: 36px 38px; display: flex; flex-direction: column; position: relative; }
+  .feat-tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--amber); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .feat-body h3 { font-size: clamp(26px, 3vw, 38px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .feat-body p { color: var(--muted); font-size: 15px; flex: 1; max-width: 52ch; }
+  .feat-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 20px; }
+  .feat-tags span {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    border: 1px solid var(--line); border-radius: 4px; padding: 3px 9px; color: var(--muted);
+  }
+  .feat-link { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--amber); }
+  .feat-img { position: relative; min-height: 280px; background: var(--panel2); overflow: hidden; }
+  .feat-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity 0.55s ease; }
+  .feat-img img.active { opacity: 1; }
+  .feat-count { position: absolute; top: 14px; right: 14px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); background: rgba(10,11,13,.8); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; z-index: 2; }
+  .feat-dots { position: absolute; bottom: 14px; left: 14px; display: flex; gap: 7px; z-index: 2; }
+  .feat-dots button {
+    width: 22px; height: 4px; border: none; border-radius: 2px; cursor: pointer;
+    background: rgba(233,231,226,.25); padding: 0; transition: background 0.2s;
+  }
+  .feat-dots button.active { background: var(--amber); }
+
+  /* grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .card:hover { border-color: #353b45; transform: translateY(-3px); }
+  .card-img { aspect-ratio: 16/9; overflow: hidden; background: var(--panel2); position: relative; border-bottom: 1px solid var(--line); }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .card:hover .card-img img { transform: scale(1.05); }
+  .card-img .tile {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted);
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .card-img .tile::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.02) 25%, transparent 25%) 0 0 / 44px 44px,
+      linear-gradient(315deg, rgba(255,255,255,0.02) 25%, transparent 25%) 0 0 / 44px 44px;
+  }
+  .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .card-body h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  .card-body p { color: var(--muted); font-size: 13.5px; flex: 1; }
+  .card-foot { display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
+  .card-foot .demo { color: var(--amber); font-size: 12px; }
+
+  /* skills */
   .skills { display: flex; flex-wrap: wrap; gap: 10px; }
   .skill {
-    border: 1px solid var(--line);
-    background: var(--bg2);
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 14px;
-    font-family: "IBM Plex Mono", monospace;
-    color: var(--ink);
+    border: 1px solid var(--line); background: var(--panel); border-radius: 6px;
+    padding: 8px 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink);
+    transition: border-color 0.15s;
   }
   .skill:hover { border-color: var(--amber); }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: border-color 0.15s ease, transform 0.15s ease;
-  }
-  .card:hover { border-color: var(--amber); transform: translateY(-2px); }
-  .card h3 { font-size: 18px; font-weight: 700; }
-  .card p { color: var(--muted); font-size: 14.5px; flex: 1; }
-  .card .meta { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
-  .card .demo { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--amber); }
+  /* footer */
+  footer { border-top: 1px solid var(--line); padding: 40px 0 56px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer .mono { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
+  footer b { color: var(--amber); font-weight: 500; }
 
-  .featured { background: linear-gradient(135deg, rgba(240,166,58,0.06), transparent 55%); }
-  .featured-card {
-    background: var(--bg2);
-    border: 1px solid var(--amber);
-    border-radius: 10px;
-    padding: 28px;
-    display: grid;
-    gap: 8px;
-  }
-  .featured-card h3 { font-size: 24px; }
-  .featured-card p { color: var(--muted); max-width: 72ch; }
-  .featured-card .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-  .featured-card .tags span {
-    font-family: "IBM Plex Mono", monospace; font-size: 12px;
-    border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px;
-  }
-  .featured-card .demo { display: inline-block; margin-top: 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; }
-
-  footer { padding: 40px 0 64px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  @media (max-width: 640px) {
-    header { padding: 64px 0 40px; }
-    h1 { font-size: 38px; }
+  @media (max-width: 760px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .avatar-wrap { max-width: 220px; }
+    .feat-card { grid-template-columns: 1fr; }
+    .feat-img { order: -1; min-height: 210px; }
+    .feat-body { padding: 24px; }
+    .topnav, .sys { display: none; }
   }
 </style>
 </head>
 <body>
 
-<header>
+<nav class="topbar">
   <div class="wrap">
-    <div class="kicker">~/touhidsiddiqueeraj-bit</div>
-    <h1>Hussain Touhid<br><span class="dim">Siddiqee</span></h1>
-    <p class="sub">I build things that run on my own hardware — a local AI studio on an AMD RX 580, image editors in the browser, solar-cell simulators, ESP32 data loggers — and research code for battery failure prediction.</p>
-    <div class="links">
-      <a href="https://github.com/touhidsiddiqueeraj-bit">github ↗</a>
-      <a href="mailto:touhidsiddiqueeraj@gmail.com">email ↗</a>
-      <a href="#projects">projects ↓</a>
+    <span class="brand">~/<b>touhid</b>/portfolio</span>
+    <div class="topnav">
+      <a href="#featured">featured</a>
+      <a href="#projects">projects</a>
+      <a href="#toolbox">toolbox</a>
+      <a href="https://github.com/touhidsiddiqueeraj-bit">github</a>
+    </div>
+    <span class="sys"><span class="led green"></span>all systems nominal<span class="cursor"></span></span>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">whoami</div>
+      <h1>Hussain Touhid<br><span class="dim">Siddiqee</span></h1>
+      <div class="hero-meta">
+        <span>local-ai engineer</span> <span class="sep">/</span>
+        <span>battery-ml researcher</span> <span class="sep">/</span>
+        <span>embedded builder</span>
+      </div>
+      <p class="hero-sub">I write code that runs on <b>my own hardware</b> — an AI studio on an AMD RX 580, browser-based tools that replace desktop software, ESP32 data loggers for the field — and research code for <b>battery failure prediction</b>.</p>
+    </div>
+    <div class="avatar-wrap">
+      <div class="avatar-ring"><img src="images/avatar.jpg" alt="Hussain Touhid Siddiqee"></div>
+      <div class="avatar-tag"><span class="led green"></span><b>online</b> · sylhet, bd</div>
     </div>
   </div>
 </header>
 
-<section class="featured">
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-inner">
+    <span>local <b>ai</b></span><span>battery <b>ml</b></span><span>embedded <b>esp32</b></span><span><b>web</b> apps</span><span>solar <b>simulation</b></span><span>lora <b>loggers</b></span><span>kiCad <b>pcb</b></span>
+    <span>local <b>ai</b></span><span>battery <b>ml</b></span><span>embedded <b>esp32</b></span><span><b>web</b> apps</span><span>solar <b>simulation</b></span><span>lora <b>loggers</b></span><span>kiCad <b>pcb</b></span>
+  </div>
+</div>
+
+<section id="featured">
   <div class="wrap">
-    <h2><span class="n">01</span> / Featured</h2>
-    <div class="featured-card">
-      <h3>polarisstudio</h3>
-      <p>Local AI studio for AMD Vulkan (RX 580) — chat, image generation, video, model library and HuggingFace downloads, all driven by an Electron shell over llama.cpp and stable-diffusion.cpp. No cloud, no telemetry, no GPU vendor lock-in.</p>
-      <div class="tags"><span>Electron</span><span>Node</span><span>llama.cpp</span><span>stable-diffusion.cpp</span><span>Vulkan</span></div>
-      <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/polarisstudio">view on github ↗</a>
+    <div class="sec-head"><span class="n">[01]</span><h2>Featured build</h2><div class="rule"></div></div>
+    <div class="feat-card">
+      <div class="feat-body">
+        <div class="feat-tag">// rotating — refreshed every 5s</div>
+        <h3 id="feat-title">polarisstudio</h3>
+        <p id="feat-desc">placeholder</p>
+        <div class="feat-tags" id="feat-tags"></div>
+        <a class="feat-link" id="feat-link" href="#">explore ↗</a>
+      </div>
+      <div class="feat-img" id="feat-img">
+        <div class="feat-count" id="feat-count">1 / 5</div>
+        <img src="images/art/polaris.png" alt="polarisstudio">
+        <img src="images/screens/pixellab.png" alt="Pixel-Lab">
+        <img src="images/screens/tcaps.png" alt="TCAPS">
+        <img src="images/screens/atlas.png" alt="atlas">
+        <img src="images/art/battery.png" alt="battery research">
+        <div class="feat-dots" id="feat-dots"></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="projects">
   <div class="wrap">
-    <h2><span class="n">02</span> / Projects</h2>
+    <div class="sec-head"><span class="n">[02]</span><h2>Projects</h2><div class="rule"></div></div>
     <div class="grid">
 
       <div class="card">
-        <h3>Pixel-Lab</h3>
-        <p>The most fully featured open-source image editor — layers, filters, adjustments, all client-side.</p>
-        <div class="meta">TypeScript</div>
-        <a class="demo" href="https://pixel-lab-jade.vercel.app">live demo ↗</a>
+        <div class="card-img"><img src="images/art/polaris.png" alt="polarisstudio"><span class="tile" style="display:none"></span></div>
+        <div class="card-body">
+          <h3>polarisstudio</h3>
+          <p>Local AI studio for AMD Vulkan — chat, image, video, model library, HuggingFace downloads. Electron over llama.cpp + stable-diffusion.cpp.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/polarisstudio">github ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>TCAPS</h3>
-        <p>Open-source browser-based alternative to SCAPS-1D — within 10% accuracy on 5 validated solar-cell benchmarks, no install.</p>
-        <div class="meta">TypeScript</div>
-        <a class="demo" href="https://tcaps.netlify.app">live demo ↗</a>
+        <div class="card-img"><img src="images/screens/pixellab.png" alt="Pixel-Lab"></div>
+        <div class="card-body">
+          <h3>Pixel-Lab</h3>
+          <p>The most fully featured open-source image editor — layers, filters, adjustments, all client-side, zero install.</p>
+          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://pixel-lab-jade.vercel.app">demo ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>atlas</h3>
-        <p>Unified AI chat interface — one window for every model you run.</p>
-        <div class="meta">JavaScript</div>
-        <a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/atlas">live demo ↗</a>
+        <div class="card-img"><img src="images/screens/tcaps.png" alt="TCAPS"></div>
+        <div class="card-body">
+          <h3>TCAPS</h3>
+          <p>Open-source browser alternative to SCAPS-1D — within 10% accuracy on 5 validated solar-cell benchmarks.</p>
+          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://tcaps.netlify.app">demo ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>Multi-Horizon Hazard Models for Battery Failure</h3>
-        <p>Hazard classification extended across NASA 18650, CALCE and Oxford LFP datasets — XGBoost, LightGBM, GRU with calibration and SHAP.</p>
-        <div class="meta">Python · C · research</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction">view on github ↗</a>
+        <div class="card-img"><img src="images/screens/atlas.png" alt="atlas"></div>
+        <div class="card-body">
+          <h3>atlas</h3>
+          <p>Unified AI chat interface — every model you run, one window.</p>
+          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/atlas">demo ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>Helios_Logger</h3>
-        <p>Modular, plug-in ESP32-S3 data logging framework for scientific field sensors.</p>
-        <div class="meta">C++ · ESP32-S3</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Helios_Logger">view on github ↗</a>
+        <div class="card-img"><img src="images/art/battery.png" alt="battery research"></div>
+        <div class="card-body">
+          <h3>Multi-Horizon Hazard Models</h3>
+          <p>Battery failure hazard learning across NASA 18650, CALCE and Oxford LFP — XGBoost/LightGBM/GRU, calibration + SHAP.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction">github ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>ForgeCad</h3>
-        <p>Lightweight 3D modeling + circuit simulation — built because Tinkercad doesn't work on an iPad Air.</p>
-        <div class="meta">JavaScript · CAD · simulation</div>
-        <a class="demo" href="https://forge-cad.vercel.app">live demo ↗</a>
+        <div class="card-img"><img src="images/art/helios.png" alt="Helios_Logger"></div>
+        <div class="card-body">
+          <h3>Helios_Logger</h3>
+          <p>Modular, plug-in ESP32-S3 data logging framework for scientific field sensors.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Helios_Logger">github ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>contourslicer</h3>
-        <p>Design custom enclosures from contour photos — no 3D printer required.</p>
-        <div class="meta">HTML · tooling</div>
-        <a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/contourslicer">live demo ↗</a>
+        <div class="card-img"><img src="images/screens/forgecad.png" alt="ForgeCad"></div>
+        <div class="card-body">
+          <h3>ForgeCad</h3>
+          <p>Lightweight 3D modeling + circuit simulation — built because Tinkercad dies on an iPad Air.</p>
+          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://forge-cad.vercel.app">demo ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>Espy</h3>
-        <p>An ESP manager built for extreme ease of use — flash and manage boards without ceremony.</p>
-        <div class="meta">Python</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Espy">view on github ↗</a>
+        <div class="card-img"><img src="images/screens/contourslicer.png" alt="contourslicer"></div>
+        <div class="card-body">
+          <h3>contourslicer</h3>
+          <p>Design custom enclosures from contour photos — no 3D printer required.</p>
+          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/contourslicer">demo ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>FitLog-2.0</h3>
-        <p>Workouts, nutrition, body metrics, personalized plans — powered by Google Gemini.</p>
-        <div class="meta">JavaScript · Gemini AI</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0">view on github ↗</a>
+        <div class="card-img"><img src="images/screens/tasky.png" alt="tasky"></div>
+        <div class="card-body">
+          <h3>tasky</h3>
+          <p>All-in-one team workspace — tasks, projects, people in one place.</p>
+          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/tasky">demo ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>RepoVision</h3>
-        <p>A tool that helps you understand any GitHub repo with AI.</p>
-        <div class="meta">HTML · AI</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/RepoVision">view on github ↗</a>
+        <div class="card-img"><span class="tile">esp tooling</span></div>
+        <div class="card-body">
+          <h3>Espy</h3>
+          <p>An ESP manager built for extreme ease of use — flash and manage boards without ceremony.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Espy">github ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>Asciify</h3>
-        <p>Fully client-side video to ASCII video converter.</p>
-        <div class="meta">JavaScript</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Asciify">view on github ↗</a>
+        <div class="card-img"><span class="tile">fitness · gemini ai</span></div>
+        <div class="card-body">
+          <h3>FitLog-2.0</h3>
+          <p>Workouts, nutrition, body metrics, personalized plans — powered by Google Gemini.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0">github ↗</a></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>ESP-32 File Manager</h3>
-        <p>File manager app for ESP32-S3 — internal + SD card storage, handy download-all button.</p>
-        <div class="meta">C++ · ESP32</div>
-        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/ESP-32-File-manager">view on github ↗</a>
+        <div class="card-img"><span class="tile">video → ascii</span></div>
+        <div class="card-body">
+          <h3>Asciify</h3>
+          <p>Fully client-side video-to-ASCII video converter.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Asciify">github ↗</a></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img"><span class="tile">repo intelligence</span></div>
+        <div class="card-body">
+          <h3>RepoVision</h3>
+          <p>A tool that helps you understand any GitHub repo with AI.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/RepoVision">github ↗</a></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img"><span class="tile">esp32-s3 storage</span></div>
+        <div class="card-body">
+          <h3>ESP-32 File Manager</h3>
+          <p>File manager app for ESP32-S3 — internal + SD card storage, handy download-all button.</p>
+          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/ESP-32-File-manager">github ↗</a></div>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
 
-<section>
+<section id="toolbox">
   <div class="wrap">
-    <h2><span class="n">03</span> / Toolbox</h2>
+    <div class="sec-head"><span class="n">[03]</span><h2>Toolbox</h2><div class="rule"></div></div>
     <div class="skills">
       <span class="skill">TypeScript / React</span>
       <span class="skill">Node / Express</span>
       <span class="skill">Python / Flask</span>
       <span class="skill">XGBoost / LightGBM / GRU</span>
-      <span class="skill">Survival &amp; hazard models</span>
+      <span class="skill">survival &amp; hazard models</span>
       <span class="skill">SHAP</span>
       <span class="skill">ESP32-S3 / C++</span>
       <span class="skill">PlatformIO</span>
       <span class="skill">TensorFlow Lite</span>
       <span class="skill">KiCad</span>
-      <span class="skill">llama.cpp / stable-diffusion.cpp</span>
-      <span class="skill">Vulkan (AMD)</span>
+      <span class="skill">llama.cpp</span>
+      <span class="skill">stable-diffusion.cpp</span>
+      <span class="skill">Vulkan / AMD</span>
       <span class="skill">Electron</span>
     </div>
   </div>
@@ -244,10 +408,94 @@
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Hussain Touhid Siddiqee</span>
-    <span>built locally · "attention is all you need"</span>
+    <span class="mono">© 2026 Hussain Touhid Siddiqee — built on my own hardware</span>
+    <span class="mono">"attention is all you need" <b>▮</b></span>
   </div>
 </footer>
+
+<script>
+(function () {
+  var ROTATE_MS = 5000;
+  var entries = [
+    {
+      title: "polarisstudio",
+      desc: "Local AI studio for AMD Vulkan (RX 580) — chat, image generation, video, model library and HuggingFace downloads, driven by an Electron shell over llama.cpp and stable-diffusion.cpp. No cloud, no telemetry, no GPU vendor lock-in.",
+      tags: ["Electron", "llama.cpp", "stable-diffusion.cpp", "Vulkan"],
+      link: "https://github.com/touhidsiddiqueeraj-bit/polarisstudio",
+      linkText: "github ↗"
+    },
+    {
+      title: "Pixel-Lab",
+      desc: "The most fully featured open-source image editor — layers, filters, adjustments, masks, all client-side with zero install.",
+      tags: ["TypeScript", "canvas", "layers"],
+      link: "https://pixel-lab-jade.vercel.app",
+      linkText: "live demo ↗"
+    },
+    {
+      title: "TCAPS",
+      desc: "An open-source, browser-based alternative to SCAPS-1D solar-cell simulation — within 10% accuracy on 5 validated benchmarks. No installation, runs anywhere a browser does.",
+      tags: ["TypeScript", "solar simulation", "physics"],
+      link: "https://tcaps.netlify.app",
+      linkText: "live demo ↗"
+    },
+    {
+      title: "atlas",
+      desc: "A unified AI chat interface — every model you run, one window. Chat, agents, and configuration in a clean dark shell.",
+      tags: ["JavaScript", "AI chat", "agents"],
+      link: "https://touhidsiddiqueeraj-bit.github.io/atlas",
+      linkText: "live demo ↗"
+    },
+    {
+      title: "Multi-Horizon Hazard Models",
+      desc: "Multihorizon hazard learning gives calibrated battery failure probabilities for risk-aware dispatch — validated across NASA 18650, CALCE, Oxford LFP and Stevenson datasets.",
+      tags: ["XGBoost", "LightGBM", "GRU", "SHAP"],
+      link: "https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction",
+      linkText: "github ↗"
+    }
+  ];
+  var idx = Math.floor(Math.random() * entries.length);
+  var timer = null;
+  var imgs = document.querySelectorAll('#feat-img img');
+  var dots = document.getElementById('feat-dots');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  entries.forEach(function (_, i) {
+    var b = document.createElement('button');
+    if (reduced) b.setAttribute('aria-label', 'Show ' + entries[i].title);
+    b.addEventListener('click', function () { show(i, true); });
+    dots.appendChild(b);
+  });
+
+  function show(i, manual) {
+    idx = i;
+    imgs.forEach(function (img, j) { img.classList.toggle('active', j === i); });
+    document.getElementById('feat-title').textContent = entries[i].title;
+    document.getElementById('feat-desc').textContent = entries[i].desc;
+    document.getElementById('feat-link').href = entries[i].link;
+    document.getElementById('feat-link').textContent = entries[i].linkText;
+    document.getElementById('feat-count').textContent = (i + 1) + ' / ' + entries.length;
+    var tags = document.getElementById('feat-tags');
+    tags.innerHTML = '';
+    entries[i].tags.forEach(function (t) {
+      var s = document.createElement('span');
+      s.textContent = t;
+      tags.appendChild(s);
+    });
+    dots.querySelectorAll('button').forEach(function (b, j) { b.classList.toggle('active', j === i); });
+    if (!manual) restart();
+  }
+
+  function restart() {
+    if (timer) clearInterval(timer);
+    if (!reduced) timer = setInterval(function () { show((idx + 1) % entries.length); }, ROTATE_MS);
+  }
+
+  show(idx, true);
+  var card = document.querySelector('.feat-card');
+  card.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
+  card.addEventListener('mouseleave', restart);
+})();
+</script>
 
 </body>
 </html>

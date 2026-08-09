@@ -4,95 +4,75 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hussain Touhid Siddiqee — hardware-lab portfolio</title>
-<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI studio, battery ML research, ESP32 data loggers, browser-based engineering tools.">
+<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI studio, battery ML research, ESP32 data loggers, browser-based engineering tools. 29 projects, one lab.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0b0d;
-    --panel: #121417;
-    --panel2: #171a1f;
-    --ink: #e9e7e2;
-    --muted: #868b94;
-    --line: #22262d;
-    --amber: #f0a63a;
-    --amber-dim: rgba(240, 166, 58, 0.1);
-    --green: #7fb069;
-    --red: #d1614d;
+    --bg: #0a0b0d; --panel: #121417; --panel2: #171a1f;
+    --ink: #e9e7e2; --muted: #868b94; --line: #22262d;
+    --amber: #f0a63a; --green: #7fb069; --red: #d1614d; --blue: #6ea8d8;
+    --amber-dim: rgba(240,166,58,.1);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Space Grotesk", sans-serif;
-    line-height: 1.55;
-    overflow-x: hidden;
-  }
+  body { background: var(--bg); color: var(--ink); font-family: "Space Grotesk", sans-serif; line-height: 1.55; overflow-x: hidden; }
   .mono { font-family: "IBM Plex Mono", monospace; }
   a { color: var(--amber); text-decoration: none; }
   a:hover { text-decoration: underline; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 
-  /* LED */
-  .led { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
-  .led.green { background: var(--green); box-shadow: 0 0 8px rgba(127,176,105,.7); }
-  .led.amber { background: var(--amber); box-shadow: 0 0 8px rgba(240,166,58,.7); }
+  /* scroll progress */
+  #progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: var(--amber); z-index: 99; }
 
-  /* top bar */
-  .topbar {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(10, 11, 13, 0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
-  }
+  .led { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+  .led.green { background: var(--green); box-shadow: 0 0 8px rgba(127,176,105,.7); animation: pulse 2.2s ease-in-out infinite; }
+  .led.amber { background: var(--amber); box-shadow: 0 0 8px rgba(240,166,58,.7); }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  /* topbar */
+  .topbar { position: sticky; top: 0; z-index: 50; background: rgba(10,11,13,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
   .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; }
   .brand { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink); }
   .brand b { color: var(--amber); font-weight: 500; }
-  .topnav { display: flex; gap: 22px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--muted); }
+  .topnav { display: flex; gap: 22px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; }
   .topnav a { color: var(--muted); }
   .topnav a:hover { color: var(--amber); text-decoration: none; }
-  .sys { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
-  .cursor { display: inline-block; width: 7px; height: 13px; background: var(--amber); animation: blink 1.1s steps(1) infinite; }
+  .sys { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); }
+  .cursor { display: inline-block; width: 7px; height: 13px; background: var(--amber); vertical-align: -2px; margin-left: 6px; animation: blink 1.1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
   /* hero */
-  header { padding: 84px 0 64px; position: relative; }
+  header { padding: 84px 0 64px; }
   .hero-grid { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: start; }
-  .kicker { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 18px; }
+  .kicker { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--green); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
   .kicker::before { content: "$ "; color: var(--muted); }
-  h1 { font-size: clamp(44px, 7.5vw, 86px); font-weight: 700; letter-spacing: -0.03em; line-height: 0.98; }
+  h1 { font-size: clamp(44px, 7.5vw, 86px); font-weight: 700; letter-spacing: -.03em; line-height: .98; }
   h1 .dim { color: var(--muted); }
-  .hero-meta { margin-top: 26px; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted); line-height: 2; }
+  .rotator { margin-top: 26px; min-height: 30px; }
+  .rotator .label { font-family: "IBM Plex Mono", monospace; font-size: 15px; color: var(--muted); margin-right: 10px; }
+  .rotator .wordbox { position: relative; display: inline-block; width: 210px; height: 30px; vertical-align: bottom; overflow: hidden; }
+  .rotator .word { position: absolute; left: 0; top: 0; font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 600; color: var(--amber); text-transform: uppercase; letter-spacing: .06em; opacity: 0; transform: translateY(18px); transition: opacity .3s, transform .3s; white-space: nowrap; }
+  .rotator .word.active { opacity: 1; transform: translateY(0); }
+  .hero-meta { margin-top: 22px; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted); line-height: 2; }
   .hero-meta span { color: var(--ink); }
   .hero-meta .sep { color: var(--line); }
-  .hero-sub { margin-top: 22px; color: var(--muted); font-size: 16.5px; max-width: 56ch; }
+  .hero-sub { margin-top: 20px; color: var(--muted); font-size: 16.5px; max-width: 56ch; }
   .hero-sub b { color: var(--ink); font-weight: 500; }
+  .stats { margin-top: 26px; display: flex; gap: 34px; font-family: "IBM Plex Mono", monospace; }
+  .stats div b { display: block; font-size: 22px; color: var(--ink); font-weight: 600; }
+  .stats div span { font-size: 11.5px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
 
   .avatar-wrap { position: relative; }
-  .avatar-ring {
-    border: 1px solid var(--line); border-radius: 10px; padding: 10px;
-    background: var(--panel);
-  }
+  .avatar-ring { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--panel); }
   .avatar-ring img { width: 100%; border-radius: 6px; display: block; }
-  .avatar-tag {
-    position: absolute; bottom: -12px; left: 12px;
-    background: var(--panel2); border: 1px solid var(--line); border-radius: 6px;
-    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 5px 10px; color: var(--muted);
-  }
+  .avatar-tag { position: absolute; bottom: -12px; left: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 5px 10px; color: var(--muted); }
   .avatar-tag b { color: var(--green); font-weight: 500; }
 
   /* marquee */
-  .marquee {
-    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    background: var(--panel);
-    overflow: hidden; white-space: nowrap;
-  }
-  .marquee-inner { display: inline-block; padding: 12px 0; animation: marquee 28s linear infinite; }
-  .marquee-inner span {
-    font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted);
-    letter-spacing: 0.14em; text-transform: uppercase; margin: 0 26px;
-  }
+  .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--panel); overflow: hidden; white-space: nowrap; }
+  .marquee-inner { display: inline-block; width: max-content; animation: marquee 30s linear infinite; }
+  .marquee-inner span { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; margin: 0 26px; }
   .marquee-inner span b { color: var(--amber); font-weight: 500; }
   @keyframes marquee { to { transform: translateX(-50%); } }
 
@@ -100,79 +80,94 @@
   section { padding: 72px 0; }
   .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 40px; }
   .sec-head .n { font-family: "IBM Plex Mono", monospace; color: var(--amber); font-size: 14px; }
-  .sec-head h2 { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 500; color: var(--ink); letter-spacing: 0.1em; text-transform: uppercase; }
+  .sec-head h2 { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
   .sec-head .rule { flex: 1; border-top: 1px solid var(--line); }
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
 
   /* featured */
   #featured { padding-top: 40px; }
-  .feat-card {
-    display: grid; grid-template-columns: 1.05fr 1fr; gap: 0;
-    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
-    background: var(--panel); min-height: 380px;
-  }
+  .feat-card { display: grid; grid-template-columns: 1.05fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); min-height: 380px; }
   .feat-body { padding: 36px 38px; display: flex; flex-direction: column; position: relative; }
-  .feat-tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--amber); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
-  .feat-body h3 { font-size: clamp(26px, 3vw, 38px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .feat-tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--amber); letter-spacing: .16em; text-transform: uppercase; margin-bottom: 14px; }
+  .feat-body h3 { font-size: clamp(26px, 3vw, 38px); font-weight: 700; letter-spacing: -.02em; margin-bottom: 14px; }
   .feat-body p { color: var(--muted); font-size: 15px; flex: 1; max-width: 52ch; }
   .feat-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 20px; }
-  .feat-tags span {
-    font-family: "IBM Plex Mono", monospace; font-size: 11px;
-    border: 1px solid var(--line); border-radius: 4px; padding: 3px 9px; color: var(--muted);
-  }
-  .feat-link { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--amber); }
+  .feat-tags span { font-family: "IBM Plex Mono", monospace; font-size: 11px; border: 1px solid var(--line); border-radius: 4px; padding: 3px 9px; color: var(--muted); }
+  .feat-link { font-family: "IBM Plex Mono", monospace; font-size: 13px; }
   .feat-img { position: relative; min-height: 280px; background: var(--panel2); overflow: hidden; }
-  .feat-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity 0.55s ease; }
+  .feat-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
   .feat-img img.active { opacity: 1; }
   .feat-count { position: absolute; top: 14px; right: 14px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); background: rgba(10,11,13,.8); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; z-index: 2; }
-  .feat-dots { position: absolute; bottom: 14px; left: 14px; display: flex; gap: 7px; z-index: 2; }
-  .feat-dots button {
-    width: 22px; height: 4px; border: none; border-radius: 2px; cursor: pointer;
-    background: rgba(233,231,226,.25); padding: 0; transition: background 0.2s;
-  }
+  .feat-controls { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(transparent, rgba(10,11,13,.85)); z-index: 2; }
+  .feat-btn { background: rgba(233,231,226,.12); border: 1px solid var(--line); color: var(--ink); width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-family: "IBM Plex Mono", monospace; font-size: 14px; transition: background .15s; }
+  .feat-btn:hover { background: rgba(240,166,58,.25); }
+  .feat-dots { display: flex; gap: 6px; flex: 1; }
+  .feat-dots button { flex: 1; height: 4px; border: none; border-radius: 2px; cursor: pointer; background: rgba(233,231,226,.2); padding: 0; transition: background .2s; }
   .feat-dots button.active { background: var(--amber); }
+  .feat-progress { position: absolute; top: 0; left: 0; height: 3px; width: 0; background: var(--amber); z-index: 3; }
+
+  /* filters */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; align-items: center; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); border-radius: 20px; padding: 6px 14px; cursor: pointer; transition: all .15s; }
+  .chip:hover { border-color: var(--amber); color: var(--ink); }
+  .chip.on { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
+  .chip .count { opacity: .6; }
+  .filters .spacer { flex: 1; }
 
   /* grid */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-  .card {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    overflow: hidden; display: flex; flex-direction: column;
-    transition: border-color 0.18s ease, transform 0.18s ease;
-  }
-  .card:hover { border-color: #353b45; transform: translateY(-3px); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .18s, box-shadow .18s; position: relative; }
+  .card:hover { border-color: #3a4150; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .card.sel { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber), 0 10px 30px rgba(0,0,0,.4); }
   .card-img { aspect-ratio: 16/9; overflow: hidden; background: var(--panel2); position: relative; border-bottom: 1px solid var(--line); }
-  .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-  .card:hover .card-img img { transform: scale(1.05); }
-  .card-img .tile {
-    position: absolute; inset: 0; display: grid; place-items: center;
-    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted);
-    letter-spacing: 0.14em; text-transform: uppercase;
-  }
-  .card-img .tile::before {
-    content: ""; position: absolute; inset: 0;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.02) 25%, transparent 25%) 0 0 / 44px 44px,
-      linear-gradient(315deg, rgba(255,255,255,0.02) 25%, transparent 25%) 0 0 / 44px 44px;
-  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+  .card:hover .card-img img { transform: scale(1.06); }
+  .card-img .tile { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+  .card-img .tile .glyph { font-family: "IBM Plex Mono", monospace; font-size: 30px; opacity: .85; }
+  .card-img .tile .tlabel { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; }
   .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-  .card-body h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  .card-body h3 { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
   .card-body p { color: var(--muted); font-size: 13.5px; flex: 1; }
   .card-foot { display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
-  .card-foot .demo { color: var(--amber); font-size: 12px; }
+  .card-foot .demo { font-size: 12px; }
+  .card.hide { display: none; }
+  .card { transition: border-color .18s, box-shadow .18s, opacity .3s, transform .3s; }
+  .card.pop { opacity: 0; transform: scale(.96); }
+
+  /* terminal */
+  .term { background: #0d0f12; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+  .term-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .term-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .term-bar .dot.r { background: var(--red); } .term-bar .dot.y { background: var(--amber); } .term-bar .dot.g { background: var(--green); }
+  .term-bar .title { margin-left: 10px; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
+  .term-bar .hint { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); }
+  .term-body { padding: 18px 20px; font-family: "IBM Plex Mono", monospace; font-size: 13px; min-height: 260px; max-height: 380px; overflow-y: auto; line-height: 1.7; }
+  .term-body .out { color: var(--muted); white-space: pre-wrap; word-break: break-word; }
+  .term-body .out .accent { color: var(--amber); }
+  .term-body .out .ok { color: var(--green); }
+  .term-body .out .err { color: var(--red); }
+  .term-line { display: flex; align-items: baseline; margin-top: 8px; }
+  .term-line .prompt { color: var(--green); margin-right: 10px; white-space: nowrap; }
+  .term-line input { background: none; border: none; outline: none; color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 13px; flex: 1; caret-color: var(--amber); }
+  .term-kbd { margin-top: 12px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); }
+  .term-kbd kbd { border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; background: var(--panel); }
 
   /* skills */
   .skills { display: flex; flex-wrap: wrap; gap: 10px; }
-  .skill {
-    border: 1px solid var(--line); background: var(--panel); border-radius: 6px;
-    padding: 8px 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink);
-    transition: border-color 0.15s;
-  }
-  .skill:hover { border-color: var(--amber); }
+  .skill { border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 8px 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; transition: border-color .15s, color .15s; cursor: default; }
+  .skill:hover { border-color: var(--amber); color: var(--amber); }
 
-  /* footer */
   footer { border-top: 1px solid var(--line); padding: 40px 0 56px; }
   footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   footer .mono { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
   footer b { color: var(--amber); font-weight: 500; }
+
+  /* easter egg */
+  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--panel2); border: 1px solid var(--amber); color: var(--amber); font-family: "IBM Plex Mono", monospace; font-size: 13px; padding: 10px 18px; border-radius: 8px; z-index: 100; opacity: 0; transition: all .35s; pointer-events: none; }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .rainbow { animation: hue 1.6s linear infinite; }
+  @keyframes hue { to { filter: hue-rotate(360deg); } }
 
   @media (max-width: 760px) {
     .hero-grid { grid-template-columns: 1fr; gap: 36px; }
@@ -182,9 +177,17 @@
     .feat-body { padding: 24px; }
     .topnav, .sys { display: none; }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-inner, .rotator .word, .led.green, .cursor { animation: none; }
+    .rotator .word { position: static; opacity: 1; transform: none; display: inline; margin-right: 8px; }
+    .rotator .wordbox { display: none; }
+    .card:hover .card-img img { transform: none; }
+  }
 </style>
 </head>
 <body>
+
+<div id="progress"></div>
 
 <nav class="topbar">
   <div class="wrap">
@@ -192,6 +195,7 @@
     <div class="topnav">
       <a href="#featured">featured</a>
       <a href="#projects">projects</a>
+      <a href="#terminal">terminal</a>
       <a href="#toolbox">toolbox</a>
       <a href="https://github.com/touhidsiddiqueeraj-bit">github</a>
     </div>
@@ -204,12 +208,21 @@
     <div>
       <div class="kicker">whoami</div>
       <h1>Hussain Touhid<br><span class="dim">Siddiqee</span></h1>
-      <div class="hero-meta">
-        <span>local-ai engineer</span> <span class="sep">/</span>
-        <span>battery-ml researcher</span> <span class="sep">/</span>
-        <span>embedded builder</span>
+      <div class="rotator">
+        <span class="label">i build</span>
+        <span class="wordbox" id="wordbox">
+          <span class="word active">local ai</span><span class="word">battery ml</span><span class="word">embedded esp32</span><span class="word">web apps</span><span class="word">solar simulation</span><span class="word">lora loggers</span><span class="word">kicad pcb</span>
+        </span>
       </div>
-      <p class="hero-sub">I write code that runs on <b>my own hardware</b> — an AI studio on an AMD RX 580, browser-based tools that replace desktop software, ESP32 data loggers for the field — and research code for <b>battery failure prediction</b>.</p>
+      <div class="hero-meta">
+        <span>local-ai engineer</span> <span class="sep">/</span> <span>battery-ml researcher</span> <span class="sep">/</span> <span>embedded builder</span>
+      </div>
+      <p class="hero-sub">I write code that runs on <b>my own hardware</b> — an AI studio on an AMD RX 580, browser tools that replace desktop software, ESP32 loggers for the field — and research code for <b>battery failure prediction</b>. 29 projects, all mine.</p>
+      <div class="stats">
+        <div><b>29</b><span>projects</span></div>
+        <div><b>7</b><span>live demos</span></div>
+        <div><b>3</b><span>research lines</span></div>
+      </div>
     </div>
     <div class="avatar-wrap">
       <div class="avatar-ring"><img src="images/avatar.jpg" alt="Hussain Touhid Siddiqee"></div>
@@ -219,31 +232,33 @@
 </header>
 
 <div class="marquee" aria-hidden="true">
-  <div class="marquee-inner">
-    <span>local <b>ai</b></span><span>battery <b>ml</b></span><span>embedded <b>esp32</b></span><span><b>web</b> apps</span><span>solar <b>simulation</b></span><span>lora <b>loggers</b></span><span>kiCad <b>pcb</b></span>
-    <span>local <b>ai</b></span><span>battery <b>ml</b></span><span>embedded <b>esp32</b></span><span><b>web</b> apps</span><span>solar <b>simulation</b></span><span>lora <b>loggers</b></span><span>kiCad <b>pcb</b></span>
-  </div>
+  <div class="marquee-inner" id="marquee"></div>
 </div>
 
 <section id="featured">
   <div class="wrap">
-    <div class="sec-head"><span class="n">[01]</span><h2>Featured build</h2><div class="rule"></div></div>
-    <div class="feat-card">
+    <div class="sec-head reveal"><span class="n">[01]</span><h2>Featured build</h2><div class="rule"></div></div>
+    <div class="feat-card reveal">
       <div class="feat-body">
-        <div class="feat-tag">// rotating — refreshed every 5s</div>
+        <div class="feat-tag">// auto-rotating · every 5s</div>
         <h3 id="feat-title">polarisstudio</h3>
         <p id="feat-desc">placeholder</p>
         <div class="feat-tags" id="feat-tags"></div>
         <a class="feat-link" id="feat-link" href="#">explore ↗</a>
       </div>
       <div class="feat-img" id="feat-img">
+        <div class="feat-progress" id="feat-progress"></div>
         <div class="feat-count" id="feat-count">1 / 5</div>
         <img src="images/art/polaris.png" alt="polarisstudio">
-        <img src="images/screens/pixellab.png" alt="Pixel-Lab">
-        <img src="images/screens/tcaps.png" alt="TCAPS">
-        <img src="images/screens/atlas.png" alt="atlas">
-        <img src="images/art/battery.png" alt="battery research">
-        <div class="feat-dots" id="feat-dots"></div>
+        <img src="images/repo/pixellab.png" alt="Pixel-Lab">
+        <img src="images/repo/tcaps.png" alt="TCAPS">
+        <img src="images/repo/atlas.png" alt="atlas">
+        <img src="images/repo/battery-mh.png" alt="battery research">
+        <div class="feat-controls">
+          <button class="feat-btn" id="feat-prev" aria-label="previous">‹</button>
+          <div class="feat-dots" id="feat-dots"></div>
+          <button class="feat-btn" id="feat-next" aria-label="next">›</button>
+        </div>
       </div>
     </div>
   </div>
@@ -251,157 +266,43 @@
 
 <section id="projects">
   <div class="wrap">
-    <div class="sec-head"><span class="n">[02]</span><h2>Projects</h2><div class="rule"></div></div>
-    <div class="grid">
+    <div class="sec-head reveal"><span class="n">[02]</span><h2>Projects — all 29</h2><div class="rule"></div></div>
+    <div class="filters reveal" id="filters"></div>
+    <div class="grid" id="grid"></div>
+    <p class="mono" style="color:var(--muted);font-size:12px;margin-top:22px">[j/k] navigate · [enter] open · [/] terminal · [esc] leave</p>
+  </div>
+</section>
 
-      <div class="card">
-        <div class="card-img"><img src="images/art/polaris.png" alt="polarisstudio"><span class="tile" style="display:none"></span></div>
-        <div class="card-body">
-          <h3>polarisstudio</h3>
-          <p>Local AI studio for AMD Vulkan — chat, image, video, model library, HuggingFace downloads. Electron over llama.cpp + stable-diffusion.cpp.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/polarisstudio">github ↗</a></div>
-        </div>
+<section id="terminal">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="n">[03]</span><h2>Terminal — try it</h2><div class="rule"></div></div>
+    <div class="term reveal">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">touhid@lab: ~/portfolio</span>
+        <span class="hint">type 'help'</span>
       </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/screens/pixellab.png" alt="Pixel-Lab"></div>
-        <div class="card-body">
-          <h3>Pixel-Lab</h3>
-          <p>The most fully featured open-source image editor — layers, filters, adjustments, all client-side, zero install.</p>
-          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://pixel-lab-jade.vercel.app">demo ↗</a></div>
-        </div>
+      <div class="term-body" id="term-body"></div>
+      <div class="term-line" style="padding:0 20px 14px;">
+        <span class="prompt">touhid@lab:~$</span>
+        <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="try: ls · open tcaps · cat espy">
       </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/screens/tcaps.png" alt="TCAPS"></div>
-        <div class="card-body">
-          <h3>TCAPS</h3>
-          <p>Open-source browser alternative to SCAPS-1D — within 10% accuracy on 5 validated solar-cell benchmarks.</p>
-          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://tcaps.netlify.app">demo ↗</a></div>
-        </div>
+      <div class="term-kbd" style="padding:0 20px 16px;">
+        <kbd>tab</kbd> complete · <kbd>↑</kbd> history · <kbd>esc</kbd> leave
       </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/screens/atlas.png" alt="atlas"></div>
-        <div class="card-body">
-          <h3>atlas</h3>
-          <p>Unified AI chat interface — every model you run, one window.</p>
-          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/atlas">demo ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/art/battery.png" alt="battery research"></div>
-        <div class="card-body">
-          <h3>Multi-Horizon Hazard Models</h3>
-          <p>Battery failure hazard learning across NASA 18650, CALCE and Oxford LFP — XGBoost/LightGBM/GRU, calibration + SHAP.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction">github ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/art/helios.png" alt="Helios_Logger"></div>
-        <div class="card-body">
-          <h3>Helios_Logger</h3>
-          <p>Modular, plug-in ESP32-S3 data logging framework for scientific field sensors.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Helios_Logger">github ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/screens/forgecad.png" alt="ForgeCad"></div>
-        <div class="card-body">
-          <h3>ForgeCad</h3>
-          <p>Lightweight 3D modeling + circuit simulation — built because Tinkercad dies on an iPad Air.</p>
-          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://forge-cad.vercel.app">demo ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/screens/contourslicer.png" alt="contourslicer"></div>
-        <div class="card-body">
-          <h3>contourslicer</h3>
-          <p>Design custom enclosures from contour photos — no 3D printer required.</p>
-          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/contourslicer">demo ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><img src="images/screens/tasky.png" alt="tasky"></div>
-        <div class="card-body">
-          <h3>tasky</h3>
-          <p>All-in-one team workspace — tasks, projects, people in one place.</p>
-          <div class="card-foot"><span class="led green"></span>live<a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/tasky">demo ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><span class="tile">esp tooling</span></div>
-        <div class="card-body">
-          <h3>Espy</h3>
-          <p>An ESP manager built for extreme ease of use — flash and manage boards without ceremony.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Espy">github ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><span class="tile">fitness · gemini ai</span></div>
-        <div class="card-body">
-          <h3>FitLog-2.0</h3>
-          <p>Workouts, nutrition, body metrics, personalized plans — powered by Google Gemini.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0">github ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><span class="tile">video → ascii</span></div>
-        <div class="card-body">
-          <h3>Asciify</h3>
-          <p>Fully client-side video-to-ASCII video converter.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Asciify">github ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><span class="tile">repo intelligence</span></div>
-        <div class="card-body">
-          <h3>RepoVision</h3>
-          <p>A tool that helps you understand any GitHub repo with AI.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/RepoVision">github ↗</a></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img"><span class="tile">esp32-s3 storage</span></div>
-        <div class="card-body">
-          <h3>ESP-32 File Manager</h3>
-          <p>File manager app for ESP32-S3 — internal + SD card storage, handy download-all button.</p>
-          <div class="card-foot"><span class="led amber"></span>repo only<a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/ESP-32-File-manager">github ↗</a></div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
 
 <section id="toolbox">
   <div class="wrap">
-    <div class="sec-head"><span class="n">[03]</span><h2>Toolbox</h2><div class="rule"></div></div>
-    <div class="skills">
-      <span class="skill">TypeScript / React</span>
-      <span class="skill">Node / Express</span>
-      <span class="skill">Python / Flask</span>
-      <span class="skill">XGBoost / LightGBM / GRU</span>
-      <span class="skill">survival &amp; hazard models</span>
-      <span class="skill">SHAP</span>
-      <span class="skill">ESP32-S3 / C++</span>
-      <span class="skill">PlatformIO</span>
-      <span class="skill">TensorFlow Lite</span>
-      <span class="skill">KiCad</span>
-      <span class="skill">llama.cpp</span>
-      <span class="skill">stable-diffusion.cpp</span>
-      <span class="skill">Vulkan / AMD</span>
-      <span class="skill">Electron</span>
+    <div class="sec-head reveal"><span class="n">[04]</span><h2>Toolbox</h2><div class="rule"></div></div>
+    <div class="skills reveal">
+      <span class="skill">TypeScript / React</span><span class="skill">Node / Express</span><span class="skill">Python / Flask</span>
+      <span class="skill">XGBoost / LightGBM / GRU</span><span class="skill">survival &amp; hazard models</span><span class="skill">SHAP</span>
+      <span class="skill">ESP32-S3 / C++</span><span class="skill">PlatformIO</span><span class="skill">TensorFlow Lite</span>
+      <span class="skill">KiCad</span><span class="skill">llama.cpp</span><span class="skill">stable-diffusion.cpp</span>
+      <span class="skill">Vulkan / AMD</span><span class="skill">Electron</span><span class="skill">SCAPS-1D</span>
     </div>
   </div>
 </section>
@@ -413,88 +314,333 @@
   </div>
 </footer>
 
-<script>
-(function () {
-  var ROTATE_MS = 5000;
-  var entries = [
-    {
-      title: "polarisstudio",
-      desc: "Local AI studio for AMD Vulkan (RX 580) — chat, image generation, video, model library and HuggingFace downloads, driven by an Electron shell over llama.cpp and stable-diffusion.cpp. No cloud, no telemetry, no GPU vendor lock-in.",
-      tags: ["Electron", "llama.cpp", "stable-diffusion.cpp", "Vulkan"],
-      link: "https://github.com/touhidsiddiqueeraj-bit/polarisstudio",
-      linkText: "github ↗"
-    },
-    {
-      title: "Pixel-Lab",
-      desc: "The most fully featured open-source image editor — layers, filters, adjustments, masks, all client-side with zero install.",
-      tags: ["TypeScript", "canvas", "layers"],
-      link: "https://pixel-lab-jade.vercel.app",
-      linkText: "live demo ↗"
-    },
-    {
-      title: "TCAPS",
-      desc: "An open-source, browser-based alternative to SCAPS-1D solar-cell simulation — within 10% accuracy on 5 validated benchmarks. No installation, runs anywhere a browser does.",
-      tags: ["TypeScript", "solar simulation", "physics"],
-      link: "https://tcaps.netlify.app",
-      linkText: "live demo ↗"
-    },
-    {
-      title: "atlas",
-      desc: "A unified AI chat interface — every model you run, one window. Chat, agents, and configuration in a clean dark shell.",
-      tags: ["JavaScript", "AI chat", "agents"],
-      link: "https://touhidsiddiqueeraj-bit.github.io/atlas",
-      linkText: "live demo ↗"
-    },
-    {
-      title: "Multi-Horizon Hazard Models",
-      desc: "Multihorizon hazard learning gives calibrated battery failure probabilities for risk-aware dispatch — validated across NASA 18650, CALCE, Oxford LFP and Stevenson datasets.",
-      tags: ["XGBoost", "LightGBM", "GRU", "SHAP"],
-      link: "https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction",
-      linkText: "github ↗"
-    }
-  ];
-  var idx = Math.floor(Math.random() * entries.length);
-  var timer = null;
-  var imgs = document.querySelectorAll('#feat-img img');
-  var dots = document.getElementById('feat-dots');
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<div id="toast"></div>
 
-  entries.forEach(function (_, i) {
-    var b = document.createElement('button');
-    if (reduced) b.setAttribute('aria-label', 'Show ' + entries[i].title);
-    b.addEventListener('click', function () { show(i, true); });
+<script>
+var P = [
+  { slug:"polarisstudio", t:"polarisstudio", d:"Local AI studio for AMD Vulkan (RX 580) — chat, image gen, video, model library, HuggingFace downloads. Electron over llama.cpp + stable-diffusion.cpp.", cat:"AI", img:"images/art/polaris.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/polarisstudio", tags:["Electron","llama.cpp","Vulkan"] },
+  { slug:"pixel-lab", t:"Pixel-Lab", d:"Professional browser image editor — 100% client-side. Layers, adjustments, vectorize. Zero install, zero cloud.", cat:"Web", img:"images/repo/pixellab.png", live:true, link:"https://pixel-lab-jade.vercel.app", tags:["TypeScript","canvas"] },
+  { slug:"tcaps", t:"TCAPS", d:"Thin-film Cell Analysis & PV Simulator — a browser-based SCAPS-1D compatible simulator, within 10% accuracy on 5 validated benchmarks.", cat:"Web", img:"images/repo/tcaps.png", live:true, link:"https://tcaps.netlify.app", tags:["TypeScript","solar","physics"] },
+  { slug:"atlas", t:"atlas", d:"Unified AI chat interface + agent IDE — every model you run, one window. No backend, no telemetry.", cat:"AI", img:"images/repo/atlas.png", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/atlas", tags:["JavaScript","AI chat"] },
+  { slug:"battery-mh", t:"Multi-Horizon Hazard Models", d:"Calibrated battery failure hazard learning — NASA 18650, CALCE, Oxford LFP. XGBoost / LightGBM / GRU + SHAP.", cat:"Energy ML", img:"images/repo/battery-mh.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction", tags:["XGBoost","GRU","SHAP"] },
+  { slug:"battery-robust", t:"Robustness of Multihorizon Battery Intelligence", d:"Do calibrated failure probabilities survive realistic operating conditions? Stress tests across severity, recalibration recovery.", cat:"Energy ML", img:"images/repo/battery-robust.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/Robustness-of-Multihorizon-Battery-Failure-Intelligence", tags:["reliability","calibration"] },
+  { slug:"battery-framework", t:"Open Python Framework — Battery Reliability", d:"Reproducible multihorizon discrete-time hazard learning for BESS — modular code, synthetic data, publication figures.", cat:"Energy ML", img:"images/repo/battery-framework.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/An-Open-Python-Framework-for-Battery-Operational-Reliability-Estimation", tags:["Python","research"] },
+  { slug:"materialspaper", t:"materialspaper", d:"RbGeI₃ lead-free perovskite solar cell — SCAPS-1D simulation under Wine, FTO/TiO₂/RbGeI₃/CuI/Au, 26.69% PCE.", cat:"Energy ML", img:"images/repo/materialspaper.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/materialspaper", tags:["SCAPS-1D","perovskite"] },
+  { slug:"artemis-helios", t:"artemis-helios", d:"Helios-Artemis — PV research implementing advanced MPPT algorithms. 9 publication figures, LSTM modeling, real field deployment data.", cat:"Energy ML", img:"images/repo/artemis-arch.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/artemis-helios", tags:["MPPT","PV","LSTM"] },
+  { slug:"helios-logger", t:"Helios_Logger", d:"Modular, plug-in ESP32-S3 data logging framework for scientific field sensors. This is the logger the field photos come from.", cat:"Embedded", img:"images/repo/helios-pcb.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/Helios_Logger", tags:["ESP32-S3","C++"] },
+  { slug:"espy", t:"Espy", d:"An ESP manager built for extreme ease of use — one-click OTA firmware updates over Wi-Fi. The mascot approves.", cat:"Embedded", img:"images/repo/espy.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/Espy", tags:["PyQt6","OTA"] },
+  { slug:"esp-file-manager", t:"ESP-32 File Manager", d:"File manager for ESP32-S3 — internal + SD card storage, handy download-all button.", cat:"Embedded", tile:"▤", link:"https://github.com/touhidsiddiqueeraj-bit/ESP-32-File-manager", tags:["ESP32-S3","C++"] },
+  { slug:"iot-nfc", t:"IoT NFC Attendance", d:"A simple, cheap IoT NFC-based attendance system — reader + Apps Script backend.", cat:"Embedded", tile:"◈", link:"https://github.com/touhidsiddiqueeraj-bit/IoT-NFC-Attendance-System", tags:["NFC","IoT"] },
+  { slug:"heartlens", t:"heartlens", d:"HeartLens AI — sub-$15 edge ECG monitoring with on-device AI inference. ESP32 + TensorFlow Lite Micro.", cat:"Embedded", img:"images/repo/heartlens.png", live:false, link:"https://github.com/touhidsiddiqueeraj-bit/heartlens", tags:["TFLite Micro","ECG"] },
+  { slug:"iot-farm", t:"IoT AI Smart Farm", d:"AI-powered automated plant growth on ESP32-S3 WROOM — final year project, Dept. of EEE, Leading University, Sylhet.", cat:"Embedded", tile:"✿", link:"https://github.com/touhidsiddiqueeraj-bit/IOT-enabled-AI-Smart-Farm-with-automated-plant-growth-", tags:["ESP32-S3","final year"] },
+  { slug:"tasky", t:"tasky", d:"All-in-one team workspace — tasks, voice/video calls, chat, calendar, whiteboard.", cat:"Web", img:"images/repo/tasky.png", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/tasky", tags:["JavaScript","team"] },
+  { slug:"contourslicer", t:"contourslicer", d:"Turn any 3D model into printable cutting templates for stacked MDF — no CNC, no 3D printer required.", cat:"Web", img:"images/repo/contourslicer.png", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/contourslicer", tags:["HTML","fabrication"] },
+  { slug:"forgecad", t:"ForgeCad", d:"Browser 3D modeler + circuit simulator — no framework, no build step. Built because Tinkercad dies on an iPad Air.", cat:"Web", img:"images/repo/forgecad.png", live:true, link:"https://forge-cad.vercel.app", tags:["Three.js","SVG"] },
+  { slug:"asciify", t:"Asciify", d:"Fully client-side, GPU-accelerated video → ASCII art converter. No uploads.", cat:"Web", tile:"▒", link:"https://github.com/touhidsiddiqueeraj-bit/Asciify", tags:["GPU","canvas"] },
+  { slug:"clinic-os", t:"Clinic OS", d:"Full-stack dental clinic web app for Quick Dental Care, Sylhet — PWA, Google Apps Script backend, WhatsApp integration.", cat:"Web", tile:"✚", link:"https://github.com/touhidsiddiqueeraj-bit/Clinic-OS-Showcase-Quick-Dental-Care", tags:["PWA","Apps Script"] },
+  { slug:"cv-genie", t:"CV-Genie", d:"Professional client-side CV builder — 13 templates, ATS analysis, PDF/DOCX export.", cat:"AI", tile:"▙", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/CV-Genie/", tags:["SPA","ATS"] },
+  { slug:"cv-genie-server", t:"cv-genie-server", d:"Render server for CV Genie — perfect-quality .doc and .pdf exports.", cat:"AI", tile:"▚", link:"https://github.com/touhidsiddiqueeraj-bit/cv-genie-server", tags:["Node","rendering"] },
+  { slug:"roadmap-ai", t:"Roadmap to AI-Powered Engineer", d:"Gamified 60-day roadmap: zero to production-ready AI web apps. Vanilla HTML/CSS/JS.", cat:"AI", tile:"▸", link:"https://github.com/touhidsiddiqueeraj-bit/Roadmap-to-AI-Powered-Engineer", tags:["learning","60 days"] },
+  { slug:"repovision", t:"RepoVision", d:"AI-powered GitHub codebase explorer and auditor — understand any repo with AI.", cat:"AI", tile:"⌁", link:"https://github.com/touhidsiddiqueeraj-bit/RepoVision", tags:["AI","github"] },
+  { slug:"fitlog", t:"FitLog-2.0", d:"AI-powered fitness & nutrition tracker — workouts, metrics, personalized plans via Google Gemini.", cat:"AI", tile:"▲", link:"https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0", tags:["Gemini","PWA"] },
+  { slug:"tflite-trainer", t:"TF-Lite Trainer", d:"Flexible trainer for MCU machine-learning models — train, convert, deploy to microcontrollers.", cat:"AI", tile:"▦", link:"https://github.com/touhidsiddiqueeraj-bit/TF-Lite-Trainer", tags:["TFLite","MCU"] },
+  { slug:"comptia-aplus", t:"comptia-aplus", d:"90-day CompTIA A+ study app — 220-1101 Core 1 & 220-1102 Core 2, self-contained PWA.", cat:"Study", tile:"▣", link:"https://github.com/touhidsiddiqueeraj-bit/comptia-aplus", tags:["A+","PWA"] },
+  { slug:"comptia-security", t:"comptia-security", d:"Security+ SY0-701 study app — 60-day plan, quizzes, progress tracking, Google Sheets sync.", cat:"Study", tile:"▧", link:"https://github.com/touhidsiddiqueeraj-bit/comptia-security", tags:["Sec+","quizzes"] },
+  { slug:"aws-ai-study", t:"AWS-AI-Study", d:"AWS Certified AI Practitioner (AIF-C01) study app — no install, no backend, no dependencies.", cat:"Study", tile:"▥", link:"https://github.com/touhidsiddiqueeraj-bit/AWS-AI-Study", tags:["AIF-C01","single-file"] }
+];
+var CATS = ["AI","Web","Energy ML","Embedded","Study"];
+var TILE_HUES = [38, 160, 210, 265, 320, 90, 12];
+var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
+
+/* ---------- marquee ---------- */
+(function () {
+  var words = ["local ai","battery ml","embedded esp32","web apps","solar simulation","lora loggers","kicad pcb"];
+  var s = words.map(function (w) { return "<span><b>" + w + "</b></span>"; }).join("");
+  document.getElementById("marquee").innerHTML = s + s;
+})();
+
+/* ---------- hero rotator ---------- */
+(function () {
+  var words = document.querySelectorAll("#wordbox .word");
+  var i = 0;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(function () {
+    words[i].classList.remove("active");
+    i = (i + 1) % words.length;
+    words[i].classList.add("active");
+  }, 2200);
+})();
+
+/* ---------- featured rotation ---------- */
+(function () {
+  var idx = Math.floor(Math.random() * FEATURED.length), timer = null, t0 = 0;
+  var ROT = 5000, reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var imgs = document.querySelectorAll("#feat-img img");
+  var dots = document.getElementById("feat-dots");
+  var bar = document.getElementById("feat-progress");
+  var card = document.querySelector(".feat-card");
+
+  FEATURED.forEach(function (f, i) {
+    var b = document.createElement("button");
+    b.setAttribute("aria-label", "Show " + f.t);
+    b.addEventListener("click", function () { show(i, true); });
     dots.appendChild(b);
   });
 
   function show(i, manual) {
-    idx = i;
-    imgs.forEach(function (img, j) { img.classList.toggle('active', j === i); });
-    document.getElementById('feat-title').textContent = entries[i].title;
-    document.getElementById('feat-desc').textContent = entries[i].desc;
-    document.getElementById('feat-link').href = entries[i].link;
-    document.getElementById('feat-link').textContent = entries[i].linkText;
-    document.getElementById('feat-count').textContent = (i + 1) + ' / ' + entries.length;
-    var tags = document.getElementById('feat-tags');
-    tags.innerHTML = '';
-    entries[i].tags.forEach(function (t) {
-      var s = document.createElement('span');
-      s.textContent = t;
-      tags.appendChild(s);
-    });
-    dots.querySelectorAll('button').forEach(function (b, j) { b.classList.toggle('active', j === i); });
+    idx = i; t0 = performance.now();
+    var f = FEATURED[i];
+    imgs.forEach(function (img, j) { img.classList.toggle("active", j === i); });
+    document.getElementById("feat-title").textContent = f.t;
+    document.getElementById("feat-desc").textContent = f.d;
+    document.getElementById("feat-link").href = f.link;
+    document.getElementById("feat-link").textContent = f.live ? "live demo ↗" : "github ↗";
+    document.getElementById("feat-count").textContent = (i + 1) + " / " + FEATURED.length;
+    var tags = document.getElementById("feat-tags");
+    tags.innerHTML = "";
+    f.tags.forEach(function (t) { var s = document.createElement("span"); s.textContent = t; tags.appendChild(s); });
+    dots.querySelectorAll("button").forEach(function (b, j) { b.classList.toggle("active", j === i); });
     if (!manual) restart();
   }
-
   function restart() {
     if (timer) clearInterval(timer);
-    if (!reduced) timer = setInterval(function () { show((idx + 1) % entries.length); }, ROTATE_MS);
+    bar.style.transition = "none"; bar.style.width = "0";
+    if (!reduced) {
+      timer = setInterval(function () { show((idx + 1) % FEATURED.length); }, ROT);
+      requestAnimationFrame(function () { bar.style.transition = "width " + ROT + "ms linear"; bar.style.width = "100%"; });
+    }
+  }
+  document.getElementById("feat-prev").addEventListener("click", function () { show((idx + FEATURED.length - 1) % FEATURED.length, true); });
+  document.getElementById("feat-next").addEventListener("click", function () { show((idx + 1) % FEATURED.length, true); });
+  card.addEventListener("mouseenter", function () { if (timer) clearInterval(timer); bar.style.transition = "none"; });
+  card.addEventListener("mouseleave", restart);
+  show(idx, true); restart();
+})();
+
+/* ---------- grid render + filters ---------- */
+(function () {
+  var grid = document.getElementById("grid");
+  var filters = document.getElementById("filters");
+  var state = { cat: "All", live: "All" };
+
+  function tileHTML(p) {
+    var hue = TILE_HUES[(P.indexOf(p)) % TILE_HUES.length];
+    return '<div class="tile" style="background:linear-gradient(135deg,hsl(' + hue + ',28%,9%),#0d0f12 70%);">' +
+      '<span class="glyph" style="color:hsl(' + hue + ',70%,65%)">' + (p.tile || "▮") + '</span>' +
+      '<span class="tlabel" style="color:hsl(' + hue + ',60%,72%)">' + p.cat + '</span></div>';
   }
 
-  show(idx, true);
-  restart();
-  var card = document.querySelector('.feat-card');
-  card.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
-  card.addEventListener('mouseleave', restart);
+  function cardHTML(p) {
+    var img = p.img ? '<img src="' + p.img + '" alt="' + p.t + '" loading="lazy">' : tileHTML(p);
+    var led = p.live ? '<span class="led green"></span>live' : '<span class="led amber"></span>repo';
+    var demo = p.live ? '<a class="demo" href="' + p.link + '">demo ↗</a>' : '<a class="demo" href="' + p.link + '">github ↗</a>';
+    return '<div class="card" data-slug="' + p.slug + '" data-cat="' + p.cat + '" data-live="' + p.live + '">' +
+      '<div class="card-img">' + img + '</div>' +
+      '<div class="card-body"><h3>' + p.t + '</h3><p>' + p.d + '</p>' +
+      '<div class="card-foot"><span>' + led + '</span>' + demo + '</div></div></div>';
+  }
+
+  function render() {
+    grid.innerHTML = "";
+    P.forEach(function (p, i) {
+      var show = (state.cat === "All" || p.cat === state.cat) && (state.live === "All" || p.live === (state.live === "Live"));
+      var el = document.createElement("div");
+      el.innerHTML = cardHTML(p);
+      var card = el.firstChild;
+      card.classList.add("hide") === undefined; card.hidden = !show;
+      if (show) { card.classList.add("pop"); setTimeout(function () { card.classList.remove("pop"); }, 30); }
+      grid.appendChild(card);
+    });
+  }
+
+  function chips() {
+    var out = "";
+    ["All"].concat(CATS).forEach(function (c) {
+      out += '<button class="chip' + (state.cat === c ? " on" : "") + '" data-cat="' + c + '">' + c + ' <span class="count">(' + (c === "All" ? P.length : P.filter(function (p) { return p.cat === c; }).length) + ')</span></button>';
+    });
+    out += '<span class="spacer"></span>';
+    ["All", "Live", "Repo"].forEach(function (s) {
+      out += '<button class="chip' + (state.live === s ? " on" : "") + '" data-live="' + s + '">' + s + '</button>';
+    });
+    filters.innerHTML = out;
+  }
+  filters.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.cat) state.cat = b.dataset.cat;
+    if (b.dataset.live) state.live = b.dataset.live;
+    chips(); render();
+  });
+
+  /* keyboard nav */
+  var cards = [];
+  function setCards() { cards = Array.prototype.slice.call(document.querySelectorAll(".card:not([hidden])")); }
+  var sel = 0;
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
+      e.preventDefault();
+      var inp = document.getElementById("term-input");
+      inp.focus(); inp.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    if (document.activeElement.tagName === "INPUT") { if (e.key === "Escape") document.activeElement.blur(); return; }
+    if (e.key === "j" || e.key === "k") {
+      e.preventDefault(); setCards();
+      if (!cards.length) return;
+      if (cards[sel]) cards[sel].classList.remove("sel");
+      sel = e.key === "j" ? Math.min(sel + 1, cards.length - 1) : Math.max(sel - 1, 0);
+      cards[sel].classList.add("sel");
+      cards[sel].scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } else if (e.key === "Enter" && cards[sel]) {
+      var p = P.filter(function (x) { return x.slug === cards[sel].dataset.slug; })[0];
+      if (p) window.open(p.link, "_blank");
+    }
+  });
+
+  /* tilt */
+  document.addEventListener("mousemove", function (e) {
+    var c = e.target.closest ? e.target.closest(".card") : null;
+    if (!c) return;
+    var r = c.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+    c.style.transform = "perspective(700px) rotateY(" + (x * 5) + "deg) rotateX(" + (-y * 5) + "deg)";
+    c.style.transformStyle = "preserve-3d";
+  });
+  document.addEventListener("mouseout", function (e) {
+    var c = e.target.closest ? e.target.closest(".card") : null;
+    if (c) { c.style.transform = ""; }
+  });
+
+  chips(); render();
+})();
+
+/* ---------- reveal on scroll ---------- */
+(function () {
+  var els = document.querySelectorAll(".reveal");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    els.forEach(function (el) { el.classList.add("in"); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.08 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+
+/* ---------- scroll progress ---------- */
+(function () {
+  var bar = document.getElementById("progress");
+  addEventListener("scroll", function () {
+    var h = document.documentElement;
+    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
+  }, { passive: true });
+})();
+
+/* ---------- terminal ---------- */
+(function () {
+  var body = document.getElementById("term-body");
+  var input = document.getElementById("term-input");
+  var history = [], hIdx = 0;
+
+  function print(html) { body.insertAdjacentHTML("beforeend", '<div class="out">' + html + '</div>'); body.scrollTop = body.scrollHeight; }
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function find(term) {
+    return P.filter(function (p) { return p.slug.indexOf(term.toLowerCase()) === 0 || p.t.toLowerCase().indexOf(term.toLowerCase()) >= 0; });
+  }
+  function link(p) { return p.live ? "demo: " + p.link : "repo: " + p.link; }
+
+  function run(cmd) {
+    var args = cmd.trim().split(/\s+/);
+    var c = args.shift();
+    switch (c) {
+      case "help":
+        print('commands: <span class="accent">help</span> <span class="accent">ls</span> [--live] <span class="accent">open</span> &lt;slug&gt; <span class="accent">cat</span> &lt;slug&gt; <span class="accent">whoami</span> <span class="accent">contact</span> <span class="accent">date</span> <span class="accent">echo</span> &lt;text&gt; <span class="accent">clear</span>'); break;
+      case "ls": {
+        var pool = c === "ls" ? P : P;
+        var list = args[0] === "--live" ? pool.filter(function (p) { return p.live; }) : pool;
+        if (!list.length) { print("<span class='err'>no projects match</span>"); break; }
+        var cols = Math.ceil(list.length / 5);
+        var rows = [];
+        for (var i = 0; i < 5; i++) {
+          var row = [];
+          for (var j = 0; j < cols; j++) { var p = list[j * 5 + i]; if (p) row.push(p.slug.padEnd(24)); }
+          rows.push(row.join(""));
+        }
+        print(rows.join("\n") + "\n<span class='muted'>" + list.length + " project(s). try: open &lt;slug&gt;</span>");
+        break;
+      }
+      case "open": {
+        var m = find(args[0] || "");
+        if (m.length === 1) { print("opening <span class='accent'>" + m[0].t + "</span> — " + link(m[0])); setTimeout(function () { window.open(m[0].link, "_blank"); }, 400); }
+        else if (m.length > 1) print("ambiguous: " + m.map(function (p) { return p.slug; }).join(", "));
+        else print("<span class='err'>open: no such project: '" + esc(args[0] || "") + "' — try 'ls'</span>");
+        break;
+      }
+      case "cat": {
+        var m2 = find(args[0] || "");
+        if (m2.length === 1) { var p = m2[0]; print("<span class='accent'>" + p.t + "</span> [" + p.cat + (p.live ? " · live" : "") + "]\n" + esc(p.d) + "\n" + link(p)); }
+        else if (m2.length > 1) print("ambiguous: " + m2.map(function (p) { return p.slug; }).join(", "));
+        else print("<span class='err'>cat: no such project: '" + esc(args[0] || "") + "'</span>");
+        break;
+      }
+      case "whoami": print("local-ai engineer / battery-ml researcher / embedded builder — 29 projects, all mine."); break;
+      case "contact": print("email: <span class='accent'>touhidsiddiqueeraj@gmail.com</span>\ngithub: <span class='accent'>github.com/touhidsiddiqueeraj-bit</span>"); break;
+      case "date": print(new Date().toString()); break;
+      case "echo": print(esc(args.join(" ")) || ""); break;
+      case "clear": body.innerHTML = ""; break;
+      case "sudo": print("<span class='err'>permission denied: the user is not in the sudoers file. this incident will be reported.</span>"); break;
+      case "rm": print("<span class='err'>nice try. everything is in git.</span>"); break;
+      case "": break;
+      default: print("<span class='err'>command not found: " + esc(c) + " — try 'help'</span>");
+    }
+  }
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      var v = input.value.trim();
+      print('<span class="prompt">$</span> ' + esc(v || " "));
+      run(v);
+      if (v) { history.push(v); hIdx = history.length; }
+      input.value = "";
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      var parts = input.value.split(/\s+/), last = parts[parts.length - 1];
+      if (["open", "cat"].indexOf(parts[0]) >= 0 && last) {
+        var matches = find(last);
+        if (matches.length === 1) { parts[parts.length - 1] = matches[0].slug; input.value = parts.join(" "); }
+        else if (matches.length > 1) { print("matches: " + matches.map(function (p) { return p.slug; }).join("  ")); }
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (hIdx > 0) { hIdx--; input.value = history[hIdx] || ""; }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (hIdx < history.length) { hIdx++; input.value = history[hIdx] || ""; }
+    }
+  });
+
+  print("touhid@lab:~$ boot sequence complete — 29 projects indexed.<br>type <span class='accent'>help</span> to see what i can do.");
+})();
+
+/* ---------- easter egg ---------- */
+(function () {
+  var seq = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+  var pos = 0, toast = document.getElementById("toast");
+  addEventListener("keydown", function (e) {
+    var k = e.key.toLowerCase();
+    if (k === "arrowup") k = "ArrowUp"; if (k === "arrowdown") k = "ArrowDown";
+    if (k === "arrowleft") k = "ArrowLeft"; if (k === "arrowright") k = "ArrowRight";
+    if (k === seq[pos]) pos++; else pos = (k === seq[0]) ? 1 : 0;
+    if (pos === seq.length) {
+      pos = 0;
+      toast.textContent = "cheat code accepted — debug mode enabled";
+      toast.classList.add("show");
+      document.body.classList.add("rainbow");
+      var inp = document.getElementById("term-input");
+      inp.focus(); inp.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(function () { toast.classList.remove("show"); }, 2600);
+      setTimeout(function () { document.body.classList.remove("rainbow"); }, 6000);
+    }
+  });
 })();
 </script>
 

@@ -600,10 +600,10 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
   function spawn() {
     parts = [];
     ICONS.forEach(function (n) {
-      for (var k = 0; k < 2; k++) parts.push({ kind: "img", name: n, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .004, s: 22 + Math.random() * 16, ph: Math.random() * 6.28, a: .1 + Math.random() * .06 });
+      for (var k = 0; k < 2; k++) parts.push({ kind: "img", name: n, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .004, s: 36 + Math.random() * 24, ph: Math.random() * 6.28, a: .24 + Math.random() * .1 });
     });
     TEXTS.forEach(function (t, i) {
-      parts.push({ kind: "txt", name: t, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: (Math.random() - .5) * .5, vr: (Math.random() - .5) * .0015, s: 11 + (i % 3) * 2, ph: Math.random() * 6.28, a: .09 + Math.random() * .05 });
+      parts.push({ kind: "txt", name: t, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: (Math.random() - .5) * .5, vr: (Math.random() - .5) * .0015, s: 14 + (i % 3) * 2, ph: Math.random() * 6.28, a: .2 + Math.random() * .08 });
     });
   }
   ICONS.forEach(function (n) {

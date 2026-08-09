@@ -145,8 +145,34 @@
 
   /* skills */
   .skills { display: flex; flex-wrap: wrap; gap: 10px; }
-  .skill { border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 8px 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; transition: border-color .15s, color .15s; cursor: default; }
-  .skill:hover { border-color: var(--amber); color: var(--amber); }
+  .skill { position: relative; border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 8px 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; transition: border-color .15s, color .15s, box-shadow .15s; cursor: default; }
+  .skill:hover { border-color: var(--amber); color: var(--amber); box-shadow: 0 0 14px rgba(240,166,58,.28); }
+  .skills.in .skill { animation: chipOn .6s ease backwards; }
+  .skills.in .skill:nth-child(4n) { animation: chipOn .6s ease backwards, breathe 3s ease-in-out 2s infinite; }
+  .skills.in .skill:nth-child(1) { animation-delay: .06s; }
+  .skills.in .skill:nth-child(2) { animation-delay: .12s; }
+  .skills.in .skill:nth-child(3) { animation-delay: .18s; }
+  .skills.in .skill:nth-child(4) { animation-delay: .24s; }
+  .skills.in .skill:nth-child(5) { animation-delay: .3s; }
+  .skills.in .skill:nth-child(6) { animation-delay: .36s; }
+  .skills.in .skill:nth-child(7) { animation-delay: .42s; }
+  .skills.in .skill:nth-child(8) { animation-delay: .48s; }
+  .skills.in .skill:nth-child(9) { animation-delay: .54s; }
+  .skills.in .skill:nth-child(10) { animation-delay: .6s; }
+  .skills.in .skill:nth-child(11) { animation-delay: .66s; }
+  .skills.in .skill:nth-child(12) { animation-delay: .72s; }
+  .skills.in .skill:nth-child(13) { animation-delay: .78s; }
+  .skills.in .skill:nth-child(14) { animation-delay: .84s; }
+  .skills.in .skill:nth-child(15) { animation-delay: .9s; }
+  @keyframes chipOn {
+    0% { opacity: 0; transform: translateY(10px); filter: brightness(.6); }
+    55% { opacity: 1; transform: translateY(0); filter: brightness(1.25); border-color: var(--amber); color: var(--amber); box-shadow: 0 0 16px rgba(240,166,58,.4); }
+    100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
+  }
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 rgba(127,176,105,0); }
+    50% { box-shadow: 0 0 12px rgba(127,176,105,.35); }
+  }
 
   footer { border-top: 1px solid var(--line); padding: 40px 0 56px; }
   footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
@@ -171,6 +197,7 @@
     .rotator .word { position: static; opacity: 1; transform: none; display: inline; margin-right: 8px; }
     .rotator .wordbox { display: none; }
     .card:hover .card-img img { transform: none; }
+    .skills.in .skill { animation: none; opacity: 1; }
   }
 </style>
 </head>
@@ -206,7 +233,7 @@
       <div class="hero-meta">
         <span>local-ai engineer</span> <span class="sep">/</span> <span>battery-ml researcher</span> <span class="sep">/</span> <span>embedded builder</span>
       </div>
-      <p class="hero-sub">I write code that runs on <b>my own hardware</b> — an AI studio on an AMD RX 580, browser tools that replace desktop software, ESP32 loggers for the field — and research code for <b>battery failure prediction</b>. 29 projects, all mine.</p>
+      <p class="hero-sub">I solve problems that off-the-shelf software ignores — a browser image editor that kills the desktop install, LoRa loggers that survive the field, and ML models that flag failing batteries weeks before they die. <b>29 projects, all mine.</b></p>
       <div class="stats">
         <div><b>29</b><span>projects</span></div>
         <div><b>7</b><span>live demos</span></div>
@@ -284,7 +311,6 @@
 
 <footer>
   <div class="wrap">
-    <span class="mono">© 2026 Hussain Touhid Siddiqee — built on my own hardware</span>
     <span class="mono">"attention is all you need" <b>▮</b></span>
   </div>
 </footer>

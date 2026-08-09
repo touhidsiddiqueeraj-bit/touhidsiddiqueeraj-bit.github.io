@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hussain Touhid Siddiqee — Portfolio</title>
+<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI, web apps, battery ML research, embedded hardware.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f12;
+    --bg2: #13161b;
+    --ink: #e8e6e1;
+    --muted: #8b909a;
+    --line: #23272e;
+    --amber: #f0a63a;
+    --green: #7fb069;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Space Grotesk", sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header { padding: 96px 0 56px; border-bottom: 1px solid var(--line); }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--green);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1 { font-size: clamp(40px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; }
+  h1 .dim { color: var(--muted); }
+  .sub { margin-top: 18px; color: var(--muted); font-size: 18px; max-width: 640px; }
+  .links { margin-top: 28px; font-family: "IBM Plex Mono", monospace; font-size: 14px; display: flex; gap: 24px; flex-wrap: wrap; }
+
+  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 20px; font-weight: 500; font-family: "IBM Plex Mono", monospace; color: var(--muted); margin-bottom: 32px; }
+  h2 .n { color: var(--amber); }
+
+  .skills { display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill {
+    border: 1px solid var(--line);
+    background: var(--bg2);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--ink);
+  }
+  .skill:hover { border-color: var(--amber); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover { border-color: var(--amber); transform: translateY(-2px); }
+  .card h3 { font-size: 18px; font-weight: 700; }
+  .card p { color: var(--muted); font-size: 14.5px; flex: 1; }
+  .card .meta { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
+  .card .demo { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--amber); }
+
+  .featured { background: linear-gradient(135deg, rgba(240,166,58,0.06), transparent 55%); }
+  .featured-card {
+    background: var(--bg2);
+    border: 1px solid var(--amber);
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    gap: 8px;
+  }
+  .featured-card h3 { font-size: 24px; }
+  .featured-card p { color: var(--muted); max-width: 72ch; }
+  .featured-card .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .featured-card .tags span {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px;
+  }
+  .featured-card .demo { display: inline-block; margin-top: 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; }
+
+  footer { padding: 40px 0 64px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  @media (max-width: 640px) {
+    header { padding: 64px 0 40px; }
+    h1 { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">~/touhidsiddiqueeraj-bit</div>
+    <h1>Hussain Touhid<br><span class="dim">Siddiqee</span></h1>
+    <p class="sub">I build things that run on my own hardware — a local AI studio on an AMD RX 580, image editors in the browser, solar-cell simulators, ESP32 data loggers — and research code for battery failure prediction.</p>
+    <div class="links">
+      <a href="https://github.com/touhidsiddiqueeraj-bit">github ↗</a>
+      <a href="mailto:touhidsiddiqueeraj@gmail.com">email ↗</a>
+      <a href="#projects">projects ↓</a>
+    </div>
+  </div>
+</header>
+
+<section class="featured">
+  <div class="wrap">
+    <h2><span class="n">01</span> / Featured</h2>
+    <div class="featured-card">
+      <h3>polarisstudio</h3>
+      <p>Local AI studio for AMD Vulkan (RX 580) — chat, image generation, video, model library and HuggingFace downloads, all driven by an Electron shell over llama.cpp and stable-diffusion.cpp. No cloud, no telemetry, no GPU vendor lock-in.</p>
+      <div class="tags"><span>Electron</span><span>Node</span><span>llama.cpp</span><span>stable-diffusion.cpp</span><span>Vulkan</span></div>
+      <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/polarisstudio">view on github ↗</a>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <h2><span class="n">02</span> / Projects</h2>
+    <div class="grid">
+
+      <div class="card">
+        <h3>Pixel-Lab</h3>
+        <p>The most fully featured open-source image editor — layers, filters, adjustments, all client-side.</p>
+        <div class="meta">TypeScript</div>
+        <a class="demo" href="https://pixel-lab-jade.vercel.app">live demo ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>TCAPS</h3>
+        <p>Open-source browser-based alternative to SCAPS-1D — within 10% accuracy on 5 validated solar-cell benchmarks, no install.</p>
+        <div class="meta">TypeScript</div>
+        <a class="demo" href="https://tcaps.netlify.app">live demo ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>atlas</h3>
+        <p>Unified AI chat interface — one window for every model you run.</p>
+        <div class="meta">JavaScript</div>
+        <a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/atlas">live demo ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>Multi-Horizon Hazard Models for Battery Failure</h3>
+        <p>Hazard classification extended across NASA 18650, CALCE and Oxford LFP datasets — XGBoost, LightGBM, GRU with calibration and SHAP.</p>
+        <div class="meta">Python · C · research</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Multi-Horizon-Hazard-Models-for-Battery-Failure-Prediction">view on github ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>Helios_Logger</h3>
+        <p>Modular, plug-in ESP32-S3 data logging framework for scientific field sensors.</p>
+        <div class="meta">C++ · ESP32-S3</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Helios_Logger">view on github ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>ForgeCad</h3>
+        <p>Lightweight 3D modeling + circuit simulation — built because Tinkercad doesn't work on an iPad Air.</p>
+        <div class="meta">JavaScript · CAD · simulation</div>
+        <a class="demo" href="https://forge-cad.vercel.app">live demo ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>contourslicer</h3>
+        <p>Design custom enclosures from contour photos — no 3D printer required.</p>
+        <div class="meta">HTML · tooling</div>
+        <a class="demo" href="https://touhidsiddiqueeraj-bit.github.io/contourslicer">live demo ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>Espy</h3>
+        <p>An ESP manager built for extreme ease of use — flash and manage boards without ceremony.</p>
+        <div class="meta">Python</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Espy">view on github ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>FitLog-2.0</h3>
+        <p>Workouts, nutrition, body metrics, personalized plans — powered by Google Gemini.</p>
+        <div class="meta">JavaScript · Gemini AI</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0">view on github ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>RepoVision</h3>
+        <p>A tool that helps you understand any GitHub repo with AI.</p>
+        <div class="meta">HTML · AI</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/RepoVision">view on github ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>Asciify</h3>
+        <p>Fully client-side video to ASCII video converter.</p>
+        <div class="meta">JavaScript</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/Asciify">view on github ↗</a>
+      </div>
+
+      <div class="card">
+        <h3>ESP-32 File Manager</h3>
+        <p>File manager app for ESP32-S3 — internal + SD card storage, handy download-all button.</p>
+        <div class="meta">C++ · ESP32</div>
+        <a class="demo" href="https://github.com/touhidsiddiqueeraj-bit/ESP-32-File-manager">view on github ↗</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span> / Toolbox</h2>
+    <div class="skills">
+      <span class="skill">TypeScript / React</span>
+      <span class="skill">Node / Express</span>
+      <span class="skill">Python / Flask</span>
+      <span class="skill">XGBoost / LightGBM / GRU</span>
+      <span class="skill">Survival &amp; hazard models</span>
+      <span class="skill">SHAP</span>
+      <span class="skill">ESP32-S3 / C++</span>
+      <span class="skill">PlatformIO</span>
+      <span class="skill">TensorFlow Lite</span>
+      <span class="skill">KiCad</span>
+      <span class="skill">llama.cpp / stable-diffusion.cpp</span>
+      <span class="skill">Vulkan (AMD)</span>
+      <span class="skill">Electron</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Hussain Touhid Siddiqee</span>
+    <span>built locally · "attention is all you need"</span>
+  </div>
+</footer>
+
+</body>
+</html>

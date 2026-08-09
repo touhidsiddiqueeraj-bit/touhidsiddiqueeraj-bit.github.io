@@ -67,6 +67,9 @@
   .stats div b { display: block; font-size: 22px; color: var(--ink); font-weight: 600; }
   .stats div span { font-size: 11.5px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
 
+  /* ambient skills background */
+  #bg-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
   /* theme toggle */
   .theme-btn { position: fixed; right: 22px; bottom: 22px; z-index: 90; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--amber); font-size: 18px; line-height: 1; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.28); transition: border-color .15s, background .2s; }
   .theme-btn:hover { border-color: var(--amber); }
@@ -150,40 +153,6 @@
   .card { transition: border-color .18s, box-shadow .18s, opacity .3s, transform .3s; }
   .card.pop { opacity: 0; transform: scale(.96); }
 
-  /* skills */
-  .skills3d { perspective: 1400px; }
-  #holo { display: flex; flex-wrap: wrap; gap: 10px; transform-style: preserve-3d; transition: transform .4s; animation: holo 9s ease-in-out infinite alternate; }
-  #holo.no-anim { animation: none; }
-  .skill { position: relative; border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 8px 14px; font-family: "IBM Plex Mono", monospace; font-size: 13px; transform: translateZ(var(--z, 0px)); transition: border-color .15s, color .15s, box-shadow .15s, transform .25s; cursor: default; }
-  .skill:hover { transform: translateZ(60px) scale(1.04); border-color: var(--amber); color: var(--amber); box-shadow: 0 0 14px rgba(240,166,58,.28); }
-  @keyframes holo { 0% { transform: rotateX(13deg) rotateY(-18deg); } 100% { transform: rotateX(9deg) rotateY(18deg); } }
-  .skills.in .skill { animation: chipOn .6s ease backwards; }
-  .skills.in .skill:nth-child(4n) { animation: chipOn .6s ease backwards, breathe 3s ease-in-out 2s infinite; }
-  .skills.in .skill:nth-child(1) { animation-delay: .06s; }
-  .skills.in .skill:nth-child(2) { animation-delay: .12s; }
-  .skills.in .skill:nth-child(3) { animation-delay: .18s; }
-  .skills.in .skill:nth-child(4) { animation-delay: .24s; }
-  .skills.in .skill:nth-child(5) { animation-delay: .3s; }
-  .skills.in .skill:nth-child(6) { animation-delay: .36s; }
-  .skills.in .skill:nth-child(7) { animation-delay: .42s; }
-  .skills.in .skill:nth-child(8) { animation-delay: .48s; }
-  .skills.in .skill:nth-child(9) { animation-delay: .54s; }
-  .skills.in .skill:nth-child(10) { animation-delay: .6s; }
-  .skills.in .skill:nth-child(11) { animation-delay: .66s; }
-  .skills.in .skill:nth-child(12) { animation-delay: .72s; }
-  .skills.in .skill:nth-child(13) { animation-delay: .78s; }
-  .skills.in .skill:nth-child(14) { animation-delay: .84s; }
-  .skills.in .skill:nth-child(15) { animation-delay: .9s; }
-  @keyframes chipOn {
-    0% { opacity: 0; transform: translateY(10px); filter: brightness(.6); }
-    55% { opacity: 1; transform: translateY(0); filter: brightness(1.25); border-color: var(--amber); color: var(--amber); box-shadow: 0 0 16px rgba(240,166,58,.4); }
-    100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
-  }
-  @keyframes breathe {
-    0%, 100% { box-shadow: 0 0 0 rgba(127,176,105,0); }
-    50% { box-shadow: 0 0 12px rgba(127,176,105,.35); }
-  }
-
   section:last-of-type { padding-bottom: 120px; }
 
   /* easter egg */
@@ -211,6 +180,7 @@
 </head>
 <body>
 
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
 <div id="progress"></div>
 
 <header>
@@ -287,23 +257,6 @@
     <div class="filters reveal" id="filters"></div>
     <div class="grid" id="grid"></div>
     <p class="mono" style="color:var(--muted);font-size:12px;margin-top:22px">[j/k] navigate · [enter] open · [/] terminal · [esc] leave</p>
-  </div>
-</section>
-
-<section id="toolbox">
-  <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[03]</span><h2>Toolbox</h2><div class="rule"></div></div>
-    <div class="skills reveal">
-      <div class="skills3d">
-        <div id="holo">
-          <span class="skill">TypeScript / React</span><span class="skill">Node / Express</span><span class="skill">Python / Flask</span>
-          <span class="skill">XGBoost / LightGBM / GRU</span><span class="skill">survival &amp; hazard models</span><span class="skill">SHAP</span>
-          <span class="skill">ESP32-S3 / C++</span><span class="skill">PlatformIO</span><span class="skill">TensorFlow Lite</span>
-          <span class="skill">KiCad</span><span class="skill">llama.cpp</span><span class="skill">stable-diffusion.cpp</span>
-          <span class="skill">Vulkan / AMD</span><span class="skill">Electron</span><span class="skill">SCAPS-1D</span>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -628,23 +581,93 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
   });
 })();
 
-/* ---------- toolbox 3d ---------- */
+/* ---------- ambient skills background ---------- */
 (function () {
-  var holo = document.getElementById("holo");
-  if (!holo) return;
-  var chips = holo.querySelectorAll(".skill");
-  for (var i = 0; i < chips.length; i++) chips[i].style.setProperty("--z", (i % 4) * 28 + "px");
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var area = holo.parentElement;
-  var onMove = function (e) {
-    var r = area.getBoundingClientRect();
-    var dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5;
-    holo.classList.add("no-anim");
-    holo.style.transform = "rotateX(" + (12 - dy * 14).toFixed(2) + "deg) rotateY(" + (dx * 20).toFixed(2) + "deg)";
-  };
-  var onLeave = function () { holo.classList.remove("no-anim"); holo.style.transform = ""; };
-  area.addEventListener("mousemove", onMove);
-  area.addEventListener("mouseleave", onLeave);
+  var cv = document.getElementById("bg-canvas");
+  if (!cv) return;
+  var ctx = cv.getContext("2d");
+  var ICONS = ["typescript", "react", "nodejs", "express", "python", "flask", "scikitlearn", "cplusplus", "tensorflow", "electron", "vulkan"];
+  var TEXTS = ["XGBoost", "hazard models", "SHAP", "ESP32", "PlatformIO", "KiCad", "llama.cpp", "sd.cpp", "SCAPS-1D"];
+  var W = 0, H = 0, parts = [], imgs = {}, loaded = 0, reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = Math.round(innerWidth * dpr);
+    H = cv.height = Math.round(innerHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (!parts.length) spawn();
+  }
+  function spawn() {
+    parts = [];
+    ICONS.forEach(function (n) {
+      for (var k = 0; k < 2; k++) parts.push({ kind: "img", name: n, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .004, s: 22 + Math.random() * 16, ph: Math.random() * 6.28, a: .1 + Math.random() * .06 });
+    });
+    TEXTS.forEach(function (t, i) {
+      parts.push({ kind: "txt", name: t, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: (Math.random() - .5) * .5, vr: (Math.random() - .5) * .0015, s: 11 + (i % 3) * 2, ph: Math.random() * 6.28, a: .09 + Math.random() * .05 });
+    });
+  }
+  ICONS.forEach(function (n) {
+    var img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function () { loaded++; };
+    img.src = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/" + n + "/" + n + "-original.svg";
+    imgs[n] = img;
+  });
+
+  var mx = -9999, my = -9999;
+  addEventListener("pointermove", function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+  addEventListener("pointerleave", function () { mx = -9999; my = -9999; });
+
+  function step() {
+    var amber = getComputedStyle(document.documentElement).getPropertyValue("--amber").trim();
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i], t = performance.now() / 1000;
+      p.x += p.vx; p.y += p.vy;
+      p.rot += p.vr;
+      p.vx += Math.sin(t * .5 + p.ph) * .004;
+      p.vy += Math.cos(t * .4 + p.ph * 1.7) * .004;
+      var dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy, d = Math.sqrt(d2);
+      if (d < 180 && d > .01) {
+        var f = (1 - d / 180) * 1.6;
+        p.vx += (dx / d) * f * .35;
+        p.vy += (dy / d) * f * .35;
+        p.vx += (-dy / d) * f * .22;
+        p.vy += (dx / d) * f * .22;
+      }
+      var sp = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      if (sp > .9) { p.vx *= .9 / sp; p.vy *= .9 / sp; }
+      if (p.x < -60) p.x = innerWidth + 60; if (p.x > innerWidth + 60) p.x = -60;
+      if (p.y < -60) p.y = innerHeight + 60; if (p.y > innerHeight + 60) p.y = -60;
+      var alpha = p.a * (.75 + .25 * Math.sin(t * .6 + p.ph));
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = alpha;
+      if (p.kind === "img") {
+        if (imgs[p.name].complete) ctx.drawImage(imgs[p.name], -p.s / 2, -p.s / 2, p.s, p.s);
+      } else {
+        ctx.font = "600 " + p.s + "px 'IBM Plex Mono', monospace";
+        ctx.fillStyle = amber || "#f0a63a";
+        ctx.textAlign = "center";
+        ctx.fillText(p.name, 0, p.s * .35);
+      }
+      ctx.restore();
+    }
+  }
+
+  if (reduced) { resize(); step(); return; }
+  resize();
+  var raf = null;
+  function loop() { step(); raf = requestAnimationFrame(loop); }
+  loop();
+  addEventListener("resize", resize);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+    else if (!raf) loop();
+  });
+  cv._parts = parts;
+  cv._mouse = function () { return [mx, my]; };
 })();
 
 /* ---------- easter egg ---------- */

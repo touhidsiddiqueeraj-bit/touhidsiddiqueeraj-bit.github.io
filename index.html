@@ -491,6 +491,7 @@
   }
 
   show(idx, true);
+  restart();
   var card = document.querySelector('.feat-card');
   card.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
   card.addEventListener('mouseleave', restart);

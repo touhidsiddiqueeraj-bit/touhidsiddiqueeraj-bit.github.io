@@ -34,8 +34,10 @@
   /* topbar */
   .topbar { position: sticky; top: 0; z-index: 50; background: rgba(10,11,13,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
   .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; }
-  .brand { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink); }
+  .brand { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  .brand:hover { text-decoration: none; }
   .brand b { color: var(--amber); font-weight: 500; }
+  .top-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
   .topnav { display: flex; gap: 22px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; }
   .topnav a { color: var(--muted); }
   .topnav a:hover { color: var(--amber); text-decoration: none; }
@@ -45,7 +47,7 @@
 
   /* hero */
   header { padding: 84px 0 64px; }
-  .hero-grid { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: start; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 360px; gap: 48px; align-items: start; }
   .kicker { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--green); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
   .kicker::before { content: "$ "; color: var(--muted); }
   h1 { font-size: clamp(44px, 7.5vw, 86px); font-weight: 700; letter-spacing: -.03em; line-height: .98; }
@@ -64,11 +66,23 @@
   .stats div b { display: block; font-size: 22px; color: var(--ink); font-weight: 600; }
   .stats div span { font-size: 11.5px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
 
-  .avatar-wrap { position: relative; }
-  .avatar-ring { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--panel); }
-  .avatar-ring img { width: 100%; border-radius: 6px; display: block; }
-  .avatar-tag { position: absolute; bottom: -12px; left: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 5px 10px; color: var(--muted); }
-  .avatar-tag b { color: var(--green); font-weight: 500; }
+  /* hero terminal */
+  .hero-term { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #0d0f12; box-shadow: 0 20px 60px rgba(0,0,0,.5); position: sticky; top: 68px; }
+  .hero-term .term-bar { display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .hero-term .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .hero-term .dot.r { background: var(--red); } .hero-term .dot.y { background: var(--amber); } .hero-term .dot.g { background: var(--green); }
+  .hero-term .title { margin-left: 10px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); }
+  .hero-term .hint { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--muted); }
+  .hero-term .term-body { padding: 14px 16px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; min-height: 240px; max-height: 290px; overflow-y: auto; line-height: 1.65; }
+  .hero-term .term-line { display: flex; align-items: baseline; padding: 0 16px 10px; }
+  .hero-term .prompt { color: var(--green); margin-right: 10px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; white-space: nowrap; }
+  .hero-term input { background: none; border: none; outline: none; color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 12.5px; flex: 1; caret-color: var(--amber); min-width: 0; }
+  .hero-term .term-kbd { padding: 0 16px 12px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--muted); }
+  .hero-term .term-kbd kbd { border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; background: var(--panel); }
+  .hero-term .out { color: var(--muted); white-space: pre-wrap; word-break: break-word; }
+  .hero-term .out .accent { color: var(--amber); }
+  .hero-term .out .ok { color: var(--green); }
+  .hero-term .out .err { color: var(--red); }
 
   /* sections */
   section { padding: 72px 0; }
@@ -112,6 +126,7 @@
   /* grid */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .18s, box-shadow .18s; position: relative; }
+  .card[hidden] { display: none; }
   .card:hover { border-color: #3a4150; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
   .card.sel { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber), 0 10px 30px rgba(0,0,0,.4); }
   .card-img { aspect-ratio: 16/9; overflow: hidden; background: var(--panel2); position: relative; border-bottom: 1px solid var(--line); }
@@ -125,27 +140,8 @@
   .card-body p { color: var(--muted); font-size: 13.5px; flex: 1; }
   .card-foot { display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
   .card-foot .demo { font-size: 12px; }
-  .card.hide { display: none; }
   .card { transition: border-color .18s, box-shadow .18s, opacity .3s, transform .3s; }
   .card.pop { opacity: 0; transform: scale(.96); }
-
-  /* terminal */
-  .term { background: #0d0f12; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
-  .term-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
-  .term-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
-  .term-bar .dot.r { background: var(--red); } .term-bar .dot.y { background: var(--amber); } .term-bar .dot.g { background: var(--green); }
-  .term-bar .title { margin-left: 10px; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
-  .term-bar .hint { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); }
-  .term-body { padding: 18px 20px; font-family: "IBM Plex Mono", monospace; font-size: 13px; min-height: 260px; max-height: 380px; overflow-y: auto; line-height: 1.7; }
-  .term-body .out { color: var(--muted); white-space: pre-wrap; word-break: break-word; }
-  .term-body .out .accent { color: var(--amber); }
-  .term-body .out .ok { color: var(--green); }
-  .term-body .out .err { color: var(--red); }
-  .term-line { display: flex; align-items: baseline; margin-top: 8px; }
-  .term-line .prompt { color: var(--green); margin-right: 10px; white-space: nowrap; }
-  .term-line input { background: none; border: none; outline: none; color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 13px; flex: 1; caret-color: var(--amber); }
-  .term-kbd { margin-top: 12px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); }
-  .term-kbd kbd { border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; background: var(--panel); }
 
   /* skills */
   .skills { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -165,7 +161,6 @@
 
   @media (max-width: 760px) {
     .hero-grid { grid-template-columns: 1fr; gap: 36px; }
-    .avatar-wrap { max-width: 220px; }
     .feat-card { grid-template-columns: 1fr; }
     .feat-img { order: -1; min-height: 210px; }
     .feat-body { padding: 24px; }
@@ -185,11 +180,11 @@
 
 <nav class="topbar">
   <div class="wrap">
-    <span class="brand">~/<b>touhid</b>/portfolio</span>
+    <a class="brand" href="#top"><img class="top-avatar" src="images/avatar.jpg" alt="Hussain Touhid Siddiqee"><b>touhid</b></a>
     <div class="topnav">
       <a href="#featured">featured</a>
       <a href="#projects">projects</a>
-      <a href="#terminal">terminal</a>
+      <a href="#top">terminal</a>
       <a href="#toolbox">toolbox</a>
       <a href="https://github.com/touhidsiddiqueeraj-bit">github</a>
     </div>
@@ -218,12 +213,23 @@
         <div><b>3</b><span>research lines</span></div>
       </div>
     </div>
-    <div class="avatar-wrap">
-      <div class="avatar-ring"><img src="images/avatar.jpg" alt="Hussain Touhid Siddiqee"></div>
-      <div class="avatar-tag"><span class="led green"></span><b>online</b> · sylhet, bd</div>
+    <div class="hero-term" id="top">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">touhid@lab: ~/portfolio</span>
+        <span class="hint">type 'help'</span>
+      </div>
+      <div class="term-body" id="term-body"></div>
+      <div class="term-line">
+        <span class="prompt">touhid@lab:~$</span>
+        <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="try: ls · open tcaps · cat espy">
+      </div>
+      <div class="term-kbd">
+        <kbd>tab</kbd> complete · <kbd>↑</kbd> history · <kbd>/</kbd> focus
+      </div>
     </div>
   </div>
- </header>
+</header>
 
 <section id="featured">
   <div class="wrap">
@@ -263,30 +269,9 @@
   </div>
 </section>
 
-<section id="terminal">
-  <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[03]</span><h2>Terminal — try it</h2><div class="rule"></div></div>
-    <div class="term reveal">
-      <div class="term-bar">
-        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-        <span class="title">touhid@lab: ~/portfolio</span>
-        <span class="hint">type 'help'</span>
-      </div>
-      <div class="term-body" id="term-body"></div>
-      <div class="term-line" style="padding:0 20px 14px;">
-        <span class="prompt">touhid@lab:~$</span>
-        <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="try: ls · open tcaps · cat espy">
-      </div>
-      <div class="term-kbd" style="padding:0 20px 16px;">
-        <kbd>tab</kbd> complete · <kbd>↑</kbd> history · <kbd>esc</kbd> leave
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="toolbox">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[04]</span><h2>Toolbox</h2><div class="rule"></div></div>
+    <div class="sec-head reveal"><span class="n">[03]</span><h2>Toolbox</h2><div class="rule"></div></div>
     <div class="skills reveal">
       <span class="skill">TypeScript / React</span><span class="skill">Node / Express</span><span class="skill">Python / Flask</span>
       <span class="skill">XGBoost / LightGBM / GRU</span><span class="skill">survival &amp; hazard models</span><span class="skill">SHAP</span>
@@ -430,7 +415,7 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
       var el = document.createElement("div");
       el.innerHTML = cardHTML(p);
       var card = el.firstChild;
-      card.classList.add("hide") === undefined; card.hidden = !show;
+      card.hidden = !show;
       if (show) { card.classList.add("pop"); setTimeout(function () { card.classList.remove("pop"); }, 30); }
       grid.appendChild(card);
     });

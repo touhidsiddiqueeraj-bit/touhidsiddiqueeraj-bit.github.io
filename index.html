@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark light">
 <title>Hussain Touhid Siddiqee — hardware-lab portfolio</title>
-<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI studio, battery ML research, ESP32 data loggers, browser-based engineering tools. 29 projects, one lab.">
+<meta name="description" content="Portfolio of Hussain Touhid Siddiqee — local AI studio, battery ML research, ESP32 data loggers, browser-based engineering tools. 33 projects, one lab.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0b0d'/><rect x='7' y='7' width='18' height='18' rx='3' fill='none' stroke='%23f0a63a' stroke-width='3'/><rect x='13' y='13' width='6' height='6' fill='%23f0a63a'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -93,7 +93,7 @@
   .hero-term .out .err { color: var(--term-red); }
   .hero-term .term-body::-webkit-scrollbar { width: 8px; }
   .hero-term .term-body::-webkit-scrollbar-thumb { background: var(--term-line); border-radius: 4px; }
-  /* neofetch ascii (ponytail: 36×29 mono, amber on dark) */
+  /* neofetch ascii (ponytail: 36×22 mono, amber on dark) */
   .nf-wrap { display: flex; gap: 16px; align-items: flex-start; }
   .nf-ascii { font-size: 7px; line-height: 1.05; color: var(--term-amber); margin: 0; white-space: pre; font-family: "IBM Plex Mono", monospace; }
   .nf-info { font-size: 12px; line-height: 1.7; color: var(--term-muted); font-family: "IBM Plex Mono", monospace; }
@@ -204,8 +204,8 @@
         <span>local-ai engineer</span> <span class="sep">/</span> <span>battery-ml researcher</span> <span class="sep">/</span> <span>embedded builder</span>
       </div>
       <div class="stats">
-        <div><b>29</b><span>projects</span></div>
-        <div><b>7</b><span>live demos</span></div>
+        <div><b>33</b><span>projects</span></div>
+        <div><b>8</b><span>live demos</span></div>
         <div><b>3</b><span>research lines</span></div>
       </div>
     </div>
@@ -258,7 +258,7 @@
 
 <section id="projects">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[02]</span><h2>Projects — all 29</h2><div class="rule"></div></div>
+    <div class="sec-head reveal"><span class="n">[02]</span><h2>Projects — all 33</h2><div class="rule"></div></div>
     <div class="filters reveal" id="filters"></div>
     <div class="grid" id="grid"></div>
     <p class="mono" style="color:var(--muted);font-size:12px;margin-top:22px">[j/k] navigate · [enter] open · [/] terminal · [esc] leave</p>
@@ -298,7 +298,11 @@ var P = [
   { slug:"tflite-trainer", t:"TF-Lite Trainer", d:"Flexible trainer for MCU machine-learning models — train, convert, deploy to microcontrollers.", cat:"AI", tile:"▦", link:"https://github.com/touhidsiddiqueeraj-bit/TF-Lite-Trainer", tags:["TFLite","MCU"] },
   { slug:"comptia-aplus", t:"comptia-aplus", d:"90-day CompTIA A+ study app — 220-1101 Core 1 & 220-1102 Core 2, self-contained PWA.", cat:"Study", tile:"▣", link:"https://github.com/touhidsiddiqueeraj-bit/comptia-aplus", tags:["A+","PWA"] },
   { slug:"comptia-security", t:"comptia-security", d:"Security+ SY0-701 study app — 60-day plan, quizzes, progress tracking, Google Sheets sync.", cat:"Study", tile:"▧", link:"https://github.com/touhidsiddiqueeraj-bit/comptia-security", tags:["Sec+","quizzes"] },
-  { slug:"aws-ai-study", t:"AWS-AI-Study", d:"AWS Certified AI Practitioner (AIF-C01) study app — no install, no backend, no dependencies.", cat:"Study", tile:"▥", link:"https://github.com/touhidsiddiqueeraj-bit/AWS-AI-Study", tags:["AIF-C01","single-file"] }
+  { slug:"aws-ai-study", t:"AWS-AI-Study", d:"AWS Certified AI Practitioner (AIF-C01) study app — no install, no backend, no dependencies.", cat:"Study", tile:"▥", link:"https://github.com/touhidsiddiqueeraj-bit/AWS-AI-Study", tags:["AIF-C01","single-file"] },
+  { slug:"gridpoweragent", t:"gridpoweragent", d:"Python-based grid power reinforcement learning agent — energy dispatch optimization.", cat:"Energy ML", tile:"◉", link:"https://github.com/touhidsiddiqueeraj-bit/gridpoweragent", tags:["Python","RL","grid"] },
+  { slug:"figify", t:"figify", d:"Matplotlib figure editor for scientific paper-grade figures — tweak any figure in the browser, export print-ready.", cat:"Web", tile:"⬔", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/figify/", tags:["matplotlib","figures","paper"] },
+  { slug:"esp-indoor-pv", t:"ESP-Indoor PV Analysis", d:"Viability of ESP-32 S3 for indoor photovoltaics without PMIC — power budgeting and harvesting analysis.", cat:"Energy ML", tile:"☼", link:"https://github.com/touhidsiddiqueeraj-bit/ESP-Indoor-PC-analysis", tags:["ESP32-S3","PV","PMIC"] },
+  { slug:"quant-pid-buck", t:"Quantization-Aware PID Buck-Boost", d:"Digital PID control of inverting buck-boost with ESP32-S3 — ADC/DPWM resolution & sampling period effects on real hardware.", cat:"Embedded", tile:"⎍", link:"https://github.com/touhidsiddiqueeraj-bit/Quantization-Aware-Digital-PID-Control-of-an-Inverting-Buck-Boost-Converter-with-ESP32-S3", tags:["ESP32-S3","PID","quantization"] }
 ];
 var CATS = ["AI","Web","Energy ML","Embedded","Study"];
 var TILE_HUES = [38, 160, 210, 265, 320, 90, 12];
@@ -527,7 +531,7 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
         else print("<span class='err'>cat: no such project: '" + esc(args[0] || "") + "'</span>");
         break;
       }
-      case "whoami": print("local-ai engineer / battery-ml researcher / embedded builder — 29 projects, all mine."); break;
+      case "whoami": print("local-ai engineer / battery-ml researcher / embedded builder — 33 projects, all mine."); break;
       case "contact": print("email: <span class='accent'>touhidsiddiqueeraj@gmail.com</span>\ngithub: <span class='accent'>github.com/touhidsiddiqueeraj-bit</span>"); break;
       case "date": print(new Date().toString()); break;
       case "echo": print(esc(args.join(" ")) || ""); break;
@@ -563,8 +567,29 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
     }
   });
 
-  var __ascii="@@@@@@@@@@@@@%*+++==*#%@@@@@@@@@@@@@\n@@@@@@@@%%*=-.      .::--=*%@@@@@@@@\n@@@@@@@%+-.                :=%@@@@@@\n@@@@@%=-.                    :#@@@@@\n@@@@%:     .  ..       ..     .#@@@@\n@@@%:   .--:::::..::::-----.   :%@@@\n@@@*   :+++*****+=++****+++=.   *@@@\n@@@*  :++++**####*******++++=.  +@@@\n@@@#  :++++*************+++==:  *@@@\n@@@@: :=++++****##******+++++- .%@@@\n@@%@+ =+==+**###########*====+.-@@@@\n@@@@#:+=----:-=+****+=-:-----+-+%%@@\n@@%=+=+=---:...:-+*=:....---=+===*@@\n@@#=++++::-.-====*#+====.:-:=++=++@@\n@@%*==+********++*#*+********++==#@@\n@@@#==+**#####*+*##*++*#####*+==+%@@\n@@@%+-+++*###*+=-++=-=+*##**++--*@%@\n@@@@%=-+++**#**-:::::-+****++=:#%@%%\n@@@%@#.-=+++-:::.:-:..::-++=-:-@@@%%\n%@@@@%:.:-+: .:-++++=-:. -=::.*@%%%%\n%%%@%@# ..-:-==-------==:::. -@%%%%%\n%%%%%%@*  ..-==========-:.. .%@%%%%%\n%%%@@@*-*.   :-======-:.   :#:#@@%%%\n@@%#*- :@#-              .-#@. =#%@@\n+-.    :%@%+:.         .-+%@%:   :-=\n        #@@@%+-:....::-+%@%@#\n        =@@@@@%*+=--=*%@@@%@-\n        :%@@@@@%++*+#@@@@@@%.\n        .#@@@#-..::..:+@@@@*";
-  print('<div class="nf-wrap"><pre class="nf-ascii">'+__ascii+'</pre><div class="nf-info"><b>touhid@lab</b><br>────────────<br><span class="accent">host</span>: touhidsiddiqueeraj-bit.github.io<br><span class="accent">role</span>: local-ai / battery-ml / embedded<br><span class="accent">projects</span>: 29 &nbsp; <span class="ok">● 7 live</span><br><span class="accent">stack</span>: ESP32 · KiCad · llama.cpp<br><span class="accent">contact</span>: touhidsiddiqueeraj@gmail.com</div></div><div style="margin-top:10px">touhid@lab:~$ boot complete — 29 projects indexed. type <span class="accent">help</span> to explore.</div>');
+  var __ascii="=**+.. . ......::.....::::-+#######*
+=#-.    .::::::--==+=-..:..-*#**+***
+--:. -++=++==-=+**###*:  ..-+**=+=-+
+::..-*#*+****+++***##*=   .=++*+*#**
+:  .+******############:  .+###*+*%%
+:. .+**#########*+===-=- :+==+-::=#%
+-: .*+*******=-::::-=: =:+*+=-: .+##
+.::.--:.:::   -----=++=%==*+=-::-++*
+=:. --:.:--.+-=+=++***##+-*++*++*=+#
+**+=======-+@%++******##+*#%%%##%%%%
+%%@#=****++#%%%#*+**##**+#%@%@@@%%%%
+%%%%*++++++-=+==*####***+*+****%@@%%
+%%%%#=++*#+---=*###*****=+###+==**++
+%%%%@*=++=+++++++=-+****:*@%%%#=-+++
+%%%%#*+===-=+++++++++*+--%%%%%*-=+==
+%%%%#==-=++====+****+=:.*%%%@#--=---
+%%%%#-::=:=+***#*+=-: .=%%%%%#*+++==
+%%%%%=.+- .-:::::...  :*%%%%%%@%@@%%
+###=#%**=  .:.....:  .=#%%%%%%%%%%%@
+=+%++@%%*.  ......   :-*@%%%%%%%%@%=
+==#%-#%%%=    .:    .:-=%%%%%%%%%+.
+=-+@*:=*%#:         .:::+%##%%%%-  :";
+  print('<div class="nf-wrap"><pre class="nf-ascii">'+__ascii+'</pre><div class="nf-info"><b>touhid@lab</b><br>────────────<br><span class="accent">host</span>: touhidsiddiqueeraj-bit.github.io<br><span class="accent">role</span>: local-ai / battery-ml / embedded<br><span class="accent">projects</span>: 33 &nbsp; <span class="ok">● 8 live</span><br><span class="accent">stack</span>: ESP32 · KiCad · llama.cpp<br><span class="accent">contact</span>: touhidsiddiqueeraj@gmail.com</div></div><div style="margin-top:10px">touhid@lab:~$ boot complete — 33 projects indexed. type <span class="accent">help</span> to explore.</div>');
 })();
 
 /* ---------- theme ---------- */

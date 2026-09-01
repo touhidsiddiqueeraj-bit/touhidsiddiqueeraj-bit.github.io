@@ -93,6 +93,11 @@
   .hero-term .out .err { color: var(--term-red); }
   .hero-term .term-body::-webkit-scrollbar { width: 8px; }
   .hero-term .term-body::-webkit-scrollbar-thumb { background: var(--term-line); border-radius: 4px; }
+  /* neofetch ascii (ponytail: 36×29 mono, amber on dark) */
+  .nf-wrap { display: flex; gap: 16px; align-items: flex-start; }
+  .nf-ascii { font-size: 7px; line-height: 1.05; color: var(--term-amber); margin: 0; white-space: pre; font-family: "IBM Plex Mono", monospace; }
+  .nf-info { font-size: 12px; line-height: 1.7; color: var(--term-muted); font-family: "IBM Plex Mono", monospace; }
+  .nf-info b { color: var(--term-amber); }
 
   /* sections */
   section { padding: 72px 0; }
@@ -163,6 +168,7 @@
 
   @media (max-width: 760px) {
     .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .hero-term { display: none; }
     .feat-card { grid-template-columns: 1fr; }
     .feat-img { order: -1; min-height: 210px; }
     .feat-body { padding: 24px; }
@@ -197,7 +203,6 @@
       <div class="hero-meta">
         <span>local-ai engineer</span> <span class="sep">/</span> <span>battery-ml researcher</span> <span class="sep">/</span> <span>embedded builder</span>
       </div>
-      <p class="hero-sub">I solve problems that off-the-shelf software ignores — a browser image editor that kills the desktop install, LoRa loggers that survive the field, and ML models that flag failing batteries weeks before they die.</p>
       <div class="stats">
         <div><b>29</b><span>projects</span></div>
         <div><b>7</b><span>live demos</span></div>
@@ -558,7 +563,8 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
     }
   });
 
-  print("touhid@lab:~$ boot sequence complete — 29 projects indexed.<br>type <span class='accent'>help</span> to see what i can do.");
+  var __ascii="@@@@@@@@@@@@@%*+++==*#%@@@@@@@@@@@@@\n@@@@@@@@%%*=-.      .::--=*%@@@@@@@@\n@@@@@@@%+-.                :=%@@@@@@\n@@@@@%=-.                    :#@@@@@\n@@@@%:     .  ..       ..     .#@@@@\n@@@%:   .--:::::..::::-----.   :%@@@\n@@@*   :+++*****+=++****+++=.   *@@@\n@@@*  :++++**####*******++++=.  +@@@\n@@@#  :++++*************+++==:  *@@@\n@@@@: :=++++****##******+++++- .%@@@\n@@%@+ =+==+**###########*====+.-@@@@\n@@@@#:+=----:-=+****+=-:-----+-+%%@@\n@@%=+=+=---:...:-+*=:....---=+===*@@\n@@#=++++::-.-====*#+====.:-:=++=++@@\n@@%*==+********++*#*+********++==#@@\n@@@#==+**#####*+*##*++*#####*+==+%@@\n@@@%+-+++*###*+=-++=-=+*##**++--*@%@\n@@@@%=-+++**#**-:::::-+****++=:#%@%%\n@@@%@#.-=+++-:::.:-:..::-++=-:-@@@%%\n%@@@@%:.:-+: .:-++++=-:. -=::.*@%%%%\n%%%@%@# ..-:-==-------==:::. -@%%%%%\n%%%%%%@*  ..-==========-:.. .%@%%%%%\n%%%@@@*-*.   :-======-:.   :#:#@@%%%\n@@%#*- :@#-              .-#@. =#%@@\n+-.    :%@%+:.         .-+%@%:   :-=\n        #@@@%+-:....::-+%@%@#\n        =@@@@@%*+=--=*%@@@%@-\n        :%@@@@@%++*+#@@@@@@%.\n        .#@@@#-..::..:+@@@@*";
+  print('<div class="nf-wrap"><pre class="nf-ascii">'+__ascii+'</pre><div class="nf-info"><b>touhid@lab</b><br>────────────<br><span class="accent">host</span>: touhidsiddiqueeraj-bit.github.io<br><span class="accent">role</span>: local-ai / battery-ml / embedded<br><span class="accent">projects</span>: 29 &nbsp; <span class="ok">● 7 live</span><br><span class="accent">stack</span>: ESP32 · KiCad · llama.cpp<br><span class="accent">contact</span>: touhidsiddiqueeraj@gmail.com</div></div><div style="margin-top:10px">touhid@lab:~$ boot complete — 29 projects indexed. type <span class="accent">help</span> to explore.</div>');
 })();
 
 /* ---------- theme ---------- */

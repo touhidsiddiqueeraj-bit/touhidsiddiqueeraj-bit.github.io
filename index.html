@@ -38,14 +38,6 @@
   a:hover { text-decoration: underline; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 
-  /* scroll progress */
-  #progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: var(--amber); z-index: 99; }
-
-  .led { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
-  .led.green { background: var(--green); box-shadow: 0 0 8px rgba(127,176,105,.7); animation: pulse 2.2s ease-in-out infinite; }
-  .led.amber { background: var(--amber); box-shadow: 0 0 8px rgba(240,166,58,.7); }
-  @keyframes pulse { 50% { opacity: .35; } }
-
   /* hero */
   header { padding: 60px 0 64px; }
   .hero-grid { display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: start; }
@@ -61,14 +53,12 @@
   .hero-meta { margin-top: 22px; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--muted); line-height: 2; }
   .hero-meta span { color: var(--ink); }
   .hero-meta .sep { color: var(--line); }
-  .hero-sub { margin-top: 20px; color: var(--muted); font-size: 16.5px; max-width: 56ch; }
-  .hero-sub b { color: var(--ink); font-weight: 500; }
   .stats { margin-top: 26px; display: flex; gap: 34px; font-family: "IBM Plex Mono", monospace; }
   .stats div b { display: block; font-size: 22px; color: var(--ink); font-weight: 600; }
   .stats div span { font-size: 11.5px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
-
-  /* ambient skills background */
-  #bg-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+  .jump { margin-top: 26px; display: flex; gap: 20px; flex-wrap: wrap; font-size: 12.5px; }
+  .jump a { color: var(--muted); }
+  .jump a:hover { color: var(--amber); text-decoration: none; }
 
   /* theme toggle */
   .theme-btn { position: fixed; right: 22px; bottom: 22px; z-index: 90; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--amber); font-size: 18px; line-height: 1; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.28); transition: border-color .15s, background .2s; }
@@ -81,7 +71,7 @@
   .hero-term .dot.r { background: var(--term-red); } .hero-term .dot.y { background: var(--term-amber); } .hero-term .dot.g { background: var(--term-green); }
   .hero-term .title { margin-left: 10px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--term-muted); }
   .hero-term .hint { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--term-muted); }
-  .hero-term .term-body { padding: 16px 18px; font-family: "IBM Plex Mono", monospace; font-size: 14px; min-height: 360px; max-height: 380px; overflow-y: auto; line-height: 1.7; }
+  .hero-term .term-body { padding: 16px 18px; font-family: "IBM Plex Mono", monospace; font-size: 14px; min-height: 150px; max-height: 200px; overflow-y: auto; line-height: 1.7; }
   .hero-term .term-line { display: flex; align-items: baseline; padding: 0 18px 12px; }
   .hero-term .prompt { color: var(--term-green); margin-right: 10px; font-family: "IBM Plex Mono", monospace; font-size: 14px; white-space: nowrap; }
   .hero-term input { background: none; border: none; outline: none; color: var(--term-ink); font-family: "IBM Plex Mono", monospace; font-size: 14px; flex: 1; caret-color: var(--term-amber); min-width: 0; }
@@ -93,11 +83,6 @@
   .hero-term .out .err { color: var(--term-red); }
   .hero-term .term-body::-webkit-scrollbar { width: 8px; }
   .hero-term .term-body::-webkit-scrollbar-thumb { background: var(--term-line); border-radius: 4px; }
-  /* neofetch ascii (ponytail: 36×22 mono, amber on dark) */
-  .nf-wrap { display: flex; gap: 16px; align-items: flex-start; }
-  .nf-ascii { font-size: 7px; line-height: 1.05; color: var(--term-amber); margin: 0; white-space: pre; font-family: "IBM Plex Mono", monospace; }
-  .nf-info { font-size: 12px; line-height: 1.7; color: var(--term-muted); font-family: "IBM Plex Mono", monospace; }
-  .nf-info b { color: var(--term-amber); }
 
   /* sections */
   section { padding: 72px 0; }
@@ -108,57 +93,55 @@
   .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
   .reveal.in { opacity: 1; transform: translateY(0); }
 
-  /* featured */
-  #featured { padding-top: 40px; }
-  .feat-card { display: grid; grid-template-columns: 1.05fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); min-height: 380px; }
-  .feat-body { padding: 36px 38px; display: flex; flex-direction: column; position: relative; }
-  .feat-tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--amber); letter-spacing: .16em; text-transform: uppercase; margin-bottom: 14px; }
-  .feat-body h3 { font-size: clamp(26px, 3vw, 38px); font-weight: 700; letter-spacing: -.02em; margin-bottom: 14px; }
-  .feat-body p { color: var(--muted); font-size: 15px; flex: 1; max-width: 52ch; }
-  .feat-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 20px; }
-  .feat-tags span { font-family: "IBM Plex Mono", monospace; font-size: 11px; border: 1px solid var(--line); border-radius: 4px; padding: 3px 9px; color: var(--muted); }
-  .feat-link { font-family: "IBM Plex Mono", monospace; font-size: 13px; }
-  .feat-img { position: relative; min-height: 280px; background: var(--panel2); overflow: hidden; }
-  .feat-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
-  .feat-img img.active { opacity: 1; }
-  .feat-count { position: absolute; top: 14px; right: 14px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); background: rgba(10,11,13,.8); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; z-index: 2; }
-  .feat-controls { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(transparent, rgba(10,11,13,.85)); z-index: 2; }
-  .feat-btn { background: rgba(233,231,226,.12); border: 1px solid var(--line); color: var(--ink); width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-family: "IBM Plex Mono", monospace; font-size: 14px; transition: background .15s; }
-  .feat-btn:hover { background: rgba(240,166,58,.25); }
-  .feat-dots { display: flex; gap: 6px; flex: 1; }
-  .feat-dots button { flex: 1; height: 4px; border: none; border-radius: 2px; cursor: pointer; background: rgba(233,231,226,.2); padding: 0; transition: background .2s; }
-  .feat-dots button.active { background: var(--amber); }
-  .feat-progress { position: absolute; top: 0; left: 0; height: 3px; width: 0; background: var(--amber); z-index: 3; }
+  /* case study */
+  #case { padding-top: 20px; }
+  .case { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
+  .case-body { padding: 34px 36px; }
+  .case-tag { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
+  .case-body h3 { font-size: clamp(22px, 2.6vw, 30px); line-height: 1.15; letter-spacing: -.02em; margin-bottom: 14px; }
+  .case-lede { font-size: 15.5px; max-width: 52ch; margin-bottom: 22px; }
+  .case-facts { display: grid; gap: 14px; }
+  .case-facts dt { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .case-facts dd { color: var(--muted); font-size: 14px; max-width: 52ch; }
+  .case-facts b { color: var(--amber); font-weight: 600; }
+  .case-facts code { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); }
+  .case-links { display: flex; gap: 22px; margin-top: 24px; font-family: "IBM Plex Mono", monospace; font-size: 13px; }
+  .case-shot { display: block; border-left: 1px solid var(--line); background: var(--panel2); }
+  .case-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* filters */
-  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; align-items: center; }
-  .chip { font-family: "IBM Plex Mono", monospace; font-size: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); border-radius: 20px; padding: 6px 14px; cursor: pointer; transition: all .15s; }
-  .chip:hover { border-color: var(--amber); color: var(--ink); }
-  .chip.on { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
-  .chip .count { opacity: .6; }
-  .filters .spacer { flex: 1; }
+  /* selected work */
+  .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .work { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; transition: border-color .18s; }
+  .work:hover { border-color: var(--amber); text-decoration: none; }
+  .work-shot { aspect-ratio: 16/9; overflow: hidden; background: var(--panel2); border-bottom: 1px solid var(--line); }
+  .work-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .work-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .work-body h3 { font-size: 18px; font-weight: 700; letter-spacing: -.01em; color: var(--ink); }
+  .work-body p { color: var(--muted); font-size: 13.5px; flex: 1; }
+  .work-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .work-meta .go { color: var(--amber); white-space: nowrap; }
 
-  /* grid */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .18s, box-shadow .18s; position: relative; }
-  .card[hidden] { display: none; }
-  .card:hover { border-color: #3a4150; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
-  .card.sel { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber), 0 10px 30px rgba(0,0,0,.4); }
-  .card-img { aspect-ratio: 16/9; overflow: hidden; background: var(--panel2); position: relative; border-bottom: 1px solid var(--line); }
-  .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
-  .card:hover .card-img img { transform: scale(1.06); }
-  .card-img .tile { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-  .card-img .tile .glyph { font-family: "IBM Plex Mono", monospace; font-size: 30px; opacity: .85; }
-  .card-img .tile .tlabel { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; }
-  .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-  .card-body h3 { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
-  .card-body p { color: var(--muted); font-size: 13.5px; flex: 1; }
-  .card-foot { display: flex; justify-content: space-between; align-items: center; font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
-  .card-foot .demo { font-size: 12px; }
-  .card { transition: border-color .18s, box-shadow .18s, opacity .3s, transform .3s; }
-  .card.pop { opacity: 0; transform: scale(.96); }
+  /* compact rows (research + everything else) */
+  .rows { border-top: 1px solid var(--line); }
+  .rows.two { display: grid; grid-template-columns: 1fr 1fr; column-gap: 44px; }
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: baseline; padding: 17px 2px; border-bottom: 1px solid var(--line); color: inherit; }
+  .row:hover { text-decoration: none; }
+  .row:hover h3 { color: var(--amber); }
+  .row h3 { font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); transition: color .15s; }
+  .row p { color: var(--muted); font-size: 13.5px; margin-top: 4px; max-width: 74ch; }
+  .row .stack { text-align: right; max-width: 30ch; }
+  #paper-rows .row { grid-template-columns: 1fr; gap: 8px; }
+  #paper-rows .row .stack { text-align: left; max-width: none; }
+  .rows.two .row { grid-template-columns: 1fr; gap: 6px; align-content: start; min-height: 134px; }
+  .rows.two .row .stack { text-align: left; max-width: none; }
+  .rows.two .row p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .stack { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--muted); opacity: .8; }
+  .hcount { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); }
 
-  section:last-of-type { padding-bottom: 120px; }
+  footer { border-top: 1px solid var(--line); padding: 30px 0 60px; }
+  .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--muted); }
+  .foot a { color: var(--muted); }
+  .foot a:hover { color: var(--amber); }
 
   /* easter egg */
   #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--panel2); border: 1px solid var(--amber); color: var(--amber); font-family: "IBM Plex Mono", monospace; font-size: 13px; padding: 10px 18px; border-radius: 8px; z-index: 100; opacity: 0; transition: all .35s; pointer-events: none; }
@@ -166,28 +149,27 @@
   .rainbow { animation: hue 1.6s linear infinite; }
   @keyframes hue { to { filter: hue-rotate(360deg); } }
 
-  @media (max-width: 760px) {
+  @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; gap: 36px; }
     .hero-term { display: none; }
-    .feat-card { grid-template-columns: 1fr; }
-    .feat-img { order: -1; min-height: 210px; }
-    .feat-body { padding: 24px; }
+    .case { grid-template-columns: 1fr; }
+    .case-shot { border-left: none; border-top: 1px solid var(--line); }
+    .case-body { padding: 26px 24px; }
+    .work-grid, .rows.two { grid-template-columns: 1fr; }
     .theme-btn { right: 14px; bottom: 14px; }
   }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; gap: 6px; }
+    .row .stack { text-align: left; max-width: none; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .rotator .word, .led.green { animation: none; }
-    #holo { animation: none; }
+    .rotator .word { animation: none; }
     .rotator .word { position: static; opacity: 1; transform: none; display: inline; margin-right: 8px; }
     .rotator .wordbox { display: none; }
-    .card:hover .card-img img { transform: none; }
-    .skills.in .skill { animation: none; opacity: 1; }
   }
 </style>
 </head>
 <body>
-
-<canvas id="bg-canvas" aria-hidden="true"></canvas>
-<div id="progress"></div>
 
 <header>
   <div class="wrap hero-grid">
@@ -208,6 +190,12 @@
         <div><b>8</b><span>live demos</span></div>
         <div><b>4</b><span>research lines</span></div>
       </div>
+      <nav class="jump mono">
+        <a href="#case">case study</a>
+        <a href="#work">selected work</a>
+        <a href="#research">research</a>
+        <a href="#more">everything else</a>
+      </nav>
     </div>
     <div class="hero-term" id="top">
       <div class="term-bar">
@@ -218,7 +206,7 @@
       <div class="term-body" id="term-body"></div>
       <div class="term-line">
         <span class="prompt">touhid@lab:~$</span>
-        <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="try: ls · open tcaps · cat espy">
+        <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="try: ls · cat palimpsest">
       </div>
       <div class="term-kbd">
         <kbd>tab</kbd> complete · <kbd>↑</kbd> history · <kbd>/</kbd> focus
@@ -227,43 +215,63 @@
   </div>
 </header>
 
-<section id="featured">
+<section id="case">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[01]</span><h2>Featured build</h2><div class="rule"></div></div>
-    <div class="feat-card reveal">
-      <div class="feat-body">
-        <div class="feat-tag">// auto-rotating · every 5s</div>
-        <h3 id="feat-title">polarisstudio</h3>
-        <p id="feat-desc">placeholder</p>
-        <div class="feat-tags" id="feat-tags"></div>
-        <a class="feat-link" id="feat-link" href="#">explore ↗</a>
-      </div>
-      <div class="feat-img" id="feat-img">
-        <div class="feat-progress" id="feat-progress"></div>
-        <div class="feat-count" id="feat-count">1 / 5</div>
-        <img src="images/art/polaris.png" alt="polarisstudio">
-        <img src="images/repo/pixellab.png" alt="Pixel-Lab">
-        <img src="images/repo/tcaps.png" alt="TCAPS">
-        <img src="images/repo/atlas.png" alt="atlas">
-        <img src="images/repo/battery-mh.png" alt="battery research">
-        <div class="feat-controls">
-          <button class="feat-btn" id="feat-prev" aria-label="previous">‹</button>
-          <div class="feat-dots" id="feat-dots"></div>
-          <button class="feat-btn" id="feat-next" aria-label="next">›</button>
+    <div class="sec-head reveal"><span class="n">[01]</span><h2>Case study</h2><div class="rule"></div></div>
+    <div class="case reveal">
+      <div class="case-body">
+        <div class="case-tag mono">// solar cell simulation, validated</div>
+        <h3>TCAPS — a SCAPS-1D class simulator that runs in a browser tab</h3>
+        <p class="case-lede">SCAPS-1D is the reference tool for thin-film solar cells. It is also a Windows binary you license, install, and click through one sweep at a time.</p>
+        <dl class="case-facts">
+          <div>
+            <dt>what I built</dt>
+            <dd>A 1-D drift-diffusion simulator in TypeScript — multilayer stacks, defect editor, I-V, quantum efficiency, band diagrams, C-V, batch sweeps, and import/export of SCAPS-1D files. No install, no licence.</dd>
+          </div>
+          <div>
+            <dt>does it hold up</dt>
+            <dd><b>5/5</b> canonical cells — CdTe, CIGS, perovskite, a-Si, c-Si — land within <b>±10%</b> of published SCAPS-1D efficiency, and the whole check reruns with <code>bun scripts/benchmark.ts</code>.</dd>
+          </div>
+        </dl>
+        <div class="case-links">
+          <a href="https://tcaps.netlify.app">open simulator ↗</a>
+          <a href="https://github.com/touhidsiddiqueeraj-bit/TCAPS">source ↗</a>
         </div>
       </div>
+      <a class="case-shot" href="https://tcaps.netlify.app" aria-label="Open the TCAPS simulator">
+        <img src="images/repo/tcaps.png" alt="TCAPS simulator with layer stack, I-V curve and benchmark table">
+      </a>
     </div>
   </div>
 </section>
 
-<section id="projects">
+<section id="work">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[02]</span><h2>Projects — all 45</h2><div class="rule"></div></div>
-    <div class="filters reveal" id="filters"></div>
-    <div class="grid" id="grid"></div>
-    <p class="mono" style="color:var(--muted);font-size:12px;margin-top:22px">[j/k] navigate · [enter] open · [/] terminal · [esc] leave</p>
+    <div class="sec-head reveal"><span class="n">[02]</span><h2>Selected work</h2><span class="hcount" id="work-n"></span><div class="rule"></div></div>
+    <div class="work-grid reveal" id="work-grid"></div>
   </div>
 </section>
+
+<section id="research">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="n">[03]</span><h2>Research &amp; papers</h2><span class="hcount" id="paper-n"></span><div class="rule"></div></div>
+    <div class="rows reveal" id="paper-rows"></div>
+  </div>
+</section>
+
+<section id="more">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="n">[04]</span><h2>Everything else</h2><span class="hcount" id="more-n"></span><div class="rule"></div></div>
+    <div class="rows two reveal" id="more-rows"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>Hussain Touhid Siddiqee — local-ai / battery-ml / embedded, Sylhet, Bangladesh</span>
+    <span><a href="mailto:touhidsiddiqueeraj@gmail.com">email</a> · <a href="https://github.com/touhidsiddiqueeraj-bit">github</a></span>
+  </div>
+</footer>
 
 <div id="toast"></div>
 <button id="theme-btn" class="theme-btn" aria-label="toggle light/dark theme">☾</button>
@@ -296,7 +304,7 @@ var P = [
   { slug:"repovision", t:"RepoVision", d:"AI-powered GitHub codebase explorer and auditor — understand any repo with AI.", cat:"AI", tile:"⌁", link:"https://github.com/touhidsiddiqueeraj-bit/RepoVision", tags:["AI","github"] },
   { slug:"fitlog", t:"FitLog-2.0", d:"AI-powered fitness & nutrition tracker — workouts, metrics, personalized plans via Google Gemini.", cat:"AI", tile:"▲", link:"https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0", tags:["Gemini","PWA"] },
   { slug:"tflite-trainer", t:"TF-Lite Trainer", d:"Flexible trainer for MCU machine-learning models — train, convert, deploy to microcontrollers.", cat:"AI", tile:"▦", link:"https://github.com/touhidsiddiqueeraj-bit/TF-Lite-Trainer", tags:["TFLite","MCU"] },
-  { slug:"palimpsest", t:"palimpsest", d:"Local-first, revision-aware Markdown editor — word-level time travel, automatic snapshots, prose-aware diffs. AI proposes, the diff decides. MCP spine for agents.", cat:"Web", tile:"✎", link:"https://github.com/touhidsiddiqueeraj-bit/palimpsest", tags:["Tauri","CodeMirror","MCP"] },
+  { slug:"palimpsest", t:"palimpsest", d:"Local-first, revision-aware Markdown editor — word-level time travel, automatic snapshots, prose-aware diffs. AI proposes, the diff decides. MCP spine for agents.", cat:"Web", img:"images/repo/palimpsest.svg", link:"https://github.com/touhidsiddiqueeraj-bit/palimpsest", tags:["Tauri","CodeMirror","MCP"] },
   { slug:"saphira", t:"Saphira", d:"An AI 3D companion that lives on screen — conversational character with generated expressions and motion.", cat:"AI", tile:"◕", link:"https://github.com/touhidsiddiqueeraj-bit/Saphira", tags:["TypeScript","Three.js","companion"] },
   { slug:"saphira-air", t:"Saphira-Air", d:"Lite cut of Saphira — the same desk companion rebuilt to run on an iPad Air.", cat:"AI", tile:"◔", link:"https://github.com/touhidsiddiqueeraj-bit/Saphira-Air", tags:["TypeScript","iPad"] },
   { slug:"hey-laya", t:"hey-laya", d:"Local-first voice assistant — on-device decision layer, Kokoro TTS, faster-whisper STT. Zero API keys, zero cloud.", cat:"AI", tile:"◎", link:"https://github.com/touhidsiddiqueeraj-bit/hey-laya", tags:["Kokoro","whisper","voice"] },
@@ -316,9 +324,9 @@ var P = [
   { slug:"digital-twins-grid", t:"Digital Twins for Cyber-Resilient Grids", d:"Systematic review and research agenda for digital twins in cyber-resilient power grids in the AI era.", cat:"Research", tile:"⌗", link:"https://github.com/touhidsiddiqueeraj-bit/Digital-Twins-for-Cyber-Resilient-Power-Grids", tags:["digital twins","grid","review"] },
   { slug:"wireless-security-ai", t:"Is Wireless Security Ready for AI?", d:"Structured scoping review and classification of 130 studies, 2020–2026, on whether wireless security is ready for the AI era.", cat:"Research", tile:"⌾", link:"https://github.com/touhidsiddiqueeraj-bit/Is-Wireless-Security-Ready-for-the-AI-Era-", tags:["wireless security","AI","review"] }
 ];
-var CATS = ["AI","Web","Energy ML","Embedded","Research","Study"];
-var TILE_HUES = [38, 160, 210, 265, 320, 90, 12];
-var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
+var SELECTED = ["palimpsest","polarisstudio","atlas","pixel-lab","forgecad","contourslicer","battery-mh","heartlens"];
+var PAPERS = ["materialspaper","mlbms-review","bms-103-review","cspbi3-cbts","cspbi3-losses","digital-twins-grid","wireless-security-ai"];
+var CASE_SLUG = "tcaps";
 
 /* ---------- hero rotator ---------- */
 (function () {
@@ -332,146 +340,37 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
   }, 2200);
 })();
 
-/* ---------- featured rotation ---------- */
+/* ---------- project sections ---------- */
 (function () {
-  var idx = Math.floor(Math.random() * FEATURED.length), timer = null, t0 = 0;
-  var ROT = 5000, reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var imgs = document.querySelectorAll("#feat-img img");
-  var dots = document.getElementById("feat-dots");
-  var bar = document.getElementById("feat-progress");
-  var card = document.querySelector(".feat-card");
+  var bySlug = {};
+  P.forEach(function (p) { bySlug[p.slug] = p; });
+  function pick(list) { return list.map(function (s) { return bySlug[s]; }).filter(Boolean); }
 
-  FEATURED.forEach(function (f, i) {
-    var b = document.createElement("button");
-    b.setAttribute("aria-label", "Show " + f.t);
-    b.addEventListener("click", function () { show(i, true); });
-    dots.appendChild(b);
-  });
+  var selected = pick(SELECTED), papers = pick(PAPERS), caseStudy = bySlug[CASE_SLUG];
+  var claimed = selected.concat(papers).concat(caseStudy ? [caseStudy] : []);
+  var rest = P.filter(function (p) { return claimed.indexOf(p) < 0; });
 
-  function show(i, manual) {
-    idx = i; t0 = performance.now();
-    var f = FEATURED[i];
-    imgs.forEach(function (img, j) { img.classList.toggle("active", j === i); });
-    document.getElementById("feat-title").textContent = f.t;
-    document.getElementById("feat-desc").textContent = f.d;
-    document.getElementById("feat-link").href = f.link;
-    document.getElementById("feat-link").textContent = f.live ? "live demo ↗" : "github ↗";
-    document.getElementById("feat-count").textContent = (i + 1) + " / " + FEATURED.length;
-    var tags = document.getElementById("feat-tags");
-    tags.innerHTML = "";
-    f.tags.forEach(function (t) { var s = document.createElement("span"); s.textContent = t; tags.appendChild(s); });
-    dots.querySelectorAll("button").forEach(function (b, j) { b.classList.toggle("active", j === i); });
-    if (!manual) restart();
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+  document.getElementById("work-grid").innerHTML = selected.map(function (p) {
+    return '<a class="work" href="' + p.link + '" target="_blank" rel="noopener">' +
+      '<div class="work-shot"><img src="' + p.img + '" alt="' + esc(p.t) + '"></div>' +
+      '<div class="work-body"><h3>' + esc(p.t) + '</h3><p>' + esc(p.d) + '</p>' +
+      '<div class="work-meta"><span class="stack">' + esc(p.tags.join(" · ")) + '</span>' +
+      '<span class="go">' + (p.live ? "live demo ↗" : "source ↗") + '</span></div></div></a>';
+  }).join("");
+
+  function rowHTML(p) {
+    return '<a class="row" href="' + p.link + '" target="_blank" rel="noopener">' +
+      '<div><h3>' + esc(p.t) + '</h3><p>' + esc(p.d) + '</p></div>' +
+      '<span class="stack">' + esc(p.tags.join(" · ")) + '</span></a>';
   }
-  function restart() {
-    if (timer) clearInterval(timer);
-    bar.style.transition = "none"; bar.style.width = "0";
-    if (!reduced) {
-      timer = setInterval(function () { show((idx + 1) % FEATURED.length); }, ROT);
-      requestAnimationFrame(function () { bar.style.transition = "width " + ROT + "ms linear"; bar.style.width = "100%"; });
-    }
-  }
-  document.getElementById("feat-prev").addEventListener("click", function () { show((idx + FEATURED.length - 1) % FEATURED.length, true); });
-  document.getElementById("feat-next").addEventListener("click", function () { show((idx + 1) % FEATURED.length, true); });
-  card.addEventListener("mouseenter", function () { if (timer) clearInterval(timer); bar.style.transition = "none"; });
-  card.addEventListener("mouseleave", restart);
-  show(idx, true); restart();
-})();
+  document.getElementById("paper-rows").innerHTML = papers.map(rowHTML).join("");
+  document.getElementById("more-rows").innerHTML = rest.map(rowHTML).join("");
 
-/* ---------- grid render + filters ---------- */
-(function () {
-  var grid = document.getElementById("grid");
-  var filters = document.getElementById("filters");
-  var state = { cat: "All", live: "All" };
-
-  function tileHTML(p) {
-    var hue = TILE_HUES[(P.indexOf(p)) % TILE_HUES.length];
-    return '<div class="tile" style="background:linear-gradient(135deg,hsl(' + hue + ',28%,9%),#0d0f12 70%);">' +
-      '<span class="glyph" style="color:hsl(' + hue + ',70%,65%)">' + (p.tile || "▮") + '</span>' +
-      '<span class="tlabel" style="color:hsl(' + hue + ',60%,72%)">' + p.cat + '</span></div>';
-  }
-
-  function cardHTML(p) {
-    var img = p.img ? '<img src="' + p.img + '" alt="' + p.t + '" loading="lazy">' : tileHTML(p);
-    var led = p.live ? '<span class="led green"></span>live' : '<span class="led amber"></span>repo';
-    var demo = p.live ? '<a class="demo" href="' + p.link + '">demo ↗</a>' : '<a class="demo" href="' + p.link + '">github ↗</a>';
-    return '<div class="card" data-slug="' + p.slug + '" data-cat="' + p.cat + '" data-live="' + p.live + '">' +
-      '<div class="card-img">' + img + '</div>' +
-      '<div class="card-body"><h3>' + p.t + '</h3><p>' + p.d + '</p>' +
-      '<div class="card-foot"><span>' + led + '</span>' + demo + '</div></div></div>';
-  }
-
-  function render() {
-    grid.innerHTML = "";
-    P.forEach(function (p, i) {
-      var show = (state.cat === "All" || p.cat === state.cat) && (state.live === "All" || p.live === (state.live === "Live"));
-      var el = document.createElement("div");
-      el.innerHTML = cardHTML(p);
-      var card = el.firstChild;
-      card.hidden = !show;
-      if (show) { card.classList.add("pop"); setTimeout(function () { card.classList.remove("pop"); }, 30); }
-      grid.appendChild(card);
-    });
-  }
-
-  function chips() {
-    var out = "";
-    ["All"].concat(CATS).forEach(function (c) {
-      out += '<button class="chip' + (state.cat === c ? " on" : "") + '" data-cat="' + c + '">' + c + ' <span class="count">(' + (c === "All" ? P.length : P.filter(function (p) { return p.cat === c; }).length) + ')</span></button>';
-    });
-    out += '<span class="spacer"></span>';
-    ["All", "Live", "Repo"].forEach(function (s) {
-      out += '<button class="chip' + (state.live === s ? " on" : "") + '" data-live="' + s + '">' + s + '</button>';
-    });
-    filters.innerHTML = out;
-  }
-  filters.addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    if (b.dataset.cat) state.cat = b.dataset.cat;
-    if (b.dataset.live) state.live = b.dataset.live;
-    chips(); render();
-  });
-
-  /* keyboard nav */
-  var cards = [];
-  function setCards() { cards = Array.prototype.slice.call(document.querySelectorAll(".card:not([hidden])")); }
-  var sel = 0;
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
-      e.preventDefault();
-      var inp = document.getElementById("term-input");
-      inp.focus(); inp.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-    if (document.activeElement.tagName === "INPUT") { if (e.key === "Escape") document.activeElement.blur(); return; }
-    if (e.key === "j" || e.key === "k") {
-      e.preventDefault(); setCards();
-      if (!cards.length) return;
-      if (cards[sel]) cards[sel].classList.remove("sel");
-      sel = e.key === "j" ? Math.min(sel + 1, cards.length - 1) : Math.max(sel - 1, 0);
-      cards[sel].classList.add("sel");
-      cards[sel].scrollIntoView({ behavior: "smooth", block: "nearest" });
-    } else if (e.key === "Enter" && cards[sel]) {
-      var p = P.filter(function (x) { return x.slug === cards[sel].dataset.slug; })[0];
-      if (p) window.open(p.link, "_blank");
-    }
-  });
-
-  /* tilt */
-  document.addEventListener("mousemove", function (e) {
-    var c = e.target.closest ? e.target.closest(".card") : null;
-    if (!c) return;
-    var r = c.getBoundingClientRect();
-    var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-    c.style.transform = "perspective(700px) rotateY(" + (x * 5) + "deg) rotateX(" + (-y * 5) + "deg)";
-    c.style.transformStyle = "preserve-3d";
-  });
-  document.addEventListener("mouseout", function (e) {
-    var c = e.target.closest ? e.target.closest(".card") : null;
-    if (c) { c.style.transform = ""; }
-  });
-
-  chips(); render();
+  document.getElementById("work-n").textContent = selected.length + " projects";
+  document.getElementById("paper-n").textContent = papers.length + " papers";
+  document.getElementById("more-n").textContent = rest.length + " projects";
 })();
 
 /* ---------- reveal on scroll ---------- */
@@ -485,15 +384,6 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
     entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
   }, { threshold: 0.08 });
   els.forEach(function (el) { io.observe(el); });
-})();
-
-/* ---------- scroll progress ---------- */
-(function () {
-  var bar = document.getElementById("progress");
-  addEventListener("scroll", function () {
-    var h = document.documentElement;
-    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
-  }, { passive: true });
 })();
 
 /* ---------- terminal ---------- */
@@ -579,8 +469,7 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
     }
   });
 
-  var __ascii="=**+.. . ......::.....::::-+#######*\n=#-.    .::::::--==+=-..:..-*#**+***\n--:. -++=++==-=+**###*:  ..-+**=+=-+\n::..-*#*+****+++***##*=   .=++*+*#**\n:  .+******############:  .+###*+*%%\n:. .+**#########*+===-=- :+==+-::=#%\n-: .*+*******=-::::-=: =:+*+=-: .+##\n.::.--:.:::   -----=++=%==*+=-::-++*\n=:. --:.:--.+-=+=++***##+-*++*++*=+#\n**+=======-+@%++******##+*#%%%##%%%%\n%%@#=****++#%%%#*+**##**+#%@%@@@%%%%\n%%%%*++++++-=+==*####***+*+****%@@%%\n%%%%#=++*#+---=*###*****=+###+==**++\n%%%%@*=++=+++++++=-+****:*@%%%#=-+++\n%%%%#*+===-=+++++++++*+--%%%%%*-=+==\n%%%%#==-=++====+****+=:.*%%%@#--=---\n%%%%#-::=:=+***#*+=-: .=%%%%%#*+++==\n%%%%%=.+- .-:::::...  :*%%%%%%@%@@%%\n###=#%**=  .:.....:  .=#%%%%%%%%%%%@\n=+%++@%%*.  ......   :-*@%%%%%%%%@%=\n==#%-#%%%=    .:    .:-=%%%%%%%%%+.\n=-+@*:=*%#:         .:::+%##%%%%-  :";
-  print('<div class="nf-wrap"><pre class="nf-ascii">'+__ascii+'</pre><div class="nf-info"><b>touhid@lab</b><br>────────────<br><span class="accent">host</span>: touhidsiddiqueeraj-bit.github.io<br><span class="accent">role</span>: local-ai / battery-ml / embedded<br><span class="accent">projects</span>: 45 &nbsp; <span class="ok">● 8 live</span><br><span class="accent">stack</span>: ESP32 · KiCad · llama.cpp<br><span class="accent">contact</span>: touhidsiddiqueeraj@gmail.com</div></div><div style="margin-top:10px">touhid@lab:~$ boot complete — 45 projects indexed. type <span class="accent">help</span> to explore.</div>');
+  print('touhid@lab — local-ai engineer / battery-ml researcher / embedded builder.\n<span class="accent">8 selected builds, 7 papers, the rest of the lab</span>. type <span class="accent">help</span>, <span class="accent">ls</span>, or <span class="accent">cat palimpsest</span>.');
 })();
 
 /* ---------- theme ---------- */
@@ -601,95 +490,6 @@ var FEATURED = [P[0], P[1], P[2], P[3], P[4]];
     try { localStorage.setItem("portfolio-theme", next); } catch (e) {}
     paint();
   });
-})();
-
-/* ---------- ambient skills background ---------- */
-(function () {
-  var cv = document.getElementById("bg-canvas");
-  if (!cv) return;
-  var ctx = cv.getContext("2d");
-  var ICONS = ["typescript", "react", "nodejs", "express", "python", "flask", "scikitlearn", "cplusplus", "tensorflow", "electron", "vulkan"];
-  var TEXTS = ["XGBoost", "hazard models", "SHAP", "ESP32", "PlatformIO", "KiCad", "llama.cpp", "sd.cpp", "SCAPS-1D"];
-  var W = 0, H = 0, parts = [], imgs = {}, loaded = 0, reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  function resize() {
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = cv.width = Math.round(innerWidth * dpr);
-    H = cv.height = Math.round(innerHeight * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    if (!parts.length) spawn();
-  }
-  function spawn() {
-    parts = [];
-    ICONS.forEach(function (n) {
-      for (var k = 0; k < 2; k++) parts.push({ kind: "img", name: n, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .004, s: 36 + Math.random() * 24, ph: Math.random() * 6.28, a: .24 + Math.random() * .1 });
-    });
-    TEXTS.forEach(function (t, i) {
-      parts.push({ kind: "txt", name: t, x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, rot: (Math.random() - .5) * .5, vr: (Math.random() - .5) * .0015, s: 14 + (i % 3) * 2, ph: Math.random() * 6.28, a: .2 + Math.random() * .08 });
-    });
-  }
-  ICONS.forEach(function (n) {
-    var img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = function () { loaded++; };
-    img.src = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/" + n + "/" + n + "-original.svg";
-    imgs[n] = img;
-  });
-
-  var mx = -9999, my = -9999;
-  addEventListener("pointermove", function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
-  addEventListener("pointerleave", function () { mx = -9999; my = -9999; });
-
-  function step() {
-    var amber = getComputedStyle(document.documentElement).getPropertyValue("--amber").trim();
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i], t = performance.now() / 1000;
-      p.x += p.vx; p.y += p.vy;
-      p.rot += p.vr;
-      p.vx += Math.sin(t * .5 + p.ph) * .004;
-      p.vy += Math.cos(t * .4 + p.ph * 1.7) * .004;
-      var dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy, d = Math.sqrt(d2);
-      if (d < 180 && d > .01) {
-        var f = (1 - d / 180) * 1.6;
-        p.vx += (dx / d) * f * .35;
-        p.vy += (dy / d) * f * .35;
-        p.vx += (-dy / d) * f * .22;
-        p.vy += (dx / d) * f * .22;
-      }
-      var sp = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-      if (sp > .9) { p.vx *= .9 / sp; p.vy *= .9 / sp; }
-      if (p.x < -60) p.x = innerWidth + 60; if (p.x > innerWidth + 60) p.x = -60;
-      if (p.y < -60) p.y = innerHeight + 60; if (p.y > innerHeight + 60) p.y = -60;
-      var alpha = p.a * (.75 + .25 * Math.sin(t * .6 + p.ph));
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.globalAlpha = alpha;
-      if (p.kind === "img") {
-        if (imgs[p.name].complete) ctx.drawImage(imgs[p.name], -p.s / 2, -p.s / 2, p.s, p.s);
-      } else {
-        ctx.font = "600 " + p.s + "px 'IBM Plex Mono', monospace";
-        ctx.fillStyle = amber || "#f0a63a";
-        ctx.textAlign = "center";
-        ctx.fillText(p.name, 0, p.s * .35);
-      }
-      ctx.restore();
-    }
-  }
-
-  if (reduced) { resize(); step(); return; }
-  resize();
-  var raf = null;
-  function loop() { step(); raf = requestAnimationFrame(loop); }
-  loop();
-  addEventListener("resize", resize);
-  document.addEventListener("visibilitychange", function () {
-    if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
-    else if (!raf) loop();
-  });
-  cv._parts = parts;
-  cv._mouse = function () { return [mx, my]; };
 })();
 
 /* ---------- easter egg ---------- */

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="palimpsest — word-level diff motif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101317"/>
+      <stop offset="1" stop-color="#0a0b0d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="26">
+    <text x="90" y="150" fill="#868b94">revision 07 · 3 days ago</text>
+    <text x="90" y="250" fill="#e9e7e2">The editor keeps</text>
+    <text x="90" y="300" fill="#d1614d">every draft<tspan text-decoration="line-through">, every save,</tspan></text>
+    <text x="90" y="350" fill="#7fb069">every word you changed</text>
+    <text x="90" y="400" fill="#e9e7e2">as a diff you can walk back through.</text>
+  </g>
+  <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="19" fill="#868b94">
+    <text x="90" y="500">−  <tspan fill="#d1614d">AI rewrites the document</tspan></text>
+    <text x="90" y="534">+  <tspan fill="#7fb069">AI proposes, the diff decides</tspan></text>
+  </g>
+  <g fill="none" stroke="#22262d">
+    <path d="M90 570h1020"/>
+    <path d="M90 120h1020" opacity=".5"/>
+  </g>
+  <text x="90" y="616" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="17" fill="#f0a63a" letter-spacing="3">PALIMPSEST · LOCAL-FIRST MARKDOWN · WORD-LEVEL TIME TRAVEL</text>
+</svg>

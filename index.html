@@ -93,22 +93,6 @@
   .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
   .reveal.in { opacity: 1; transform: translateY(0); }
 
-  /* case study */
-  #case { padding-top: 20px; }
-  .case { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
-  .case-body { padding: 34px 36px; }
-  .case-tag { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
-  .case-body h3 { font-size: clamp(22px, 2.6vw, 30px); line-height: 1.15; letter-spacing: -.02em; margin-bottom: 14px; }
-  .case-lede { font-size: 15.5px; max-width: 52ch; margin-bottom: 22px; }
-  .case-facts { display: grid; gap: 14px; }
-  .case-facts dt { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
-  .case-facts dd { color: var(--muted); font-size: 14px; max-width: 52ch; }
-  .case-facts b { color: var(--amber); font-weight: 600; }
-  .case-facts code { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); }
-  .case-links { display: flex; gap: 22px; margin-top: 24px; font-family: "IBM Plex Mono", monospace; font-size: 13px; }
-  .case-shot { display: block; border-left: 1px solid var(--line); background: var(--panel2); }
-  .case-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
   /* selected work */
   .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
   .work { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; transition: border-color .18s; }
@@ -130,6 +114,7 @@
   .ring-stage { display: none; position: relative; perspective: 1400px; perspective-origin: 50% 44%; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
   html.ring-ok .ring-stage { display: block; }
   html.ring-ok #work-grid { display: none; }
+  html.ring-ok #paper-rows { display: none; }
   .ring-stage.grabbing { cursor: grabbing; }
   .ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
   .ring-card { position: absolute; left: calc(var(--card-w, 380px) / -2); top: calc(var(--card-h, 352px) / -2); width: var(--card-w, 380px); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; will-change: transform, opacity; backface-visibility: hidden; cursor: pointer; }
@@ -199,7 +184,7 @@
   /* saphira aura — live background canvas (ported from Saphira's mood glow) */
   #aura { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
   @supports (background: color-mix(in srgb, red 50%, transparent)) {
-    .case, .work, .ring-card { background: color-mix(in srgb, var(--panel) 90%, transparent); }
+    .work, .ring-card { background: color-mix(in srgb, var(--panel) 90%, transparent); }
   }
 
   /* terminal life — phosphor glow, scanlines, scan sweep, typed boot (reduced motion disables) */
@@ -227,9 +212,6 @@
   @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; gap: 36px; }
     .hero-term { display: none; }
-    .case { grid-template-columns: 1fr; }
-    .case-shot { border-left: none; border-top: 1px solid var(--line); }
-    .case-body { padding: 26px 24px; }
     .work-grid, .rows.two { grid-template-columns: 1fr; }
     .theme-btn { right: 14px; bottom: 14px; }
   }
@@ -251,6 +233,7 @@
     .rotator .wordbox { display: none; }
     html.ring-ok .ring-stage, html.ring-ok .ring-ui { display: none !important; }
     html.ring-ok #work-grid { display: grid !important; }
+    html.ring-ok #paper-rows { display: block !important; }
   }
 </style>
 </head>
@@ -278,7 +261,6 @@
         <div><b>4</b><span>research lines</span></div>
       </div>
       <nav class="jump mono">
-        <a href="#case">case study</a>
         <a href="#work">selected work</a>
         <a href="#research">research</a>
         <a href="#more">everything else</a>
@@ -303,39 +285,9 @@
   </div>
 </header>
 
-<section id="case">
-  <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[01]</span><h2>Case study</h2><div class="rule"></div></div>
-    <div class="case reveal">
-      <div class="case-body">
-        <div class="case-tag mono">// solar cell simulation, validated</div>
-        <h3>TCAPS — a SCAPS-1D class simulator that runs in a browser tab</h3>
-        <p class="case-lede">SCAPS-1D is the reference tool for thin-film solar cells. It is also a Windows binary you license, install, and click through one sweep at a time.</p>
-        <dl class="case-facts">
-          <div>
-            <dt>what I built</dt>
-            <dd>A 1-D drift-diffusion simulator in TypeScript — multilayer stacks, defect editor, I-V, quantum efficiency, band diagrams, C-V, batch sweeps, and import/export of SCAPS-1D files. No install, no licence.</dd>
-          </div>
-          <div>
-            <dt>does it hold up</dt>
-            <dd><b>5/5</b> canonical cells — CdTe, CIGS, perovskite, a-Si, c-Si — land within <b>±10%</b> of published SCAPS-1D efficiency, and the whole check reruns with <code>bun scripts/benchmark.ts</code>.</dd>
-          </div>
-        </dl>
-        <div class="case-links">
-          <a href="https://tcaps.netlify.app">open simulator ↗</a>
-          <a href="https://github.com/touhidsiddiqueeraj-bit/TCAPS">source ↗</a>
-        </div>
-      </div>
-      <a class="case-shot" href="https://tcaps.netlify.app" aria-label="Open the TCAPS simulator">
-        <img src="images/repo/tcaps.png" alt="TCAPS simulator with layer stack, I-V curve and benchmark table">
-      </a>
-    </div>
-  </div>
-</section>
-
 <section id="work">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[02]</span><h2>Selected work</h2><span class="hcount" id="work-n"></span><div class="rule"></div></div>
+    <div class="sec-head reveal"><span class="n">[01]</span><h2>Selected work</h2><span class="hcount" id="work-n"></span><div class="rule"></div></div>
     <div class="ring-zone reveal">
       <div class="ring-stage" id="ring-stage" title="drag to spin" role="region" aria-roledescription="carousel" aria-label="Selected work">
         <div class="ring" id="ring"></div>
@@ -357,14 +309,29 @@
 
 <section id="research">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[03]</span><h2>Research &amp; papers</h2><span class="hcount" id="paper-n"></span><div class="rule"></div></div>
+    <div class="sec-head reveal"><span class="n">[02]</span><h2>Research &amp; papers</h2><span class="hcount" id="paper-n"></span><div class="rule"></div></div>
+    <div class="ring-zone reveal">
+      <div class="ring-stage" id="paper-stage" title="drag to spin" role="region" aria-roledescription="carousel" aria-label="Research and papers">
+        <div class="ring" id="paper-ring"></div>
+      </div>
+      <div class="ring-ui">
+        <button class="ring-btn" id="paper-prev" type="button" aria-label="Previous paper">&larr;</button>
+        <div class="ring-dots" id="paper-dots" role="group" aria-label="Pick a paper"></div>
+        <button class="ring-btn" id="paper-next" type="button" aria-label="Next paper">&rarr;</button>
+        <button class="ring-btn ring-toggle" id="paper-pause" type="button" aria-pressed="false" aria-label="Pause auto-rotation">
+          <svg viewBox="0 0 38 38" aria-hidden="true"><circle class="ring-arc-bg" cx="19" cy="19" r="16.5"></circle><circle class="ring-arc" id="paper-arc" cx="19" cy="19" r="16.5"></circle></svg>
+          <span class="ring-ico" aria-hidden="true"></span>
+        </button>
+      </div>
+      <span class="visually-hidden" id="paper-live" aria-live="polite"></span>
+    </div>
     <div class="rows reveal" id="paper-rows"></div>
   </div>
 </section>
 
 <section id="more">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="n">[04]</span><h2>Everything else</h2><span class="hcount" id="more-n"></span><div class="rule"></div></div>
+    <div class="sec-head reveal"><span class="n">[03]</span><h2>Everything else</h2><span class="hcount" id="more-n"></span><div class="rule"></div></div>
     <div class="rows two reveal" id="more-rows"></div>
   </div>
 </section>
@@ -427,9 +394,8 @@ var P = [
   { slug:"digital-twins-grid", t:"Digital Twins for Cyber-Resilient Grids", d:"Systematic review and research agenda for digital twins in cyber-resilient power grids in the AI era.", cat:"Research", tile:"⌗", link:"https://github.com/touhidsiddiqueeraj-bit/Digital-Twins-for-Cyber-Resilient-Power-Grids", tags:["digital twins","grid","review"] },
   { slug:"wireless-security-ai", t:"Is Wireless Security Ready for AI?", d:"Structured scoping review and classification of 130 studies, 2020–2026, on whether wireless security is ready for the AI era.", cat:"Research", tile:"⌾", link:"https://github.com/touhidsiddiqueeraj-bit/Is-Wireless-Security-Ready-for-the-AI-Era-", tags:["wireless security","AI","review"] }
 ];
-var SELECTED = ["palimpsest","polarisstudio","atlas","pixel-lab","forgecad","contourslicer","battery-mh","heartlens"];
+var SELECTED = ["palimpsest","polarisstudio","atlas","pixel-lab","forgecad","contourslicer","battery-mh","heartlens","tcaps"];
 var PAPERS = ["materialspaper","mlbms-review","bms-103-review","cspbi3-cbts","cspbi3-losses","digital-twins-grid","wireless-security-ai"];
-var CASE_SLUG = "tcaps";
 
 /* ---------- hero rotator ---------- */
 (function () {
@@ -443,34 +409,33 @@ var CASE_SLUG = "tcaps";
   }, 2200);
 })();
 
-/* ---------- selected-work ring — billboarded 3d carousel ----------
-   one focal card at a time so projects don't blur into background noise.
+/* ---------- billboarded 3d rings — one shared factory, one instance per showcase ----------
+   one focal card at a time so entries don't blur into background noise.
    cards sit on a cylinder, each counter-rotated to face the viewer (nothing
    mirrored); the front card reads flat while sides recede with dim + scale.
    drag to spin with inertia, auto-advance every 7s (pauses on hover/drag/
    hidden tab + a pause button with a progress arc), two-stage click (side
    card -> front, front card -> link), arrow keys, dots, and a flat
-   scroll-snap rail under 720px. prefers-reduced-motion never boots the ring
-   and keeps the 2x4 grid. fresh github-synced repos join the ring's tail. */
-(function () {
-  var stage = document.getElementById("ring-stage");
-  var ringEl = document.getElementById("ring");
-  var dotsEl = document.getElementById("ring-dots");
-  var liveEl = document.getElementById("ring-live");
-  var workN = document.getElementById("work-n");
-  var pauseBtn = document.getElementById("ring-pause");
-  var arcEl = document.getElementById("ring-arc");
-  if (!stage || !ringEl || !dotsEl) return;
+   scroll-snap rail under 720px. prefers-reduced-motion never boots a ring
+   and keeps the static grid / paper rows. fresh github-synced repos join
+   the selected-work ring's tail only. */
+function initRing(cfg) {
+  var stage = document.getElementById(cfg.stage);
+  var ringEl = document.getElementById(cfg.ring);
+  var dotsEl = document.getElementById(cfg.dots);
+  var liveEl = document.getElementById(cfg.live);
+  var countEl = document.getElementById(cfg.count);
+  var pauseBtn = document.getElementById(cfg.pause);
+  var arcEl = document.getElementById(cfg.arc);
+  if (!stage || !ringEl || !dotsEl) return null;
 
   var reduceMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (reduceMQ.matches) return; // static grid stays — the ring never boots
+  if (reduceMQ.matches) return null; // static grid stays — the ring never boots
   document.documentElement.classList.add("ring-ok");
 
+  var noun = cfg.noun || "project", unit = cfg.unit || "projects";
   var DWELL = 7000, MAX_CARDS = 12, ARC = 103.7;
-  var bySlug = {};
-  P.forEach(function (p) { bySlug[p.slug] = p; });
-  var items = [];
-  SELECTED.forEach(function (s) { if (bySlug[s]) items.push(bySlug[s]); });
+  var items = cfg.items.slice();
 
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
   function cardHTML(p, i) {
@@ -554,7 +519,7 @@ var CASE_SLUG = "tcaps";
       dots[i].classList.toggle("on", i === frontIdx);
       if (i === frontIdx) dots[i].setAttribute("aria-current", "true"); else dots[i].removeAttribute("aria-current");
     }
-    if (liveEl && !firstSync && items[frontIdx]) liveEl.textContent = items[frontIdx].t + " — project " + (frontIdx + 1) + " of " + N;
+    if (liveEl && !firstSync && items[frontIdx]) liveEl.textContent = items[frontIdx].t + " — " + noun + " " + (frontIdx + 1) + " of " + N;
     firstSync = false;
   }
   function onSettle(ts) {
@@ -653,8 +618,8 @@ var CASE_SLUG = "tcaps";
     if (i !== frontIdx) goTo(i); // tabbing to a side card rotates it front
   });
 
-  document.getElementById("ring-prev").addEventListener("click", function () { goTo(frontIdx - 1); });
-  document.getElementById("ring-next").addEventListener("click", function () { goTo(frontIdx + 1); });
+  document.getElementById(cfg.prev).addEventListener("click", function () { goTo(frontIdx - 1); });
+  document.getElementById(cfg.next).addEventListener("click", function () { goTo(frontIdx + 1); });
   pauseBtn.addEventListener("click", function () {
     autoOn = !autoOn;
     pauseBtn.classList.toggle("paused", !autoOn);
@@ -721,10 +686,10 @@ var CASE_SLUG = "tcaps";
     N = items.length;
     step = 360 / N;
     var dh = "";
-    for (var i = 0; i < N; i++) dh += '<button class="ring-dot" type="button" data-i="' + i + '" aria-label="Project ' + (i + 1) + ": " + esc(items[i].t) + '"></button>';
+    for (var i = 0; i < N; i++) dh += '<button class="ring-dot" type="button" data-i="' + i + '" aria-label="' + noun.charAt(0).toUpperCase() + noun.slice(1) + " " + (i + 1) + ": " + esc(items[i].t) + '"></button>';
     dotsEl.innerHTML = dh;
     dots = dotsEl.querySelectorAll(".ring-dot");
-    if (workN) workN.textContent = N + " projects";
+    if (countEl) countEl.textContent = N + " " + unit;
     measure();
     paint(performance.now());
   }
@@ -733,8 +698,8 @@ var CASE_SLUG = "tcaps";
   onSettle(performance.now());
   ensureLoop();
 
-  /* github auto-sync hands fresh repos to the ring (glyph tile until screenshotted) */
-  window.__ringAdd = function (fresh) {
+  /* github auto-sync hands fresh repos to this ring (glyph tile until screenshotted) */
+  function add(fresh) {
     if (!fresh || !fresh.length || dragging) return;
     var room = MAX_CARDS - items.length;
     if (room <= 0) return;
@@ -745,8 +710,20 @@ var CASE_SLUG = "tcaps";
     build();
     onSettle(performance.now());
     if (isRail()) stage.scrollLeft = 0;
-  };
-})();
+  }
+  return { add: add };
+}
+
+/* two showcases, one mechanic: selected work (screenshots) and research
+   papers (glyph tiles until a paper has a render) — each with its own drag,
+   dots, pause control and viewport-aware loop */
+var _by = {};
+P.forEach(function (p) { _by[p.slug] = p; });
+function _pick(list) { return list.map(function (s) { return _by[s]; }).filter(Boolean); }
+var workRing = initRing({ stage: "ring-stage", ring: "ring", dots: "ring-dots", live: "ring-live", count: "work-n", pause: "ring-pause", arc: "ring-arc", prev: "ring-prev", next: "ring-next", noun: "project", unit: "projects", items: _pick(SELECTED) });
+var paperRing = initRing({ stage: "paper-stage", ring: "paper-ring", dots: "paper-dots", live: "paper-live", count: "paper-n", pause: "paper-pause", arc: "paper-arc", prev: "paper-prev", next: "paper-next", noun: "paper", unit: "papers", items: _pick(PAPERS) });
+/* fresh repos join the selected-work ring's tail (papers stay curated) */
+window.__ringAdd = function (fresh) { if (workRing) workRing.add(fresh); };
 
 /* ---------- project sections ---------- */
 (function () {
@@ -754,8 +731,8 @@ var CASE_SLUG = "tcaps";
   P.forEach(function (p) { bySlug[p.slug] = p; });
   function pick(list) { return list.map(function (s) { return bySlug[s]; }).filter(Boolean); }
 
-  var selected = pick(SELECTED), papers = pick(PAPERS), caseStudy = bySlug[CASE_SLUG];
-  var claimed = selected.concat(papers).concat(caseStudy ? [caseStudy] : []);
+  var selected = pick(SELECTED), papers = pick(PAPERS);
+  var claimed = selected.concat(papers);
   var rest = P.filter(function (p) { return claimed.indexOf(p) < 0; });
 
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
@@ -959,7 +936,7 @@ var CASE_SLUG = "tcaps";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var BOOT = [
     { t: "touhid@lab — local-ai engineer / battery-ml researcher / embedded builder.\n" },
-    { t: "8 selected builds, 7 papers, the rest of the lab", cls: "accent" },
+    { t: SELECTED.length + " selected builds, " + PAPERS.length + " papers, the rest of the lab", cls: "accent" },
     { t: ". type " },
     { t: "help", cls: "accent" },
     { t: ", " },

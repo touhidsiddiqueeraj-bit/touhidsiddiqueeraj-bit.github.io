@@ -115,6 +115,7 @@
   html.ring-ok .ring-stage { display: block; }
   html.ring-ok #work-grid { display: none; }
   html.ring-ok #paper-rows { display: none; }
+  html.ring-ok #more-rows { display: none; }
   .ring-stage.grabbing { cursor: grabbing; }
   .ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
   .ring-card { position: absolute; left: calc(var(--card-w, 380px) / -2); top: calc(var(--card-h, 352px) / -2); width: var(--card-w, 380px); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; will-change: transform, opacity; backface-visibility: hidden; cursor: pointer; }
@@ -234,6 +235,7 @@
     html.ring-ok .ring-stage, html.ring-ok .ring-ui { display: none !important; }
     html.ring-ok #work-grid { display: grid !important; }
     html.ring-ok #paper-rows { display: block !important; }
+    html.ring-ok #more-rows { display: grid !important; }
   }
 </style>
 </head>
@@ -332,6 +334,21 @@
 <section id="more">
   <div class="wrap">
     <div class="sec-head reveal"><span class="n">[03]</span><h2>Everything else</h2><span class="hcount" id="more-n"></span><div class="rule"></div></div>
+    <div class="ring-zone reveal">
+      <div class="ring-stage" id="more-stage" title="drag to spin" role="region" aria-roledescription="carousel" aria-label="Everything else">
+        <div class="ring" id="more-ring"></div>
+      </div>
+      <div class="ring-ui">
+        <button class="ring-btn" id="more-prev" type="button" aria-label="Previous project">&larr;</button>
+        <div class="ring-dots" id="more-dots" role="group" aria-label="Pick a project"></div>
+        <button class="ring-btn" id="more-next" type="button" aria-label="Next project">&rarr;</button>
+        <button class="ring-btn ring-toggle" id="more-pause" type="button" aria-pressed="false" aria-label="Pause auto-rotation">
+          <svg viewBox="0 0 38 38" aria-hidden="true"><circle class="ring-arc-bg" cx="19" cy="19" r="16.5"></circle><circle class="ring-arc" id="more-arc" cx="19" cy="19" r="16.5"></circle></svg>
+          <span class="ring-ico" aria-hidden="true"></span>
+        </button>
+      </div>
+      <span class="visually-hidden" id="more-live" aria-live="polite"></span>
+    </div>
     <div class="rows two reveal" id="more-rows"></div>
   </div>
 </section>
@@ -368,31 +385,31 @@ var P = [
   { slug:"forgecad", t:"ForgeCad", d:"Browser 3D modeler + circuit simulator — no framework, no build step. Built because Tinkercad dies on an iPad Air.", cat:"Web", img:"images/repo/forgecad.png", live:true, link:"https://forge-cad.vercel.app", tags:["Three.js","SVG"] },
   { slug:"asciify", t:"Asciify", d:"Fully client-side, GPU-accelerated video → ASCII art converter. No uploads.", cat:"Web", tile:"▒", link:"https://github.com/touhidsiddiqueeraj-bit/Asciify", tags:["GPU","canvas"] },
   { slug:"clinic-os", t:"Clinic OS", d:"Full-stack dental clinic web app for Quick Dental Care, Sylhet — PWA, Google Apps Script backend, WhatsApp integration.", cat:"Web", tile:"✚", link:"https://github.com/touhidsiddiqueeraj-bit/Clinic-OS-Showcase-Quick-Dental-Care", tags:["PWA","Apps Script"] },
-  { slug:"cv-genie", t:"CV-Genie", d:"Professional client-side CV builder — 13 templates, ATS analysis, PDF/DOCX export.", cat:"AI", tile:"▙", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/CV-Genie/", tags:["SPA","ATS"] },
+  { slug:"cv-genie", t:"CV-Genie", d:"Professional client-side CV builder — 13 templates, ATS analysis, PDF/DOCX export.", cat:"AI", img:"images/repo/cv-genie.png", tile:"▙", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/CV-Genie/", tags:["SPA","ATS"] },
   { slug:"cv-genie-server", t:"cv-genie-server", d:"Render server for CV Genie — perfect-quality .doc and .pdf exports.", cat:"AI", tile:"▚", link:"https://github.com/touhidsiddiqueeraj-bit/cv-genie-server", tags:["Node","rendering"] },
   { slug:"roadmap-ai", t:"Roadmap to AI-Powered Engineer", d:"Gamified 60-day roadmap: zero to production-ready AI web apps. Vanilla HTML/CSS/JS.", cat:"AI", tile:"▸", link:"https://github.com/touhidsiddiqueeraj-bit/Roadmap-to-AI-Powered-Engineer", tags:["learning","60 days"] },
   { slug:"repovision", t:"RepoVision", d:"AI-powered GitHub codebase explorer and auditor — understand any repo with AI.", cat:"AI", tile:"⌁", link:"https://github.com/touhidsiddiqueeraj-bit/RepoVision", tags:["AI","github"] },
-  { slug:"fitlog", t:"FitLog-2.0", d:"AI-powered fitness & nutrition tracker — workouts, metrics, personalized plans via Google Gemini.", cat:"AI", tile:"▲", link:"https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0", tags:["Gemini","PWA"] },
+  { slug:"fitlog", t:"FitLog-2.0", d:"AI-powered fitness & nutrition tracker — workouts, metrics, personalized plans via Google Gemini.", cat:"AI", img:"images/repo/fitlog.png", tile:"▲", link:"https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0", tags:["Gemini","PWA"] },
   { slug:"tflite-trainer", t:"TF-Lite Trainer", d:"Flexible trainer for MCU machine-learning models — train, convert, deploy to microcontrollers.", cat:"AI", tile:"▦", link:"https://github.com/touhidsiddiqueeraj-bit/TF-Lite-Trainer", tags:["TFLite","MCU"] },
   { slug:"palimpsest", t:"palimpsest", d:"Local-first, revision-aware Markdown editor — word-level time travel, automatic snapshots, prose-aware diffs. AI proposes, the diff decides. MCP spine for agents.", cat:"Web", img:"images/repo/palimpsest.svg", link:"https://github.com/touhidsiddiqueeraj-bit/palimpsest", tags:["Tauri","CodeMirror","MCP"] },
-  { slug:"saphira", t:"Saphira", d:"An AI 3D companion that lives on screen — conversational character with generated expressions and motion.", cat:"AI", tile:"◕", link:"https://github.com/touhidsiddiqueeraj-bit/Saphira", tags:["TypeScript","Three.js","companion"] },
-  { slug:"saphira-air", t:"Saphira-Air", d:"Lite cut of Saphira — the same desk companion rebuilt to run on an iPad Air.", cat:"AI", tile:"◔", link:"https://github.com/touhidsiddiqueeraj-bit/Saphira-Air", tags:["TypeScript","iPad"] },
+  { slug:"saphira", t:"Saphira", d:"An AI 3D companion that lives on screen — conversational character with generated expressions and motion.", cat:"AI", img:"images/repo/saphira.png", tile:"◕", link:"https://github.com/touhidsiddiqueeraj-bit/Saphira", tags:["TypeScript","Three.js","companion"] },
+  { slug:"saphira-air", t:"Saphira-Air", d:"Lite cut of Saphira — the same desk companion rebuilt to run on an iPad Air.", cat:"AI", img:"images/repo/saphira-air.png", tile:"◔", link:"https://github.com/touhidsiddiqueeraj-bit/Saphira-Air", tags:["TypeScript","iPad"] },
   { slug:"hey-laya", t:"hey-laya", d:"Local-first voice assistant — on-device decision layer, Kokoro TTS, faster-whisper STT. Zero API keys, zero cloud.", cat:"AI", tile:"◎", link:"https://github.com/touhidsiddiqueeraj-bit/hey-laya", tags:["Kokoro","whisper","voice"] },
   { slug:"comptia-aplus", t:"comptia-aplus", d:"90-day CompTIA A+ study app — 220-1101 Core 1 & 220-1102 Core 2, self-contained PWA.", cat:"Study", tile:"▣", link:"https://github.com/touhidsiddiqueeraj-bit/comptia-aplus", tags:["A+","PWA"] },
   { slug:"comptia-security", t:"comptia-security", d:"Security+ SY0-701 study app — 60-day plan, quizzes, progress tracking, Google Sheets sync.", cat:"Study", tile:"▧", link:"https://github.com/touhidsiddiqueeraj-bit/comptia-security", tags:["Sec+","quizzes"] },
   { slug:"aws-ai-study", t:"AWS-AI-Study", d:"AWS Certified AI Practitioner (AIF-C01) study app — no install, no backend, no dependencies.", cat:"Study", tile:"▥", link:"https://github.com/touhidsiddiqueeraj-bit/AWS-AI-Study", tags:["AIF-C01","single-file"] },
-  { slug:"gridpoweragent", t:"gridpoweragent", d:"Python-based grid power reinforcement learning agent — energy dispatch optimization.", cat:"Energy ML", tile:"◉", link:"https://github.com/touhidsiddiqueeraj-bit/gridpoweragent", tags:["Python","RL","grid"] },
-  { slug:"figify", t:"figify", d:"Matplotlib figure editor for scientific paper-grade figures — tweak any figure in the browser, export print-ready.", cat:"Web", tile:"⬔", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/figify/", tags:["matplotlib","figures","paper"] },
-  { slug:"esp-indoor-pv", t:"ESP-Indoor PV Analysis", d:"Viability of ESP-32 S3 for indoor photovoltaics without PMIC — power budgeting and harvesting analysis.", cat:"Energy ML", tile:"☼", link:"https://github.com/touhidsiddiqueeraj-bit/ESP-Indoor-PC-analysis", tags:["ESP32-S3","PV","PMIC"] },
-  { slug:"quant-pid-buck", t:"Quantization-Aware PID Buck-Boost", d:"Digital PID control of inverting buck-boost with ESP32-S3 — ADC/DPWM resolution & sampling period effects on real hardware.", cat:"Embedded", tile:"⎍", link:"https://github.com/touhidsiddiqueeraj-bit/Quantization-Aware-Digital-PID-Control-of-an-Inverting-Buck-Boost-Converter-with-ESP32-S3", tags:["ESP32-S3","PID","quantization"] },
-  { slug:"voltlab", t:"VoltLab", d:"Motor-control simulator with an MCP layer — tune a drive in the browser, then let an agent drive it.", cat:"Embedded", tile:"⊙", link:"https://github.com/touhidsiddiqueeraj-bit/VoltLab", tags:["motor control","MCP","sim"] },
-  { slug:"sarah-rover", t:"SARAH Moon Rover", d:"Mission planning for the SARAH moon rover — traverse planning and operations design.", cat:"Web", tile:"☾", link:"https://github.com/touhidsiddiqueeraj-bit/SARAH-moon-rover", tags:["HTML","rover","planning"] },
+  { slug:"gridpoweragent", t:"gridpoweragent", d:"Python-based grid power reinforcement learning agent — energy dispatch optimization.", cat:"Energy ML", img:"images/repo/gridpoweragent.png", tile:"◉", link:"https://github.com/touhidsiddiqueeraj-bit/gridpoweragent", tags:["Python","RL","grid"] },
+  { slug:"figify", t:"figify", d:"Matplotlib figure editor for scientific paper-grade figures — tweak any figure in the browser, export print-ready.", cat:"Web", img:"images/repo/figify.png", tile:"⬔", live:true, link:"https://touhidsiddiqueeraj-bit.github.io/figify/", tags:["matplotlib","figures","paper"] },
+  { slug:"esp-indoor-pv", t:"ESP-Indoor PV Analysis", d:"Viability of ESP-32 S3 for indoor photovoltaics without PMIC — power budgeting and harvesting analysis.", cat:"Energy ML", img:"images/repo/esp-indoor-pv.png", tile:"☼", link:"https://github.com/touhidsiddiqueeraj-bit/ESP-Indoor-PC-analysis", tags:["ESP32-S3","PV","PMIC"] },
+  { slug:"quant-pid-buck", t:"Quantization-Aware PID Buck-Boost", d:"Digital PID control of inverting buck-boost with ESP32-S3 — ADC/DPWM resolution & sampling period effects on real hardware.", cat:"Embedded", img:"images/repo/quant-pid-buck.png", tile:"⎍", link:"https://github.com/touhidsiddiqueeraj-bit/Quantization-Aware-Digital-PID-Control-of-an-Inverting-Buck-Boost-Converter-with-ESP32-S3", tags:["ESP32-S3","PID","quantization"] },
+  { slug:"voltlab", t:"VoltLab", d:"Motor-control simulator with an MCP layer — tune a drive in the browser, then let an agent drive it.", cat:"Embedded", img:"images/repo/voltlab.png", tile:"⊙", link:"https://github.com/touhidsiddiqueeraj-bit/VoltLab", tags:["motor control","MCP","sim"] },
+  { slug:"sarah-rover", t:"SARAH Moon Rover", d:"Mission planning for the SARAH moon rover — traverse planning and operations design.", cat:"Web", img:"images/repo/sarah-rover.png", tile:"☾", link:"https://github.com/touhidsiddiqueeraj-bit/SARAH-moon-rover", tags:["HTML","rover","planning"] },
   { slug:"mlbms-review", t:"ML-BMS Scoping Review (IEEE TTE)", d:"Two-tier scoping review of 799 eligible records with in-depth classification and a validation audit of 103 studies — reproducible corpus and manuscript.", cat:"Research", tile:"▩", link:"https://github.com/touhidsiddiqueeraj-bit/ML-BMS-TTE-Resubmission", tags:["scoping review","BMS","IEEE TTE"] },
-  { slug:"bms-103-review", t:"ML in BMS — 103 Studies Classified", d:"Machine learning in battery management systems: structured scoping review and classification of 103 peer-reviewed studies, 2019–2026.", cat:"Research", tile:"▨", link:"https://github.com/touhidsiddiqueeraj-bit/-structured-scoping-review-and-classification-of-103-peer-reviewed-studies-about-AI-in-BMS", tags:["review","BMS","classification"] },
-  { slug:"cspbi3-cbts", t:"CsPbI₃/CBTS Guardrailed Ceiling", d:"What a CsPbI₃/CBTS cell can honestly claim — 24.95% permissive-box maximum vs 20.8% defended, with a reproducibility audit of published 24%+ results.", cat:"Research", tile:"⬓", link:"https://github.com/touhidsiddiqueeraj-bit/cspbi3-cbts-guardrailed", tags:["SCAPS-1D","CsPbI3","guardrails"] },
-  { slug:"cspbi3-losses", t:"Electrical Losses in CsPbI₃ Cells", d:"Stacked idealisations inflate SCAPS-1D CsPbI₃ projections — joint optimisation of thickness, doping, defects, gap and transport affinities on one worked stack.", cat:"Research", tile:"⬒", link:"https://github.com/touhidsiddiqueeraj-bit/Modeling-electricModeling-electrical-losses-in-CsPbI3-solar-cells-al-losses-in-CsPbI3-solar-cells-", tags:["SCAPS-1D","CsPbI3","losses"] },
-  { slug:"digital-twins-grid", t:"Digital Twins for Cyber-Resilient Grids", d:"Systematic review and research agenda for digital twins in cyber-resilient power grids in the AI era.", cat:"Research", tile:"⌗", link:"https://github.com/touhidsiddiqueeraj-bit/Digital-Twins-for-Cyber-Resilient-Power-Grids", tags:["digital twins","grid","review"] },
-  { slug:"wireless-security-ai", t:"Is Wireless Security Ready for AI?", d:"Structured scoping review and classification of 130 studies, 2020–2026, on whether wireless security is ready for the AI era.", cat:"Research", tile:"⌾", link:"https://github.com/touhidsiddiqueeraj-bit/Is-Wireless-Security-Ready-for-the-AI-Era-", tags:["wireless security","AI","review"] }
+  { slug:"bms-103-review", t:"ML in BMS — 103 Studies Classified", d:"Machine learning in battery management systems: structured scoping review and classification of 103 peer-reviewed studies, 2019–2026.", cat:"Research", img:"images/repo/bms-103-review.png", tile:"▨", link:"https://github.com/touhidsiddiqueeraj-bit/-structured-scoping-review-and-classification-of-103-peer-reviewed-studies-about-AI-in-BMS", tags:["review","BMS","classification"] },
+  { slug:"cspbi3-cbts", t:"CsPbI₃/CBTS Guardrailed Ceiling", d:"What a CsPbI₃/CBTS cell can honestly claim — 24.95% permissive-box maximum vs 20.8% defended, with a reproducibility audit of published 24%+ results.", cat:"Research", img:"images/repo/cspbi3-cbts.png", tile:"⬓", link:"https://github.com/touhidsiddiqueeraj-bit/cspbi3-cbts-guardrailed", tags:["SCAPS-1D","CsPbI3","guardrails"] },
+  { slug:"cspbi3-losses", t:"Electrical Losses in CsPbI₃ Cells", d:"Stacked idealisations inflate SCAPS-1D CsPbI₃ projections — joint optimisation of thickness, doping, defects, gap and transport affinities on one worked stack.", cat:"Research", img:"images/repo/cspbi3-losses.png", tile:"⬒", link:"https://github.com/touhidsiddiqueeraj-bit/Modeling-electricModeling-electrical-losses-in-CsPbI3-solar-cells-al-losses-in-CsPbI3-solar-cells-", tags:["SCAPS-1D","CsPbI3","losses"] },
+  { slug:"digital-twins-grid", t:"Digital Twins for Cyber-Resilient Grids", d:"Systematic review and research agenda for digital twins in cyber-resilient power grids in the AI era.", cat:"Research", img:"images/repo/digital-twins-grid.png", tile:"⌗", link:"https://github.com/touhidsiddiqueeraj-bit/Digital-Twins-for-Cyber-Resilient-Power-Grids", tags:["digital twins","grid","review"] },
+  { slug:"wireless-security-ai", t:"Is Wireless Security Ready for AI?", d:"Structured scoping review and classification of 130 studies, 2020–2026, on whether wireless security is ready for the AI era.", cat:"Research", img:"images/repo/wireless-security-ai.png", tile:"⌾", link:"https://github.com/touhidsiddiqueeraj-bit/Is-Wireless-Security-Ready-for-the-AI-Era-", tags:["wireless security","AI","review"] }
 ];
 var SELECTED = ["palimpsest","polarisstudio","atlas","pixel-lab","forgecad","contourslicer","battery-mh","heartlens","tcaps"];
 var PAPERS = ["materialspaper","mlbms-review","bms-103-review","cspbi3-cbts","cspbi3-losses","digital-twins-grid","wireless-security-ai"];
@@ -722,8 +739,6 @@ P.forEach(function (p) { _by[p.slug] = p; });
 function _pick(list) { return list.map(function (s) { return _by[s]; }).filter(Boolean); }
 var workRing = initRing({ stage: "ring-stage", ring: "ring", dots: "ring-dots", live: "ring-live", count: "work-n", pause: "ring-pause", arc: "ring-arc", prev: "ring-prev", next: "ring-next", noun: "project", unit: "projects", items: _pick(SELECTED) });
 var paperRing = initRing({ stage: "paper-stage", ring: "paper-ring", dots: "paper-dots", live: "paper-live", count: "paper-n", pause: "paper-pause", arc: "paper-arc", prev: "paper-prev", next: "paper-next", noun: "paper", unit: "papers", items: _pick(PAPERS) });
-/* fresh repos join the selected-work ring's tail (papers stay curated) */
-window.__ringAdd = function (fresh) { if (workRing) workRing.add(fresh); };
 
 /* ---------- project sections ---------- */
 (function () {
@@ -734,6 +749,7 @@ window.__ringAdd = function (fresh) { if (workRing) workRing.add(fresh); };
   var selected = pick(SELECTED), papers = pick(PAPERS);
   var claimed = selected.concat(papers);
   var rest = P.filter(function (p) { return claimed.indexOf(p) < 0; });
+  rest.sort(function (a, b) { return (b.img ? 1 : 0) - (a.img ? 1 : 0); }); // image-backed lead the ring
 
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 
@@ -756,6 +772,12 @@ window.__ringAdd = function (fresh) { if (workRing) workRing.add(fresh); };
   document.getElementById("work-n").textContent = selected.length + " projects";
   document.getElementById("paper-n").textContent = papers.length + " papers";
   document.getElementById("more-n").textContent = rest.length + " projects";
+
+  /* third showcase: everything outside selected/papers spins on its own ring —
+     image-backed projects lead, fresh github repos fill the tail slots */
+  var moreRing = initRing({ stage: "more-stage", ring: "more-ring", dots: "more-dots", live: "more-live", count: null, pause: "more-pause", arc: "more-arc", prev: "more-prev", next: "more-next", noun: "project", unit: "projects", items: rest.slice(0, 10) });
+  /* fresh repos join the everything-else ring (selected ring stays curated) */
+  window.__ringAdd = function (fresh) { if (moreRing) moreRing.add(fresh); };
 
   /* ---------- live repo sync — new public repos land here automatically ----------
      curated data above stays the source of truth (images, tags, categories);
@@ -802,7 +824,7 @@ window.__ringAdd = function (fresh) { if (workRing) workRing.add(fresh); };
       document.getElementById("more-n").textContent = all.length + " projects";
       var statB = document.querySelector(".stats div b");
       if (statB) statB.textContent = String(P.length);
-      // showcase: fresh repos join the selected-work ring too (up to its cap)
+      // showcase: fresh repos join the everything-else ring too (up to its cap)
       try { if (window.__ringAdd) window.__ringAdd(fresh); } catch (e) {}
       // defer so the terminal IIFE (later in this script) has its listener ready
       try { setTimeout(function () { window.dispatchEvent(new CustomEvent("repos:synced", { detail: { count: fresh.length } })); }, 0); } catch (e) {}

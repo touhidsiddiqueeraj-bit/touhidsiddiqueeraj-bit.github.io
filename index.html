@@ -155,6 +155,28 @@
     .case, .work { background: color-mix(in srgb, var(--panel) 90%, transparent); }
   }
 
+  /* terminal life — phosphor glow, scanlines, scan sweep, typed boot (reduced motion disables) */
+  .hero-term .term-body, .hero-term .term-kbd { text-shadow: 0 0 7px rgba(233,231,226,.13); }
+  .hero-term .out .accent { text-shadow: 0 0 9px rgba(240,166,58,.4); }
+  .hero-term .out .ok { text-shadow: 0 0 9px rgba(127,176,105,.4); }
+  .hero-term .out .err { text-shadow: 0 0 9px rgba(209,97,77,.45); }
+  .hero-term .out .muted { color: var(--term-muted); }
+  .hero-term .out { animation: termIn .22s ease-out both; }
+  @keyframes termIn { from { opacity: 0; transform: translateY(4px); } }
+  .hero-term::before { content: ""; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 3px); }
+  .hero-term::after { content: ""; position: absolute; left: 0; right: 0; top: -36%; height: 34%; z-index: 3; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(240,166,58,.045) 45%, rgba(255,217,160,.085) 50%, rgba(240,166,58,.045) 55%, transparent); animation: termSweep 7.5s linear infinite; }
+  @keyframes termSweep { to { transform: translateY(430%); } }
+  .hero-term .type-caret { color: var(--term-amber); text-shadow: 0 0 8px rgba(240,166,58,.5); animation: caretBlink .9s steps(1) infinite; }
+  @keyframes caretBlink { 50% { opacity: 0; } }
+  .hero-term .mood-dot { width: 10px; height: 10px; border-radius: 50%; margin-left: 8px; flex: none; background: #ffcf5c; box-shadow: 0 0 9px 1px rgba(255,207,92,.55); transition: background 1.4s ease, box-shadow 1.4s ease; animation: moodBreath 3.3s ease-in-out infinite; }
+  @keyframes moodBreath { 50% { transform: scale(1.22); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-term::after, .hero-term .out, .hero-term .type-caret, .hero-term .mood-dot { animation: none; }
+  }
+
+  /* auto-synced repos get a small new chip */
+  .row.fresh h3::after { content: " new"; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); background: var(--amber-dim); border-radius: 4px; padding: 1px 6px; margin-left: 10px; vertical-align: 2px; }
+
   @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; gap: 36px; }
     .hero-term { display: none; }
@@ -209,6 +231,7 @@
       <div class="term-bar">
         <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
         <span class="title">touhid@lab: ~/portfolio</span>
+        <span class="mood-dot" id="mood-dot" aria-hidden="true" title="saphira's mood"></span>
         <span class="hint">type 'help'</span>
       </div>
       <div class="term-body" id="term-body"></div>
@@ -379,6 +402,76 @@ var CASE_SLUG = "tcaps";
   document.getElementById("work-n").textContent = selected.length + " projects";
   document.getElementById("paper-n").textContent = papers.length + " papers";
   document.getElementById("more-n").textContent = rest.length + " projects";
+
+  /* ---------- live repo sync — new public repos land here automatically ----------
+     curated data above stays the source of truth (images, tags, categories);
+     the github api only ever APPENDS repos that are not curated yet. cached 6h
+     so page loads stay fast and the 60 req/h anonymous limit is never an issue. */
+  (function () {
+    var USER = "touhidsiddiqueeraj-bit", KEY = "portfolio-repos-v1";
+    var TTL = 6 * 60 * 60 * 1000, MAXFRESH = 8, SKIP = { "touhidsiddiqueeraj-bit.github.io": 1, "touhidsiddiqueeraj-bit": 1 }; // pages site + profile readme repo are not projects
+    var known = {}; // by slug AND by github repo name — curated slugs are often shorter
+    P.forEach(function (p) {
+      known[p.slug] = true;
+      var m = String(p.link || "").match(/github\.com\/[^\/]+\/([^\/#?]+)/);
+      if (m) known[m[1].toLowerCase()] = true;
+    });
+    var moreEl = document.getElementById("more-rows");
+
+    function cacheRead() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
+    function cacheWrite(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
+
+    function mapRepo(r) {
+      var tags = [];
+      if (r.language) tags.push(r.language);
+      (r.topics || []).slice(0, 3).forEach(function (tp) { if (tags.indexOf(tp) < 0) tags.push(tp); });
+      if (!tags.length) tags.push("just shipped");
+      return {
+        slug: String(r.name || "").toLowerCase(), t: r.name || "untitled",
+        d: r.description || "fresh from the lab — write-up in progress.",
+        cat: "New", tile: "\u2726",
+        live: r.has_pages === true, link: r.html_url, tags: tags, fresh: true,
+        created: r.created_at || ""
+      };
+    }
+
+    function apply(list) {
+      var fresh = list.filter(function (p) {
+        return p.slug && !known[p.slug] && !SKIP[p.slug];
+      }).sort(function (a, b) { return b.created > a.created ? 1 : -1; }).slice(0, MAXFRESH);
+      if (!fresh.length) return;
+      fresh.forEach(function (p) { P.push(p); });
+      var all = rest.concat(fresh);
+      moreEl.innerHTML = all.map(rowHTML).join("");
+      var rows = moreEl.querySelectorAll(".row");
+      for (var i = rest.length; i < rows.length; i++) rows[i].classList.add("fresh");
+      document.getElementById("more-n").textContent = all.length + " projects";
+      var statB = document.querySelector(".stats div b");
+      if (statB) statB.textContent = String(P.length);
+      // defer so the terminal IIFE (later in this script) has its listener ready
+      try { setTimeout(function () { window.dispatchEvent(new CustomEvent("repos:synced", { detail: { count: fresh.length } })); }, 0); } catch (e) {}
+    }
+
+    var cached = cacheRead();
+    if (cached && Date.now() - cached.ts < TTL) { apply(cached.repos || []); return; }
+    if (!window.fetch) return;
+    var page = 1, collected = [];
+    function fetchPage() {
+      fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=created&page=" + page)
+        .then(function (r) { if (!r.ok) throw new Error("github api " + r.status); return r.json(); })
+        .then(function (list) {
+          list = Array.isArray(list) ? list : [];
+          list.forEach(function (r) {
+            if (!r.fork && !SKIP[String(r.name || "").toLowerCase()]) collected.push(mapRepo(r));
+          });
+          if (list.length === 100 && page < 3) { page++; fetchPage(); return; }
+          cacheWrite({ ts: Date.now(), repos: collected });
+          apply(collected);
+        })
+        .catch(function () { /* offline or rate-limited: the curated list already rendered */ });
+    }
+    fetchPage();
+  })();
 })();
 
 /* ---------- reveal on scroll ---------- */
@@ -412,7 +505,7 @@ var CASE_SLUG = "tcaps";
     var c = args.shift();
     switch (c) {
       case "help":
-        print('commands: <span class="accent">help</span> <span class="accent">ls</span> [--live] <span class="accent">open</span> &lt;slug&gt; <span class="accent">cat</span> &lt;slug&gt; <span class="accent">whoami</span> <span class="accent">contact</span> <span class="accent">date</span> <span class="accent">echo</span> &lt;text&gt; <span class="accent">clear</span>'); break;
+        print('commands: <span class="accent">help</span> <span class="accent">ls</span> [--live] <span class="accent">open</span> &lt;slug&gt; <span class="accent">cat</span> &lt;slug&gt; <span class="accent">whoami</span> <span class="accent">contact</span> <span class="accent">date</span> <span class="accent">echo</span> &lt;text&gt; <span class="accent">saphira</span> <span class="accent">mood</span> <span class="accent">clear</span>'); break;
       case "ls": {
         var pool = c === "ls" ? P : P;
         var list = args[0] === "--live" ? pool.filter(function (p) { return p.live; }) : pool;
@@ -441,13 +534,19 @@ var CASE_SLUG = "tcaps";
         else print("<span class='err'>cat: no such project: '" + esc(args[0] || "") + "'</span>");
         break;
       }
-      case "whoami": print("local-ai engineer / battery-ml researcher / embedded builder — 45 projects, all mine."); break;
+      case "whoami": print("local-ai engineer / battery-ml researcher / embedded builder — " + P.length + " projects, all mine."); break;
       case "contact": print("email: <span class='accent'>touhidsiddiqueeraj@gmail.com</span>\ngithub: <span class='accent'>github.com/touhidsiddiqueeraj-bit</span>"); break;
       case "date": print(new Date().toString()); break;
       case "echo": print(esc(args.join(" ")) || ""); break;
       case "clear": body.innerHTML = ""; break;
       case "sudo": print("<span class='err'>permission denied: the user is not in the sudoers file. this incident will be reported.</span>"); break;
       case "rm": print("<span class='err'>nice try. everything is in git.</span>"); break;
+      case "saphira": print("<span class='accent'>saphira</span> — the ai companion breathing behind this page.\nmood palette: happy · excited · surprised · thinking · sad · blush\nrepo: <span class='accent'>github.com/touhidsiddiqueeraj-bit/Saphira</span> — try <span class='accent'>mood</span> to shift her"); break;
+      case "mood": {
+        try { window.dispatchEvent(new CustomEvent("aura:mood-next")); print("shifting her mood — watch the glow drift…"); }
+        catch (e) { print("<span class='err'>saphira is not home right now</span>"); }
+        break;
+      }
       case "": break;
       default: print("<span class='err'>command not found: " + esc(c) + " — try 'help'</span>");
     }
@@ -477,7 +576,59 @@ var CASE_SLUG = "tcaps";
     }
   });
 
-  print('touhid@lab — local-ai engineer / battery-ml researcher / embedded builder.\n<span class="accent">8 selected builds, 7 papers, the rest of the lab</span>. type <span class="accent">help</span>, <span class="accent">ls</span>, or <span class="accent">cat palimpsest</span>.');
+  /* boot banner types itself in, like a real login — instant under reduced motion */
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var BOOT = [
+    { t: "touhid@lab — local-ai engineer / battery-ml researcher / embedded builder.\n" },
+    { t: "8 selected builds, 7 papers, the rest of the lab", cls: "accent" },
+    { t: ". type " },
+    { t: "help", cls: "accent" },
+    { t: ", " },
+    { t: "ls", cls: "accent" },
+    { t: ", or " },
+    { t: "cat palimpsest", cls: "accent" },
+    { t: "." }
+  ];
+  if (reduceMotion || !window.setInterval) {
+    print(BOOT.map(function (tk) { return tk.cls ? '<span class="' + tk.cls + '">' + tk.t + "</span>" : tk.t; }).join(""));
+  } else {
+    var bootDiv = document.createElement("div");
+    bootDiv.className = "out";
+    body.appendChild(bootDiv);
+    var caret = document.createElement("span");
+    caret.className = "type-caret";
+    caret.textContent = "\u258b";
+    bootDiv.appendChild(caret);
+    var ti = 0, ci = 0, cur = null;
+    var typeTimer = setInterval(function () {
+      if (ti >= BOOT.length) {
+        clearInterval(typeTimer);
+        if (caret.parentNode) caret.parentNode.removeChild(caret);
+        return;
+      }
+      var tk = BOOT[ti];
+      if (!cur || cur.cls !== tk.cls) {
+        if (tk.cls) { cur = { cls: tk.cls, el: document.createElement("span") }; cur.el.className = tk.cls; bootDiv.insertBefore(cur.el, caret); }
+        else cur = { cls: undefined, el: bootDiv };
+      }
+      if (ci < tk.t.length) {
+        cur.el.insertBefore(document.createTextNode(tk.t.charAt(ci++)), tk.cls ? null : caret);
+        body.scrollTop = body.scrollHeight;
+      } else { ti++; ci = 0; cur = null; }
+    }, 13);
+  }
+
+  /* the little dot in the title bar breathes with saphira's current mood */
+  var moodDot = document.getElementById("mood-dot");
+  window.addEventListener("aura:mood", function (e) {
+    if (!moodDot || !e.detail) return;
+    moodDot.style.background = e.detail.hex;
+    moodDot.style.boxShadow = "0 0 9px 1px " + e.detail.glow;
+    moodDot.title = "saphira mood: " + e.detail.name;
+  });
+  window.addEventListener("repos:synced", function (e) {
+    if (e.detail && e.detail.count) print("<span class='ok'>+" + e.detail.count + " repo(s) auto-synced from github</span> — try <span class='accent'>ls</span>");
+  });
 })();
 
 /* ---------- theme ---------- */
@@ -516,6 +667,7 @@ var CASE_SLUG = "tcaps";
     var reduce = reduceMQ.matches;
 
     var MOODS = ["#ffcf5c", "#ff7ab8", "#c39bff", "#8fd0c5", "#6b9dff", "#ff9eb0"]; // avatar.ts MOODS
+    var MOOD_NAMES = ["happy", "excited", "surprised", "thinking", "sad", "blush"];
     var BLOBS = [                                                                     // her #boot orb
       { c: [255, 217, 160], r: 0.52, x: 0.22, y: 0.14, a: 0.155, sp: 0.62, ph: 0.0 },
       { c: [255, 154, 184], r: 0.48, x: 0.82, y: 0.42, a: 0.135, sp: 0.44, ph: 2.1 },
@@ -530,6 +682,7 @@ var CASE_SLUG = "tcaps";
     var gx = 0.5, gy = 0.3, tgx = 0.5, tgy = 0.3, gazeUntil = 0; // her gaze
     var px = 0.5, py = 0.3, pSeen = -10;                          // her head tracking
     var flies = [], last = 0, raf = 0, running = false, lastThemeCheck = -10;
+    var burstUntil = 0; // brief glow boost when someone runs 'mood' in the terminal
 
     function hex(h) {
       h = h.replace("#", "");
@@ -587,10 +740,18 @@ var CASE_SLUG = "tcaps";
     function arrived() {
       return Math.abs(moodTgt[0] - moodCur[0]) + Math.abs(moodTgt[1] - moodCur[1]) + Math.abs(moodTgt[2] - moodCur[2]) < 3;
     }
+    function announce() {
+      try {
+        window.dispatchEvent(new CustomEvent("aura:mood", {
+          detail: { hex: MOODS[moodIdx], name: MOOD_NAMES[moodIdx], glow: rgba(hex(MOODS[moodIdx]), 0.55) }
+        }));
+      } catch (e) {}
+    }
     function nextMood(t) {
       moodIdx = (moodIdx + 1 + Math.floor(Math.random() * (MOODS.length - 1))) % MOODS.length;
       moodTgt = hex(MOODS[moodIdx]);
       moodHold = t + 8 + Math.random() * 5;
+      announce();
     }
 
     function paint(t, dt) {
@@ -622,7 +783,7 @@ var CASE_SLUG = "tcaps";
 
       // her mood glow — wanders, tracks the pointer, pulses with her breath
       var gr = Math.max(W, H) * 0.62;
-      ctx.globalAlpha = Math.max(0.02, (light ? 0.075 : 0.13) * (0.55 + 0.15 * Math.sin(t * 0.9)) * (0.8 + 0.35 * Math.sin(t * 1.9)));
+      ctx.globalAlpha = Math.max(0.02, (light ? 0.075 : 0.13) * (0.55 + 0.15 * Math.sin(t * 0.9)) * (0.8 + 0.35 * Math.sin(t * 1.9)) * (t < burstUntil ? 1.7 : 1));
       ctx.drawImage(moodSprite, gx * W - gr, gy * H - gr, gr * 2, gr * 2);
 
       // music-box dust — fireflies twinkling on her blink clock
@@ -716,12 +877,20 @@ var CASE_SLUG = "tcaps";
       });
     } catch (err) {}
 
+    try {
+      window.addEventListener("aura:mood-next", function () {
+        moodHold = 0;
+        burstUntil = performance.now() / 1000 + 2.5;
+      });
+    } catch (err) {}
+
     // boot
     readTheme();
     for (var i = 0; i < BLOBS.length; i++) blobSprites.push(sprite(BLOBS[i].c));
     resize();
     paint(0, 0.016);
     start();
+    announce(); // light the title-bar dot with her opening mood
   } catch (err) {
     canvas.style.display = "none";
   }

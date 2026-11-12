@@ -121,6 +121,53 @@
   .work-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-family: "IBM Plex Mono", monospace; font-size: 12px; }
   .work-meta .go { color: var(--amber); white-space: nowrap; }
 
+  /* ---------- selected-work ring — billboarded 3d carousel ----------
+     cards sit on a cylinder but each counter-rotates to face the viewer:
+     front card big and flat, sides recede with scale + dim, nothing mirrored.
+     hidden until the ring module boots (html.ring-ok) — the 2x4 grid above
+     stays as the reduced-motion / fallback render. */
+  .ring-zone { position: relative; }
+  .ring-stage { display: none; position: relative; perspective: 1400px; perspective-origin: 50% 44%; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+  html.ring-ok .ring-stage { display: block; }
+  html.ring-ok #work-grid { display: none; }
+  .ring-stage.grabbing { cursor: grabbing; }
+  .ring { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+  .ring-card { position: absolute; left: calc(var(--card-w, 380px) / -2); top: calc(var(--card-h, 352px) / -2); width: var(--card-w, 380px); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; will-change: transform, opacity; backface-visibility: hidden; cursor: pointer; }
+  .ring-card:hover { text-decoration: none; border-color: var(--muted); }
+  .ring-card.front { border-color: var(--mood-c, var(--amber)); box-shadow: 0 26px 60px -24px var(--mood-g, rgba(240,166,58,.45)); transition: border-color .25s, box-shadow .25s; }
+  .ring-card.ghost { pointer-events: none; }
+  .ring-media { aspect-ratio: 16/9; overflow: hidden; background: var(--panel2); border-bottom: 1px solid var(--line); position: relative; flex: none; }
+  .ring-media img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .ring-glyph { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 60px; color: var(--amber); background: radial-gradient(120px 90px at 50% 42%, var(--amber-dim), transparent 70%), var(--panel2); }
+  .ring-new { position: absolute; top: 10px; right: 10px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); background: var(--amber-dim); border-radius: 4px; padding: 1px 6px; }
+  .ring-body { padding: 15px 18px 16px; height: 138px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+  .ring-body h3 { font-size: 17.5px; font-weight: 700; letter-spacing: -.01em; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ring-body p { color: var(--muted); font-size: 13px; line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .ring-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; }
+  .ring-meta .stack { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: .8; }
+  .ring-meta .go { color: var(--amber); white-space: nowrap; }
+  .ring-ui { display: none; align-items: center; justify-content: center; gap: 12px; margin-top: 24px; }
+  html.ring-ok .ring-ui { display: flex; }
+  .ring-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: border-color .15s, color .15s; }
+  .ring-btn:hover { border-color: var(--amber); color: var(--amber); text-decoration: none; }
+  .ring-btn:focus-visible, .ring-dot:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .ring-toggle { position: relative; }
+  .ring-toggle svg { position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px); transform: rotate(-90deg); pointer-events: none; }
+  .ring-arc-bg { fill: none; stroke: none; }
+  .ring-arc { fill: none; stroke: var(--amber); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 103.7; stroke-dashoffset: 103.7; opacity: .85; }
+  .ring-toggle.paused .ring-arc { opacity: 0; }
+  .ring-ico { position: relative; width: 12px; height: 12px; }
+  .ring-ico::before, .ring-ico::after { content: ""; position: absolute; top: 1px; bottom: 1px; width: 3.5px; background: currentColor; border-radius: 1px; }
+  .ring-ico::before { left: 1.5px; }
+  .ring-ico::after { right: 1.5px; }
+  .ring-toggle.paused .ring-ico::before { left: 2px; top: 1px; width: 0; height: 0; background: none; border-left: 10px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-radius: 0; }
+  .ring-toggle.paused .ring-ico::after { display: none; }
+  .ring-dots { display: flex; align-items: center; gap: 7px; }
+  .ring-dot { width: 8px; height: 8px; border-radius: 99px; border: none; padding: 0; background: var(--line); cursor: pointer; transition: background .2s, width .25s; }
+  .ring-dot:hover { background: var(--muted); }
+  .ring-dot.on { width: 22px; background: var(--amber); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
   /* compact rows (research + everything else) */
   .rows { border-top: 1px solid var(--line); }
   .rows.two { display: grid; grid-template-columns: 1fr 1fr; column-gap: 44px; }
@@ -152,7 +199,7 @@
   /* saphira aura — live background canvas (ported from Saphira's mood glow) */
   #aura { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
   @supports (background: color-mix(in srgb, red 50%, transparent)) {
-    .case, .work { background: color-mix(in srgb, var(--panel) 90%, transparent); }
+    .case, .work, .ring-card { background: color-mix(in srgb, var(--panel) 90%, transparent); }
   }
 
   /* terminal life — phosphor glow, scanlines, scan sweep, typed boot (reduced motion disables) */
@@ -190,10 +237,20 @@
     .row { grid-template-columns: 1fr; gap: 6px; }
     .row .stack { text-align: left; max-width: none; }
   }
+  /* under 720px the 3d ring collapses into a native scroll-snap rail */
+  @media (max-width: 720px) {
+    html.ring-ok .ring-stage { overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; perspective: none; touch-action: auto; cursor: default; }
+    html.ring-ok .ring-stage::-webkit-scrollbar { display: none; }
+    html.ring-ok .ring { position: static; display: flex; gap: 14px; width: max-content; height: auto; padding: 2px 24px 6px; transform: none !important; transform-style: flat; }
+    html.ring-ok .ring-card { position: static; left: auto; top: auto; margin: 0; width: min(84vw, 400px); flex: none; transform: none !important; opacity: 1 !important; scroll-snap-align: center; }
+    html.ring-ok .ring-card.ghost { pointer-events: auto; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .rotator .word { animation: none; }
     .rotator .word { position: static; opacity: 1; transform: none; display: inline; margin-right: 8px; }
     .rotator .wordbox { display: none; }
+    html.ring-ok .ring-stage, html.ring-ok .ring-ui { display: none !important; }
+    html.ring-ok #work-grid { display: grid !important; }
   }
 </style>
 </head>
@@ -279,6 +336,21 @@
 <section id="work">
   <div class="wrap">
     <div class="sec-head reveal"><span class="n">[02]</span><h2>Selected work</h2><span class="hcount" id="work-n"></span><div class="rule"></div></div>
+    <div class="ring-zone reveal">
+      <div class="ring-stage" id="ring-stage" title="drag to spin" role="region" aria-roledescription="carousel" aria-label="Selected work">
+        <div class="ring" id="ring"></div>
+      </div>
+      <div class="ring-ui">
+        <button class="ring-btn" id="ring-prev" type="button" aria-label="Previous project">&larr;</button>
+        <div class="ring-dots" id="ring-dots" role="group" aria-label="Pick a project"></div>
+        <button class="ring-btn" id="ring-next" type="button" aria-label="Next project">&rarr;</button>
+        <button class="ring-btn ring-toggle" id="ring-pause" type="button" aria-pressed="false" aria-label="Pause auto-rotation">
+          <svg viewBox="0 0 38 38" aria-hidden="true"><circle class="ring-arc-bg" cx="19" cy="19" r="16.5"></circle><circle class="ring-arc" id="ring-arc" cx="19" cy="19" r="16.5"></circle></svg>
+          <span class="ring-ico" aria-hidden="true"></span>
+        </button>
+      </div>
+      <span class="visually-hidden" id="ring-live" aria-live="polite"></span>
+    </div>
     <div class="work-grid reveal" id="work-grid"></div>
   </div>
 </section>
@@ -371,6 +443,311 @@ var CASE_SLUG = "tcaps";
   }, 2200);
 })();
 
+/* ---------- selected-work ring — billboarded 3d carousel ----------
+   one focal card at a time so projects don't blur into background noise.
+   cards sit on a cylinder, each counter-rotated to face the viewer (nothing
+   mirrored); the front card reads flat while sides recede with dim + scale.
+   drag to spin with inertia, auto-advance every 7s (pauses on hover/drag/
+   hidden tab + a pause button with a progress arc), two-stage click (side
+   card -> front, front card -> link), arrow keys, dots, and a flat
+   scroll-snap rail under 720px. prefers-reduced-motion never boots the ring
+   and keeps the 2x4 grid. fresh github-synced repos join the ring's tail. */
+(function () {
+  var stage = document.getElementById("ring-stage");
+  var ringEl = document.getElementById("ring");
+  var dotsEl = document.getElementById("ring-dots");
+  var liveEl = document.getElementById("ring-live");
+  var workN = document.getElementById("work-n");
+  var pauseBtn = document.getElementById("ring-pause");
+  var arcEl = document.getElementById("ring-arc");
+  if (!stage || !ringEl || !dotsEl) return;
+
+  var reduceMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reduceMQ.matches) return; // static grid stays — the ring never boots
+  document.documentElement.classList.add("ring-ok");
+
+  var DWELL = 7000, MAX_CARDS = 12, ARC = 103.7;
+  var bySlug = {};
+  P.forEach(function (p) { bySlug[p.slug] = p; });
+  var items = [];
+  SELECTED.forEach(function (s) { if (bySlug[s]) items.push(bySlug[s]); });
+
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function cardHTML(p, i) {
+    var media = p.img
+      ? '<img src="' + p.img + '" alt="' + esc(p.t) + ' screenshot" loading="lazy" draggable="false">'
+      : '<span class="ring-glyph" aria-hidden="true">' + esc(p.tile || "\u2726") + "</span>";
+    return '<a class="ring-card" href="' + p.link + '" target="_blank" rel="noopener" data-i="' + i + '" draggable="false">' +
+      '<div class="ring-media">' + media + (p.fresh ? '<span class="ring-new">new</span>' : "") + "</div>" +
+      '<div class="ring-body"><h3>' + esc(p.t) + "</h3><p>" + esc(p.d) + "</p>" +
+      '<div class="ring-meta"><span class="stack">' + esc(p.tags.join(" · ")) + "</span>" +
+      '<span class="go">' + (p.live ? "live demo ↗" : "source ↗") + "</span></div></div></a>";
+  }
+
+  /* geometry — radius sized so adjacent cards never overlap (capped at 720) */
+  var cards = [], dots = [], N = 0, step = 45, R = 520, cardW = 380, cardH = 352;
+  var railMQ = window.matchMedia("(max-width: 720px)");
+  function isRail() { return railMQ.matches; }
+  function railStep() { return cards[0] ? cards[0].offsetWidth + 14 : 320; }
+  var paintedAngle = null;
+
+  function measure() {
+    paintedAngle = null;
+    if (isRail()) { stage.style.height = ""; ringEl.style.transform = ""; return; }
+    cardW = N > 10 ? 340 : 380;
+    R = Math.min((cardW + 26) / (2 * Math.sin(Math.PI / N)), 720);
+    cardH = cards[0] ? cards[0].offsetHeight : 352;
+    ringEl.style.setProperty("--card-w", cardW + "px");
+    ringEl.style.setProperty("--card-h", cardH + "px");
+    stage.style.height = cardH + 46 + "px";
+    ringEl.style.transform = "translateZ(" + (-R) + "px)";
+  }
+
+  /* rotation state */
+  var angle = 0, target = 0, frontIdx = 0, settled = true, firstSync = true;
+  var visible = false, hoverPause = false, autoOn = true, dragging = false;
+  var lastSettle = 0, lastTs = 0, rafId = 0, looping = false;
+  var dragMoved = 0, startX = 0, startAngle = 0, lastX = 0, lastT = 0, vx = 0;
+
+  function wrap180(d) { return ((d % 360) + 540) % 360 - 180; }
+  function autoActive() { return autoOn && !hoverPause && !dragging && !document.hidden; }
+
+  function paint(ts) {
+    if (isRail()) { moodPaint(ts); return; }
+    if (paintedAngle === angle) { moodPaint(ts); return; } // settled: only her mood breathes
+    paintedAngle = angle;
+    var frontCut = Math.cos(Math.PI / N);
+    for (var i = 0; i < N; i++) {
+      var c = cards[i];
+      var w = angle + i * step;
+      var d = Math.cos(w * Math.PI / 180);
+      var o = d > 0 ? Math.min(1, 0.2 + 0.8 * d) : Math.max(0, 0.2 * (1 + d * 7));
+      c.style.transform = "rotateY(" + w + "deg) translateZ(" + R + "px) rotateY(" + (-w) + "deg)";
+      c.style.opacity = o.toFixed(3);
+      c.classList.toggle("ghost", o < 0.12);
+      c.classList.toggle("front", d >= frontCut);
+    }
+    moodPaint(ts);
+  }
+
+  /* her mood light breathes into the front card — same palette + breath
+     rate as the aura, so ring and background read as one system */
+  var lastMood = "";
+  function moodPaint(ts) {
+    var m = window.__saphiraMood ? window.__saphiraMood() : null;
+    if (!m) {
+      if (lastMood !== "off") { lastMood = "off"; stage.style.removeProperty("--mood-c"); stage.style.removeProperty("--mood-g"); }
+      return;
+    }
+    var breath = 0.5 + 0.5 * Math.sin(ts / 1000 * 1.9); // her sin(breathT*1.9)
+    var rgb = Math.round(m[0]) + "," + Math.round(m[1]) + "," + Math.round(m[2]);
+    var key = rgb + "|" + breath.toFixed(2);
+    if (key === lastMood) return;
+    lastMood = key;
+    stage.style.setProperty("--mood-c", "rgb(" + rgb + ")");
+    stage.style.setProperty("--mood-g", "rgba(" + rgb + "," + (0.18 + 0.16 * breath).toFixed(3) + ")");
+  }
+
+  function syncUI() {
+    if (isRail()) for (var j = 0; j < N; j++) cards[j].classList.toggle("front", j === frontIdx);
+    for (var i = 0; i < N; i++) {
+      dots[i].classList.toggle("on", i === frontIdx);
+      if (i === frontIdx) dots[i].setAttribute("aria-current", "true"); else dots[i].removeAttribute("aria-current");
+    }
+    if (liveEl && !firstSync && items[frontIdx]) liveEl.textContent = items[frontIdx].t + " — project " + (frontIdx + 1) + " of " + N;
+    firstSync = false;
+  }
+  function onSettle(ts) {
+    settled = true;
+    lastSettle = ts || performance.now();
+    frontIdx = ((Math.round(-angle / step) % N) + N) % N;
+    syncUI();
+  }
+
+  function loop(ts) {
+    rafId = 0;
+    if (!visible) { looping = false; lastTs = 0; return; }
+    var dt = lastTs ? Math.min(0.05, (ts - lastTs) / 1000) : 0.016;
+    lastTs = ts;
+    if (!dragging) {
+      angle += (target - angle) * (1 - Math.exp(-7.5 * dt));
+      if (Math.abs(target - angle) < 0.08) { angle = target; if (!settled) onSettle(ts); }
+    }
+    paint(ts);
+    if (autoActive() && settled) {
+      var el = ts - lastSettle;
+      if (el >= DWELL) { goTo(frontIdx + 1); el = 0; }
+      if (arcEl) arcEl.style.strokeDashoffset = (ARC * (1 - Math.min(1, el / DWELL))).toFixed(1);
+    }
+    if (autoActive() || !settled || dragging || isRail()) rafId = requestAnimationFrame(loop);
+    else { looping = false; lastTs = 0; if (arcEl) arcEl.style.strokeDashoffset = ARC; }
+  }
+  function ensureLoop() { if (!looping && visible) { looping = true; if (!rafId) rafId = requestAnimationFrame(loop); } }
+
+  function goTo(i) {
+    i = ((i % N) + N) % N;
+    if (isRail()) { stage.scrollTo({ left: i * railStep(), behavior: "smooth" }); frontIdx = i; lastSettle = performance.now(); syncUI(); return; }
+    target = angle + wrap180(-i * step - angle); // always the short way round
+    settled = false;
+    ensureLoop();
+  }
+
+  /* drag to spin — window-level move/up so the click target stays the card */
+  function dragMove(e) {
+    if (!dragging) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > dragMoved) dragMoved = Math.abs(dx);
+    angle = startAngle + dx * (step / (cardW * 0.85));
+    var dt = e.timeStamp - lastT;
+    if (dt > 0) vx = (e.clientX - lastX) / dt;
+    lastX = e.clientX; lastT = e.timeStamp;
+    settled = false;
+  }
+  function dragEnd() {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("grabbing");
+    window.removeEventListener("pointermove", dragMove);
+    window.removeEventListener("pointerup", dragEnd);
+    window.removeEventListener("pointercancel", dragCancel);
+    var proj = angle + vx * 160 * (step / (cardW * 0.85)); // flick projection
+    proj = Math.max(angle - 1.6 * step, Math.min(angle + 1.6 * step, proj));
+    target = Math.round((dragMoved > 8 ? proj : angle) / step) * step;
+    settled = false;
+    ensureLoop();
+  }
+  function dragCancel() { if (dragging) { vx = 0; dragEnd(); } }
+
+  stage.addEventListener("pointerdown", function (e) {
+    if (isRail() || e.button > 0) return;
+    dragging = true; dragMoved = 0;
+    startX = lastX = e.clientX; startAngle = angle;
+    lastT = e.timeStamp; vx = 0;
+    stage.classList.add("grabbing");
+    window.addEventListener("pointermove", dragMove);
+    window.addEventListener("pointerup", dragEnd);
+    window.addEventListener("pointercancel", dragCancel);
+    ensureLoop();
+  });
+  stage.addEventListener("dragstart", function (e) { e.preventDefault(); });
+
+  stage.addEventListener("click", function (e) {
+    if (dragMoved > 8) { e.preventDefault(); return; } // that was a drag, not a click
+    if (isRail()) return;                              // rail: every card is front-facing
+    var card = e.target.closest(".ring-card");
+    if (!card) return;
+    var i = +card.getAttribute("data-i");
+    if (i !== frontIdx) { e.preventDefault(); goTo(i); } // side card: bring it front
+  });
+
+  stage.addEventListener("pointerenter", function () { hoverPause = true; });
+  stage.addEventListener("pointerleave", function () { hoverPause = false; ensureLoop(); });
+  stage.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { e.preventDefault(); goTo(frontIdx + 1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); goTo(frontIdx - 1); }
+  });
+  ringEl.addEventListener("focusin", function (e) {
+    var card = e.target.closest(".ring-card");
+    if (!card || isRail()) return;
+    var i = +card.getAttribute("data-i");
+    if (i !== frontIdx) goTo(i); // tabbing to a side card rotates it front
+  });
+
+  document.getElementById("ring-prev").addEventListener("click", function () { goTo(frontIdx - 1); });
+  document.getElementById("ring-next").addEventListener("click", function () { goTo(frontIdx + 1); });
+  pauseBtn.addEventListener("click", function () {
+    autoOn = !autoOn;
+    pauseBtn.classList.toggle("paused", !autoOn);
+    pauseBtn.setAttribute("aria-pressed", String(!autoOn));
+    pauseBtn.setAttribute("aria-label", autoOn ? "Pause auto-rotation" : "Resume auto-rotation");
+    if (autoOn) lastSettle = performance.now();
+    ensureLoop();
+  });
+  dotsEl.addEventListener("click", function (e) {
+    var d = e.target.closest(".ring-dot");
+    if (d) goTo(+d.getAttribute("data-i"));
+  });
+
+  /* rail: track the centered card as it scrolls */
+  stage.addEventListener("scroll", function () {
+    if (!isRail() || !N) return;
+    var i = Math.min(N - 1, Math.max(0, Math.round(stage.scrollLeft / railStep())));
+    if (i !== frontIdx) { frontIdx = i; syncUI(); }
+  }, { passive: true });
+
+  /* only spend frames while the section is on screen */
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(function (ens) {
+      var v = ens[ens.length - 1].isIntersecting;
+      if (v && !visible) lastSettle = performance.now(); // fresh dwell on re-entry
+      visible = v;
+      ensureLoop();
+    }, { threshold: 0.15 }).observe(stage);
+  } else { visible = true; ensureLoop(); }
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) ensureLoop(); });
+
+  function clearInline() {
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].style.transform = "";
+      cards[i].style.opacity = "";
+      cards[i].classList.remove("ghost", "front");
+    }
+  }
+  function onModeChange() {
+    measure();
+    if (isRail()) {
+      clearInline();
+      requestAnimationFrame(function () { // let the rail lay out first, or the snap resets frontIdx
+        stage.scrollLeft = frontIdx * railStep();
+        syncUI();
+      });
+    } else {
+      angle = target = -frontIdx * step;
+      settled = true;
+      paint(performance.now());
+    }
+    ensureLoop();
+  }
+  try { railMQ.addEventListener("change", onModeChange); } catch (err) {}
+  var rT;
+  window.addEventListener("resize", function () {
+    clearTimeout(rT);
+    rT = setTimeout(function () { if (!isRail() && N) { measure(); paint(performance.now()); } }, 120);
+  });
+
+  function build() {
+    ringEl.innerHTML = items.map(cardHTML).join("");
+    cards = ringEl.querySelectorAll(".ring-card");
+    N = items.length;
+    step = 360 / N;
+    var dh = "";
+    for (var i = 0; i < N; i++) dh += '<button class="ring-dot" type="button" data-i="' + i + '" aria-label="Project ' + (i + 1) + ": " + esc(items[i].t) + '"></button>';
+    dotsEl.innerHTML = dh;
+    dots = dotsEl.querySelectorAll(".ring-dot");
+    if (workN) workN.textContent = N + " projects";
+    measure();
+    paint(performance.now());
+  }
+
+  build();
+  onSettle(performance.now());
+  ensureLoop();
+
+  /* github auto-sync hands fresh repos to the ring (glyph tile until screenshotted) */
+  window.__ringAdd = function (fresh) {
+    if (!fresh || !fresh.length || dragging) return;
+    var room = MAX_CARDS - items.length;
+    if (room <= 0) return;
+    items = items.concat(fresh.slice(0, room));
+    angle = target = 0;
+    frontIdx = 0;
+    settled = true;
+    build();
+    onSettle(performance.now());
+    if (isRail()) stage.scrollLeft = 0;
+  };
+})();
+
 /* ---------- project sections ---------- */
 (function () {
   var bySlug = {};
@@ -448,6 +825,8 @@ var CASE_SLUG = "tcaps";
       document.getElementById("more-n").textContent = all.length + " projects";
       var statB = document.querySelector(".stats div b");
       if (statB) statB.textContent = String(P.length);
+      // showcase: fresh repos join the selected-work ring too (up to its cap)
+      try { if (window.__ringAdd) window.__ringAdd(fresh); } catch (e) {}
       // defer so the terminal IIFE (later in this script) has its listener ready
       try { setTimeout(function () { window.dispatchEvent(new CustomEvent("repos:synced", { detail: { count: fresh.length } })); }, 0); } catch (e) {}
     }
@@ -891,6 +1270,8 @@ var CASE_SLUG = "tcaps";
     paint(0, 0.016);
     start();
     announce(); // light the title-bar dot with her opening mood
+    // the selected-work ring breathes with the same mood light
+    try { window.__saphiraMood = function () { return moodCur.slice(); }; } catch (e) {}
   } catch (err) {
     canvas.style.display = "none";
   }
